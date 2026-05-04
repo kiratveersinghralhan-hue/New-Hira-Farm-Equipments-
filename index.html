@@ -430,6 +430,40 @@
     </div>
   </footer>
 
+
+  <script>
+    // Fallback: lets mobile users enter the site even if the main animation script fails.
+    (function () {
+      function closeIntro() {
+        var intro = document.getElementById('introOverlay');
+        if (!intro) return;
+        intro.classList.add('hidden');
+        intro.style.opacity = '0';
+        intro.style.visibility = 'hidden';
+        intro.style.pointerEvents = 'none';
+        intro.setAttribute('aria-hidden', 'true');
+      }
+
+      function bindIntroButton() {
+        var btn = document.getElementById('skipIntro');
+        if (!btn) return;
+        btn.addEventListener('click', closeIntro);
+        btn.addEventListener('touchend', function (event) {
+          event.preventDefault();
+          closeIntro();
+        }, { passive: false });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindIntroButton);
+      } else {
+        bindIntroButton();
+      }
+
+      window.NewHiraCloseIntro = closeIntro;
+      setTimeout(closeIntro, 5200);
+    })();
+  </script>
   <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -872,3 +872,16 @@ input:focus, textarea:focus, select:focus { border-color: rgba(240,165,58,0.7); 
   .floating-cta a { flex: 1; justify-content:center; padding:0 8px; }
   body { padding-bottom: 72px; }
 }
+
+
+/* Mobile safety fallback: if JavaScript animation fails, the intro will still disappear. */
+@keyframes introSafetyExit {
+  0%, 82% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+.intro-overlay {
+  animation: introSafetyExit 5.6s ease forwards;
+}
+.intro-overlay.hidden {
+  animation: none;
+}

@@ -1131,9 +1131,16 @@ function animateIntro() {
 }
 
 function hideIntro() {
+  if (!els.introOverlay) return;
   els.introOverlay.classList.add('hidden');
+  els.introOverlay.style.opacity = '0';
+  els.introOverlay.style.visibility = 'hidden';
+  els.introOverlay.style.pointerEvents = 'none';
   els.introOverlay.setAttribute('aria-hidden', 'true');
 }
+
+// Safety net for slow mobile browsers: close intro even if canvas animation stalls.
+setTimeout(hideIntro, 5500);
 
 function animateHero() {
   const ctx = els.heroCanvas.getContext('2d');
