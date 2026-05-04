@@ -28,6 +28,8 @@ const content = {
     navSpecs: 'Specifications',
     navService: 'Parts & Service',
     navGallery: 'Gallery',
+    navFinance: 'Finance',
+    navDealers: 'Dealers',
     navEnquire: 'Enquire',
     navCta: 'Get offer',
     heroEyebrow: 'Agricultural harvester experience',
@@ -165,6 +167,37 @@ const content = {
     contactHoursLabel: 'Working hours',
     contactHoursValue: 'Mon - Sat • 9 AM to 6 PM',
     contactNote: 'Tip: once you confirm pricing, warranty, finance and discount details, update them in the JavaScript content file and the whole site will change everywhere.',
+    financeEyebrow: 'Finance and buying support',
+    financeTitle: 'Make the next step simple for farmers.',
+    financeLead: 'Add real bank, finance, subsidy, exchange and booking terms after confirmation. The section is ready to explain the complete purchase journey clearly.',
+    financeBadge: 'Production ready block',
+    financeBadgeText: 'Update values once pricing and documents are final.',
+    financeSteps: [
+      ['Booking', 'Capture buyer details, crop, location and selected discount offer.'],
+      ['Finance help', 'Add bank, EMI, subsidy or exchange guidance once confirmed.'],
+      ['Document check', 'Mention ID, address, land, GST or finance documents as required.'],
+      ['Delivery follow-up', 'Sales team can call, confirm stock and schedule delivery discussion.']
+    ],
+    dealerEyebrow: 'Dealer and service network',
+    dealerTitle: 'Show where buyers can get help, service and spare parts.',
+    dealerLead: 'Use this area for factory address, dealers, service vans, technicians, spare-part availability and seasonal check-up camps.',
+    dealers: [
+      ['Factory / Head office', 'Add exact New Hira Farm Equipments address, phone number and visiting hours.'],
+      ['Field service', 'Explain technician support, service radius and seasonal check-up availability.'],
+      ['Spare parts counter', 'Show genuine spare parts, filters, belts, blades, chains, bearings and auger parts.']
+    ],
+    faqEyebrow: 'Buyer questions',
+    faqTitle: 'Answer common questions before the farmer calls.',
+    faqLead: 'This FAQ makes the site feel complete and reduces confusion about offers, service, documents and model specifications.',
+    faqs: [
+      ['Are the specifications final?', 'No. The current values are draft public listing values. Confirm the latest model details before publishing.'],
+      ['Can the discount be changed?', 'Yes. The offer slider and text can be changed after your father confirms the final campaign amount.'],
+      ['Where do enquiries go?', 'The form sends enquiries to Firebase Firestore when Firebase is enabled and rules are published.'],
+      ['Can real harvester photos be added?', 'Yes. Replace the gallery placeholders with real photos or videos of the machine, factory and parts.']
+    ],
+    floatCall: 'Call',
+    floatWhatsapp: 'WhatsApp',
+    floatEnquiry: 'Enquire',
     footerText: 'Dynamic agricultural harvester landing page with English, Hindi and Punjabi translation support.',
     footerBackTop: 'Back to top',
     states: ['Punjab', 'Haryana', 'Rajasthan', 'Uttar Pradesh', 'Other'],
@@ -221,6 +254,8 @@ const content = {
     navSpecs: 'स्पेसिफिकेशन',
     navService: 'पार्ट्स और सर्विस',
     navGallery: 'गैलरी',
+    navFinance: 'फाइनेंस',
+    navDealers: 'डीलर',
     navEnquire: 'पूछताछ',
     navCta: 'ऑफर लें',
     heroEyebrow: 'एग्रीकल्चरल हार्वेस्टर अनुभव',
@@ -358,6 +393,37 @@ const content = {
     contactHoursLabel: 'कार्य समय',
     contactHoursValue: 'सोम - शनि • सुबह 9 से शाम 6 बजे',
     contactNote: 'टिप: जैसे ही आप कीमत, वारंटी, फाइनेंस और डिस्काउंट कन्फर्म करें, JavaScript कंटेंट फाइल में बदल दें और पूरी साइट अपने-आप हर जगह बदल जाएगी।',
+    financeEyebrow: 'फाइनेंस और खरीद सहायता',
+    financeTitle: 'किसानों के लिए अगला कदम आसान बनाइए।',
+    financeLead: 'कन्फर्मेशन के बाद असली बैंक, फाइनेंस, सब्सिडी, एक्सचेंज और बुकिंग शर्तें जोड़ें। यह सेक्शन पूरी खरीद यात्रा साफ समझाने के लिए तैयार है।',
+    financeBadge: 'प्रोडक्शन रेडी ब्लॉक',
+    financeBadgeText: 'कीमत और दस्तावेज़ फाइनल होने पर वैल्यू अपडेट करें।',
+    financeSteps: [
+      ['बुकिंग', 'खरीदार की जानकारी, फसल, लोकेशन और चुना गया डिस्काउंट ऑफर कैप्चर करें।'],
+      ['फाइनेंस सहायता', 'कन्फर्म होने पर बैंक, EMI, सब्सिडी या एक्सचेंज गाइडेंस जोड़ें।'],
+      ['दस्तावेज़ जाँच', 'जरूरत अनुसार ID, एड्रेस, जमीन, GST या फाइनेंस दस्तावेज़ बताएं।'],
+      ['डिलीवरी फॉलो-अप', 'सेल्स टीम कॉल करके स्टॉक और डिलीवरी चर्चा कन्फर्म कर सकती है।']
+    ],
+    dealerEyebrow: 'डीलर और सर्विस नेटवर्क',
+    dealerTitle: 'दिखाएँ कि खरीदार को मदद, सर्विस और स्पेयर पार्ट्स कहाँ मिलेंगे।',
+    dealerLead: 'इस क्षेत्र का उपयोग फैक्टरी पता, डीलर, सर्विस वैन, तकनीशियन, स्पेयर पार्ट उपलब्धता और सीज़नल चेक-अप कैंप के लिए करें।',
+    dealers: [
+      ['फैक्टरी / हेड ऑफिस', 'न्यू हीरा फार्म इक्विपमेंट्स का सही पता, फोन नंबर और विज़िटिंग समय जोड़ें।'],
+      ['फील्ड सर्विस', 'तकनीशियन सपोर्ट, सर्विस रेंज और सीज़नल चेक-अप उपलब्धता समझाएँ।'],
+      ['स्पेयर पार्ट्स काउंटर', 'असली स्पेयर पार्ट्स, फिल्टर, बेल्ट, ब्लेड, चेन, बेयरिंग और ऑगर पार्ट्स दिखाएँ।']
+    ],
+    faqEyebrow: 'खरीदारों के सवाल',
+    faqTitle: 'किसान के कॉल करने से पहले आम सवालों का जवाब दें।',
+    faqLead: 'यह FAQ साइट को पूरा महसूस कराता है और ऑफर, सर्विस, दस्तावेज़ और मॉडल स्पेसिफिकेशन की कन्फ्यूजन कम करता है।',
+    faqs: [
+      ['क्या स्पेसिफिकेशन फाइनल हैं?', 'नहीं। अभी वैल्यू ड्राफ्ट सार्वजनिक लिस्टिंग से हैं। प्रकाशित करने से पहले नवीनतम मॉडल डिटेल कन्फर्म करें।'],
+      ['क्या डिस्काउंट बदला जा सकता है?', 'हाँ। आपके पिता फाइनल कैंपेन राशि कन्फर्म करें तो ऑफर स्लाइडर और टेक्स्ट बदल सकते हैं।'],
+      ['पूछताछ कहाँ जाएगी?', 'Firebase enabled होने और rules publish होने पर फॉर्म enquiry Firebase Firestore में भेजता है।'],
+      ['क्या असली हार्वेस्टर फोटो जोड़ी जा सकती हैं?', 'हाँ। गैलरी placeholders को मशीन, फैक्टरी और पार्ट्स की असली फोटो या वीडियो से बदलें।']
+    ],
+    floatCall: 'कॉल',
+    floatWhatsapp: 'WhatsApp',
+    floatEnquiry: 'पूछताछ',
     footerText: 'English, Hindi और Punjabi सपोर्ट वाली डायनेमिक एग्रीकल्चरल हार्वेस्टर लैंडिंग पेज।',
     footerBackTop: 'ऊपर जाएँ',
     states: ['पंजाब', 'हरियाणा', 'राजस्थान', 'उत्तर प्रदेश', 'अन्य'],
@@ -414,6 +480,8 @@ const content = {
     navSpecs: 'ਸਪੈਸਿਫਿਕੇਸ਼ਨ',
     navService: 'ਪਾਰਟਸ ਅਤੇ ਸਰਵਿਸ',
     navGallery: 'ਗੈਲਰੀ',
+    navFinance: 'ਫਾਇਨੈਂਸ',
+    navDealers: 'ਡੀਲਰ',
     navEnquire: 'ਪੁੱਛਗਿੱਛ',
     navCta: 'ਆਫਰ ਲਓ',
     heroEyebrow: 'ਐਗਰੀਕਲਚਰਲ ਹਾਰਵੇਸਟਰ ਅਨੁਭਵ',
@@ -551,6 +619,37 @@ const content = {
     contactHoursLabel: 'ਕੰਮ ਦੇ ਘੰਟੇ',
     contactHoursValue: 'ਸੋਮ - ਸ਼ਨੀ • ਸਵੇਰੇ 9 ਵਜੇ ਤੋਂ ਸ਼ਾਮ 6 ਵਜੇ ਤੱਕ',
     contactNote: 'ਟਿਪ: ਜਿਵੇਂ ਹੀ ਤੁਸੀਂ ਕੀਮਤ, ਵਾਰੰਟੀ, ਫਾਇਨੈਂਸ ਅਤੇ ਡਿਸਕਾਉਂਟ ਕਨਫਰਮ ਕਰੋ, JavaScript ਸਮੱਗਰੀ ਫਾਈਲ ਵਿੱਚ ਅੱਪਡੇਟ ਕਰੋ ਅਤੇ ਪੂਰੀ ਸਾਈਟ ਆਪੇ ਹੀ ਹਰ ਜਗ੍ਹਾ ਬਦਲ ਜਾਵੇਗੀ।',
+    financeEyebrow: 'ਫਾਇਨੈਂਸ ਅਤੇ ਖਰੀਦ ਸਹਾਇਤਾ',
+    financeTitle: 'ਕਿਸਾਨਾਂ ਲਈ ਅਗਲਾ ਕਦਮ ਆਸਾਨ ਬਣਾਓ।',
+    financeLead: 'ਕਨਫਰਮ ਕਰਨ ਤੋਂ ਬਾਅਦ ਅਸਲੀ ਬੈਂਕ, ਫਾਇਨੈਂਸ, ਸਬਸਿਡੀ, ਐਕਸਚੇਂਜ ਅਤੇ ਬੁਕਿੰਗ ਸ਼ਰਤਾਂ ਜੋੜੋ। ਇਹ ਸੈਕਸ਼ਨ ਪੂਰੀ ਖਰੀਦ ਯਾਤਰਾ ਸਾਫ਼ ਸਮਝਾਉਣ ਲਈ ਤਿਆਰ ਹੈ।',
+    financeBadge: 'ਪ੍ਰੋਡਕਸ਼ਨ ਰੈਡੀ ਬਲਾਕ',
+    financeBadgeText: 'ਕੀਮਤ ਅਤੇ ਦਸਤਾਵੇਜ਼ ਫਾਈਨਲ ਹੋਣ ਤੇ ਵੈਲਯੂ ਅੱਪਡੇਟ ਕਰੋ।',
+    financeSteps: [
+      ['ਬੁਕਿੰਗ', 'ਖਰੀਦਦਾਰ ਦੀ ਜਾਣਕਾਰੀ, ਫਸਲ, ਲੋਕੇਸ਼ਨ ਅਤੇ ਚੁਣਿਆ ਡਿਸਕਾਉਂਟ ਆਫਰ ਕੈਪਚਰ ਕਰੋ।'],
+      ['ਫਾਇਨੈਂਸ ਮਦਦ', 'ਕਨਫਰਮ ਹੋਣ ਤੇ ਬੈਂਕ, EMI, ਸਬਸਿਡੀ ਜਾਂ ਐਕਸਚੇਂਜ ਗਾਈਡੈਂਸ ਜੋੜੋ।'],
+      ['ਦਸਤਾਵੇਜ਼ ਜਾਂਚ', 'ਲੋੜ ਅਨੁਸਾਰ ID, ਐਡਰੈੱਸ, ਜ਼ਮੀਨ, GST ਜਾਂ ਫਾਇਨੈਂਸ ਦਸਤਾਵੇਜ਼ ਦੱਸੋ।'],
+      ['ਡਿਲਿਵਰੀ ਫਾਲੋ-ਅੱਪ', 'ਸੇਲਜ਼ ਟੀਮ ਕਾਲ ਕਰਕੇ ਸਟਾਕ ਅਤੇ ਡਿਲਿਵਰੀ ਚਰਚਾ ਕਨਫਰਮ ਕਰ ਸਕਦੀ ਹੈ।']
+    ],
+    dealerEyebrow: 'ਡੀਲਰ ਅਤੇ ਸਰਵਿਸ ਨੈੱਟਵਰਕ',
+    dealerTitle: 'ਦਿਖਾਓ ਕਿ ਖਰੀਦਦਾਰ ਨੂੰ ਮਦਦ, ਸਰਵਿਸ ਅਤੇ ਸਪੇਅਰ ਪਾਰਟਸ ਕਿੱਥੇ ਮਿਲਣਗੇ।',
+    dealerLead: 'ਇਸ ਖੇਤਰ ਨੂੰ ਫੈਕਟਰੀ ਪਤਾ, ਡੀਲਰ, ਸਰਵਿਸ ਵੈਨ, ਟੈਕਨੀਸ਼ਨ, ਸਪੇਅਰ ਪਾਰਟ ਉਪਲਬਧਤਾ ਅਤੇ ਸੀਜ਼ਨਲ ਚੈਕਅੱਪ ਕੈਂਪ ਲਈ ਵਰਤੋ।',
+    dealers: [
+      ['ਫੈਕਟਰੀ / ਹੈੱਡ ਆਫਿਸ', 'ਨਿਊ ਹੀਰਾ ਫਾਰਮ ਇਕੁਇਪਮੈਂਟਸ ਦਾ ਸਹੀ ਪਤਾ, ਫੋਨ ਨੰਬਰ ਅਤੇ ਵਿਜ਼ਿਟਿੰਗ ਸਮਾਂ ਜੋੜੋ।'],
+      ['ਫੀਲਡ ਸਰਵਿਸ', 'ਟੈਕਨੀਸ਼ਨ ਸਹਾਇਤਾ, ਸਰਵਿਸ ਰੇਡੀਅਸ ਅਤੇ ਸੀਜ਼ਨਲ ਚੈਕਅੱਪ ਉਪਲਬਧਤਾ ਸਮਝਾਓ।'],
+      ['ਸਪੇਅਰ ਪਾਰਟਸ ਕਾਊਂਟਰ', 'ਅਸਲੀ ਸਪੇਅਰ ਪਾਰਟਸ, ਫਿਲਟਰ, ਬੈਲਟ, ਬਲੇਡ, ਚੇਨ, ਬੇਅਰਿੰਗ ਅਤੇ ਆਗਰ ਪਾਰਟਸ ਦਿਖਾਓ।']
+    ],
+    faqEyebrow: 'ਖਰੀਦਦਾਰਾਂ ਦੇ ਸਵਾਲ',
+    faqTitle: 'ਕਿਸਾਨ ਦੇ ਕਾਲ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਆਮ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਦਿਓ।',
+    faqLead: 'ਇਹ FAQ ਸਾਈਟ ਨੂੰ ਪੂਰਾ ਮਹਿਸੂਸ ਕਰਵਾਉਂਦਾ ਹੈ ਅਤੇ ਆਫਰ, ਸਰਵਿਸ, ਦਸਤਾਵੇਜ਼ ਅਤੇ ਮਾਡਲ ਸਪੈਸਿਫਿਕੇਸ਼ਨ ਬਾਰੇ ਗਲਤਫਹਿਮੀ ਘਟਾਉਂਦਾ ਹੈ।',
+    faqs: [
+      ['ਕੀ ਸਪੈਸਿਫਿਕੇਸ਼ਨ ਫਾਈਨਲ ਹਨ?', 'ਨਹੀਂ। ਮੌਜੂਦਾ ਵੈਲਯੂਜ਼ ਡਰਾਫਟ ਪਬਲਿਕ ਲਿਸਟਿੰਗ ਤੋਂ ਹਨ। ਪਬਲਿਸ਼ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਨਵੀਂ ਮਾਡਲ ਡੀਟੇਲ ਕਨਫਰਮ ਕਰੋ।'],
+      ['ਕੀ ਡਿਸਕਾਉਂਟ ਬਦਲਿਆ ਜਾ ਸਕਦਾ ਹੈ?', 'ਹਾਂ। ਤੁਹਾਡੇ ਪਿਤਾ ਫਾਈਨਲ ਕੈਂਪੇਨ ਰਕਮ ਕਨਫਰਮ ਕਰਨ ਤੋਂ ਬਾਅਦ ਆਫਰ ਸਲਾਈਡਰ ਅਤੇ ਟੈਕਸਟ ਬਦਲ ਸਕਦੇ ਹੋ।'],
+      ['ਪੁੱਛਗਿੱਛ ਕਿੱਥੇ ਜਾਵੇਗੀ?', 'Firebase enabled ਹੋਣ ਅਤੇ rules publish ਹੋਣ ਤੇ ਫਾਰਮ enquiry Firebase Firestore ਵਿੱਚ ਭੇਜਦਾ ਹੈ।'],
+      ['ਕੀ ਅਸਲੀ ਹਾਰਵੇਸਟਰ ਫੋਟੋ ਜੋੜੀ ਜਾ ਸਕਦੀ ਹੈ?', 'ਹਾਂ। ਗੈਲਰੀ placeholders ਨੂੰ ਮਸ਼ੀਨ, ਫੈਕਟਰੀ ਅਤੇ ਪਾਰਟਸ ਦੀਆਂ ਅਸਲੀ ਫੋਟੋ ਜਾਂ ਵੀਡੀਓ ਨਾਲ ਬਦਲੋ।']
+    ],
+    floatCall: 'ਕਾਲ',
+    floatWhatsapp: 'WhatsApp',
+    floatEnquiry: 'ਪੁੱਛਗਿੱਛ',
     footerText: 'English, Hindi ਅਤੇ Punjabi ਸਹਾਇਤਾ ਨਾਲ ਡਾਇਨਾਮਿਕ ਐਗਰੀਕਲਚਰਲ ਹਾਰਵੇਸਟਰ ਲੈਂਡਿੰਗ ਪੇਜ।',
     footerBackTop: 'ਉੱਪਰ ਜਾਓ',
     states: ['ਪੰਜਾਬ', 'ਹਰਿਆਣਾ', 'ਰਾਜਸਥਾਨ', 'ਉੱਤਰ ਪ੍ਰਦੇਸ਼', 'ਹੋਰ'],
@@ -620,6 +719,9 @@ const els = {
   offerAmountDisplay: document.getElementById('offerAmountDisplay'),
   applyOfferBtn: document.getElementById('applyOfferBtn'),
   offerList: document.getElementById('offerList'),
+  financeSteps: document.getElementById('financeSteps'),
+  dealerGrid: document.getElementById('dealerGrid'),
+  faqList: document.getElementById('faqList'),
   enquiryForm: document.getElementById('enquiryForm'),
   stateSelect: document.getElementById('stateSelect'),
   cropSelect: document.getElementById('cropSelect'),
@@ -723,6 +825,37 @@ function renderOfferList() {
   `).join('');
 }
 
+
+function renderProductionSections() {
+  const t = content[appState.lang];
+  if (els.financeSteps) {
+    els.financeSteps.innerHTML = t.financeSteps.map(([title, body], index) => `
+      <article class="finance-step">
+        <span>${index + 1}</span>
+        <strong>${title}</strong>
+        <small>${body}</small>
+      </article>
+    `).join('');
+  }
+  if (els.dealerGrid) {
+    els.dealerGrid.innerHTML = t.dealers.map(([title, body]) => `
+      <article class="dealer-card reveal visible">
+        <div class="pin">⌖</div>
+        <h3>${title}</h3>
+        <p>${body}</p>
+      </article>
+    `).join('');
+  }
+  if (els.faqList) {
+    els.faqList.innerHTML = t.faqs.map(([question, answer]) => `
+      <details class="faq-item">
+        <summary>${question}</summary>
+        <p>${answer}</p>
+      </details>
+    `).join('');
+  }
+}
+
 function renderSpecTable() {
   const t = content[appState.lang];
   setText(els.specTitle, t.specTitles[appState.specTab]);
@@ -752,6 +885,7 @@ function applyLanguage(lang) {
   renderStory();
   renderParts();
   renderOfferList();
+  renderProductionSections();
   renderSpecTable();
   renderFormOptions();
 }
