@@ -3,307 +3,379 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="New Hira Combine Harvester landing page with multilingual product showcase, 2D/3D model, and Firebase enquiry form." />
-  <title>New Hira Combine Harvester</title>
+  <meta name="theme-color" content="#0b0d10" />
+  <meta name="description" content="New Hira Farm Equipments premium combine harvester website with multilingual content, animated intro, interactive visuals and Firebase enquiry form." />
+  <title>New Hira Farm Equipments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="intro-overlay" id="introOverlay" aria-hidden="false">
+    <canvas id="introCanvas" width="1440" height="900"></canvas>
+    <div class="intro-content">
+      <p class="intro-kicker" data-i18n="introKicker">Punjab Crafted • Field Ready</p>
+      <h1><span data-i18n="introBrandA">New Hira</span><br><span data-i18n="introBrandB">Farm Equipments</span></h1>
+      <p class="intro-caption" data-i18n="introCaption">Premium combine harvester experience</p>
+    </div>
+    <button class="skip-intro" id="skipIntro" type="button" data-i18n="skipIntro">Skip intro</button>
+  </div>
+
   <a class="skip-link" href="#main" data-i18n="skipLink">Skip to content</a>
 
   <header class="site-header" id="top">
-    <nav class="nav-shell" aria-label="Main navigation">
-      <a href="#top" class="brand" aria-label="New Hira home">
-        <span class="brand-mark">NH</span>
-        <span class="brand-text">
+    <div class="nav-wrap">
+      <a href="#top" class="brand">
+        <span class="brand-badge">NH</span>
+        <span class="brand-copy">
           <strong>New Hira</strong>
           <small data-i18n="brandSub">Farm Equipments</small>
         </span>
       </a>
 
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav" data-i18n-aria="menuOpen">
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
 
-      <div class="nav-links" id="primaryNav">
-        <a href="#product" data-i18n="navProduct">Product</a>
-        <a href="#specs" data-i18n="navSpecs">Specs</a>
-        <a href="#models" data-i18n="navModels">2D/3D View</a>
-        <a href="#offers" data-i18n="navOffers">Offers</a>
-        <a href="#enquiry" data-i18n="navEnquiry">Enquire</a>
-      </div>
+      <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
+        <a href="#overview" data-i18n="navOverview">Overview</a>
+        <a href="#machine" data-i18n="navMachine">Machine</a>
+        <a href="#specs" data-i18n="navSpecs">Specifications</a>
+        <a href="#service" data-i18n="navService">Parts & Service</a>
+        <a href="#gallery" data-i18n="navGallery">Gallery</a>
+        <a href="#enquiry" data-i18n="navEnquire">Enquire</a>
+      </nav>
 
-      <div class="nav-actions">
-        <label class="language-label" for="languageSelect" data-i18n="languageLabel">Language</label>
-        <select id="languageSelect" aria-label="Choose language">
-          <option value="en">English</option>
-          <option value="hi">हिन्दी</option>
-          <option value="pa">ਪੰਜਾਬੀ</option>
-        </select>
-        <button class="theme-toggle" type="button" id="themeToggle" data-i18n="themeToggle">Dark</button>
+      <div class="nav-tools">
+        <div class="select-wrap">
+          <label for="languageSelect" class="sr-only" data-i18n="languageLabel">Language</label>
+          <select id="languageSelect" aria-label="Choose language">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="pa">ਪੰਜਾਬੀ</option>
+          </select>
+        </div>
+        <a href="#enquiry" class="btn btn-small btn-outline" data-i18n="navCta">Get offer</a>
       </div>
-    </nav>
+    </div>
   </header>
 
   <main id="main">
-    <section class="hero section-grid">
-      <div class="hero-copy reveal">
-        <p class="eyebrow" data-i18n="heroBadge">Made in Punjab • Built for Indian fields</p>
-        <h1 data-i18n="heroTitle">New Hira 985 combine harvester for faster, cleaner harvesting.</h1>
-        <p class="hero-lede" data-i18n="heroLead">Showcase the machine, explain the specs, collect farmer enquiries, and promote seasonal discounts from one fast landing page.</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#enquiry" data-i18n="ctaEnquire">Send enquiry</a>
-          <a class="btn ghost" href="#models" data-i18n="ctaViewModel">View 3D model</a>
-        </div>
-        <div class="hero-note">
-          <span class="pulse-dot"></span>
-          <span data-i18n="draftSpecsNotice">Draft specs are editable. Confirm exact model details before publishing.</span>
-        </div>
-      </div>
-
-      <div class="hero-card reveal">
-        <div class="model-card-toolbar">
-          <span data-i18n="liveModelLabel">Interactive 3D preview</span>
-          <button type="button" class="mini-btn" id="autoRotateBtn" data-i18n="pauseRotate">Pause</button>
-        </div>
-        <canvas id="harvesterCanvas" width="720" height="520" aria-label="Simple 3D combine harvester model"></canvas>
-        <div class="range-row">
-          <label for="rotationRange" data-i18n="rotateModel">Rotate model</label>
-          <input id="rotationRange" type="range" min="0" max="360" value="25" />
-        </div>
-      </div>
-    </section>
-
-    <section class="stats-strip" aria-label="Highlights">
-      <div class="stat-card reveal">
-        <strong data-counter="14">0</strong>
-        <span data-i18n="statCutter">ft cutter bar draft</span>
-      </div>
-      <div class="stat-card reveal">
-        <strong data-counter="128">0</strong>
-        <span data-i18n="statPower">HP draft power</span>
-      </div>
-      <div class="stat-card reveal">
-        <strong data-counter="6">0</strong>
-        <span data-i18n="statWalker">straw walkers listed</span>
-      </div>
-      <div class="stat-card reveal">
-        <strong data-counter="7">0</strong>
-        <span data-i18n="statCrops">crop types supported</span>
-      </div>
-    </section>
-
-    <section class="section product-section" id="product">
-      <div class="section-heading reveal">
-        <p class="eyebrow" data-i18n="productEyebrow">Product showcase</p>
-        <h2 data-i18n="productTitle">A landing page that sells the machine visually.</h2>
-        <p data-i18n="productLead">Farmers can understand the harvester quickly: engine, cutter bar, tyres, grain handling, gears, spare parts, and service support.</p>
-      </div>
-
-      <div class="feature-grid" id="featureGrid" aria-live="polite"></div>
-    </section>
-
-    <section class="section specs-section" id="specs">
-      <div class="section-heading reveal">
-        <p class="eyebrow" data-i18n="specsEyebrow">Technical details</p>
-        <h2 data-i18n="specsTitle">Editable draft specifications for New Hira 985.</h2>
-        <p data-i18n="specsLead">Use these as a starting point. Replace anything after your father confirms the latest model, engine, emissions, pricing, and offer terms.</p>
-      </div>
-
-      <div class="tabs reveal" role="tablist" aria-label="Specification categories">
-        <button class="tab active" type="button" role="tab" aria-selected="true" data-spec-tab="power" data-i18n="tabPower">Power</button>
-        <button class="tab" type="button" role="tab" aria-selected="false" data-spec-tab="crop" data-i18n="tabCrop">Crop</button>
-        <button class="tab" type="button" role="tab" aria-selected="false" data-spec-tab="drive" data-i18n="tabDrive">Drive</button>
-        <button class="tab" type="button" role="tab" aria-selected="false" data-spec-tab="service" data-i18n="tabService">Service</button>
-      </div>
-
-      <div class="spec-layout">
-        <div class="spec-table-card reveal">
-          <div class="spec-toolbar">
-            <h3 id="specPanelTitle" data-i18n="specPanelTitle">Power & Engine</h3>
-            <input type="search" id="specSearch" data-i18n-placeholder="specSearchPlaceholder" placeholder="Search specs" />
+    <section class="hero" id="overview">
+      <div class="hero-backdrop"></div>
+      <div class="hero-grid container">
+        <div class="hero-copy reveal">
+          <p class="eyebrow" data-i18n="heroEyebrow">Agricultural harvester experience</p>
+          <h1 data-i18n="heroTitle">A premium website concept for a powerful New Hira combine harvester.</h1>
+          <p class="hero-lead" data-i18n="heroLead">Inspired by high-end automotive storytelling and modern product pages, this design presents New Hira as a trusted manufacturer with dynamic visuals, multilingual content and direct farmer enquiries.</p>
+          <div class="hero-actions">
+            <a href="#enquiry" class="btn btn-primary" data-i18n="heroCtaPrimary">Enquire now</a>
+            <a href="#machine" class="btn btn-ghost" data-i18n="heroCtaSecondary">Explore machine</a>
           </div>
-          <div class="spec-table" id="specTable"></div>
+          <div class="hero-points" id="heroPoints"></div>
         </div>
-        <aside class="download-card reveal">
-          <h3 data-i18n="brochureTitle">Brochure ready</h3>
-          <p data-i18n="brochureLead">This page can become a brochure PDF later. For now, all text is dynamic from one JavaScript file.</p>
-          <a class="btn primary full" href="#enquiry" data-i18n="brochureCta">Ask for price</a>
-        </aside>
+
+        <div class="hero-stage reveal">
+          <div class="hero-stage-head">
+            <span data-i18n="heroStageLabel">Animated machine showcase</span>
+            <div class="status-pill">
+              <span class="pulse"></span>
+              <span data-i18n="heroStageStatus">Dynamic visual active</span>
+            </div>
+          </div>
+          <canvas id="heroCanvas" width="900" height="620" aria-label="Animated combine harvester"></canvas>
+          <div class="hero-stage-footer">
+            <div>
+              <small data-i18n="heroFooterLabelA">Story style</small>
+              <strong data-i18n="heroFooterValueA">Premium / cinematic</strong>
+            </div>
+            <div>
+              <small data-i18n="heroFooterLabelB">Language mode</small>
+              <strong id="currentLanguageLabel">English</strong>
+            </div>
+            <div>
+              <small data-i18n="heroFooterLabelC">Lead backend</small>
+              <strong>Firebase</strong>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <div class="metrics container reveal" id="metricsGrid"></div>
     </section>
 
-    <section class="section models-section" id="models">
-      <div class="section-heading reveal">
-        <p class="eyebrow" data-i18n="modelsEyebrow">2D + 3D model</p>
-        <h2 data-i18n="modelsTitle">Explain the machine with interactive visuals.</h2>
-        <p data-i18n="modelsLead">The 3D preview is a lightweight canvas model. The 2D diagram highlights important parts without needing heavy files.</p>
+    <section class="story container section" id="machine">
+      <div class="section-intro reveal">
+        <p class="eyebrow" data-i18n="storyEyebrow">Manufacturer story</p>
+        <h2 data-i18n="storyTitle">Built for demanding fields, presented with a modern premium identity.</h2>
+        <p data-i18n="storyLead">This layout mixes the elegance of luxury landing pages with practical agricultural communication — so farmers see strength, reliability, service support and value.</p>
       </div>
 
-      <div class="model-grid">
-        <div class="diagram-card reveal">
-          <div class="card-head">
-            <h3 data-i18n="diagramTitle">2D part diagram</h3>
-            <button class="mini-btn" type="button" id="highlightPartsBtn" data-i18n="highlightParts">Highlight parts</button>
+      <div class="story-layout">
+        <div class="story-card large reveal">
+          <div class="story-card-top">
+            <span class="chip" data-i18n="storyCardTag">New Hira 985 • Draft showcase</span>
+            <span class="mini-line" data-i18n="storyCardMini">Editable after final model confirmation</span>
           </div>
-          <svg class="harvester-diagram" viewBox="0 0 900 430" role="img" aria-labelledby="diagramLabel">
-            <title id="diagramLabel">2D combine harvester parts diagram</title>
-            <defs>
-              <linearGradient id="bodyGradient" x1="0" x2="1">
-                <stop offset="0%" stop-color="#33a852" />
-                <stop offset="100%" stop-color="#0f7f3c" />
-              </linearGradient>
-            </defs>
-            <rect x="42" y="278" width="735" height="18" rx="9" class="ground" />
-            <path d="M126 208 L225 142 H557 L686 205 L660 270 H154 Z" class="svg-body" />
-            <path d="M236 148 H402 V210 H146 Z" class="svg-cabin" />
-            <rect x="426" y="160" width="126" height="82" rx="14" class="svg-engine" />
-            <rect x="566" y="198" width="116" height="48" rx="10" class="svg-tank" />
-            <rect x="44" y="242" width="152" height="18" rx="8" class="svg-cutter" />
-            <path d="M38 242 L162 196 L194 214 L78 260 Z" class="svg-header" />
-            <circle cx="220" cy="288" r="62" class="svg-wheel" />
-            <circle cx="220" cy="288" r="28" class="svg-hub" />
-            <circle cx="604" cy="288" r="43" class="svg-wheel" />
-            <circle cx="604" cy="288" r="18" class="svg-hub" />
-            <path d="M675 208 C728 198 782 213 827 238" class="svg-auger" />
-            <path d="M711 210 L840 226" class="svg-auger-line" />
-            <g class="svg-callouts">
-              <line x1="486" y1="158" x2="486" y2="89" />
-              <text x="486" y="74" data-svg-i18n="callEngine">Engine</text>
-              <line x1="122" y1="224" x2="84" y2="134" />
-              <text x="82" y="119" data-svg-i18n="callCutter">Cutter bar</text>
-              <line x1="624" y1="207" x2="686" y2="125" />
-              <text x="690" y="110" data-svg-i18n="callTank">Grain tank</text>
-              <line x1="216" y1="288" x2="138" y2="354" />
-              <text x="72" y="382" data-svg-i18n="callTyres">Tyres</text>
-              <line x1="746" y1="216" x2="808" y2="158" />
-              <text x="810" y="146" data-svg-i18n="callAuger">Unloading auger</text>
-            </g>
-          </svg>
+          <h3 data-i18n="storyCardTitle">One machine. One premium message. Multiple crops.</h3>
+          <p data-i18n="storyCardBody">Use this space to communicate manufacturing confidence, crop compatibility, operator comfort, and the availability of genuine service and spare parts.</p>
+          <div class="story-list" id="storyList"></div>
         </div>
 
-        <div class="parts-card reveal">
-          <h3 data-i18n="partsTitle">Spare parts focus</h3>
-          <p data-i18n="partsLead">Use this area to promote availability of genuine spare parts, service, and seasonal maintenance kits.</p>
-          <div class="parts-list" id="partsList"></div>
+        <div class="story-panel reveal">
+          <div class="floating-card">
+            <span class="panel-kicker" data-i18n="panelKicker">Machine highlights</span>
+            <h3 data-i18n="panelTitle">Designed to convert attention into enquiries.</h3>
+            <div class="highlight-stack" id="highlightStack"></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section offers-section" id="offers">
-      <div class="section-heading reveal">
-        <p class="eyebrow" data-i18n="offersEyebrow">Seasonal offer</p>
-        <h2 data-i18n="offersTitle">Create discount campaigns without changing the design.</h2>
-        <p data-i18n="offersLead">When your father confirms the exact amount, update the campaign amount in one place. The enquiry form will capture which offer the farmer selected.</p>
-      </div>
-
-      <div class="offer-builder reveal">
-        <div class="offer-preview">
-          <span class="offer-tag" data-i18n="offerTag">Limited booking benefit</span>
-          <h3 id="offerHeadline">₹1,00,000 booking discount</h3>
-          <p id="offerSubline" data-i18n="offerSubline">Draft campaign text. Confirm before publish.</p>
-          <ul class="offer-list">
-            <li data-i18n="offerPoint1">Priority delivery discussion</li>
-            <li data-i18n="offerPoint2">Service team callback</li>
-            <li data-i18n="offerPoint3">Spare parts availability check</li>
-          </ul>
+    <section class="experience section" id="specs">
+      <div class="container">
+        <div class="section-intro reveal">
+          <p class="eyebrow" data-i18n="experienceEyebrow">2D + 3D product experience</p>
+          <h2 data-i18n="experienceTitle">Interactive visuals that explain the machine better than a plain brochure.</h2>
+          <p data-i18n="experienceLead">A lightweight 3D model preview and an annotated 2D diagram help visitors understand the machine quickly on mobile or desktop.</p>
         </div>
-        <div class="offer-controls">
-          <label for="discountAmount" data-i18n="discountLabel">Discount amount</label>
-          <input id="discountAmount" type="range" min="25000" max="150000" step="5000" value="100000" />
-          <output id="discountOutput">₹1,00,000</output>
-          <button class="btn primary" type="button" id="applyOfferBtn" data-i18n="applyOffer">Apply this offer to enquiry</button>
+
+        <div class="experience-grid">
+          <div class="model-card reveal">
+            <div class="model-card-head">
+              <div>
+                <span class="panel-kicker" data-i18n="threeDLabel">Interactive 3D view</span>
+                <h3 data-i18n="threeDTitle">Rotate the combine harvester</h3>
+              </div>
+              <button class="btn btn-small btn-outline" type="button" id="rotateToggle" data-i18n="pauseRotate">Pause</button>
+            </div>
+            <canvas id="modelCanvas" width="950" height="560" aria-label="3D combine harvester model"></canvas>
+            <div class="slider-wrap">
+              <label for="rotationRange" data-i18n="rotationLabel">Rotation</label>
+              <input id="rotationRange" type="range" min="0" max="360" value="30" />
+            </div>
+          </div>
+
+          <div class="spec-card reveal">
+            <div class="spec-head">
+              <span class="panel-kicker" data-i18n="specLabel">Machine data</span>
+              <h3 id="specTitle" data-i18n="specDefaultTitle">Power & engine</h3>
+            </div>
+            <div class="spec-tabs" role="tablist">
+              <button class="spec-tab active" data-tab="power" type="button" role="tab" aria-selected="true" data-i18n="tabPower">Power</button>
+              <button class="spec-tab" data-tab="harvesting" type="button" role="tab" aria-selected="false" data-i18n="tabHarvesting">Harvesting</button>
+              <button class="spec-tab" data-tab="drive" type="button" role="tab" aria-selected="false" data-i18n="tabDrive">Drive</button>
+              <button class="spec-tab" data-tab="service" type="button" role="tab" aria-selected="false" data-i18n="tabServiceSpecs">Service</button>
+            </div>
+            <div class="spec-table" id="specTable"></div>
+            <p class="spec-note" data-i18n="specNote">Draft technical information from public listings. Confirm final values before publishing.</p>
+          </div>
+        </div>
+
+        <div class="diagram-grid">
+          <div class="diagram-card reveal">
+            <div class="diagram-head">
+              <div>
+                <span class="panel-kicker" data-i18n="diagramKicker">2D annotated diagram</span>
+                <h3 data-i18n="diagramTitle">Important parts at a glance</h3>
+              </div>
+              <button id="flashParts" class="btn btn-small btn-outline" type="button" data-i18n="diagramButton">Highlight parts</button>
+            </div>
+
+            <svg class="harvester-diagram" viewBox="0 0 980 480" role="img" aria-labelledby="diagramLabel">
+              <title id="diagramLabel">2D combine harvester parts diagram</title>
+              <defs>
+                <linearGradient id="diagramBody" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f0a53a" />
+                  <stop offset="100%" stop-color="#ff6b1c" />
+                </linearGradient>
+                <linearGradient id="diagramCab" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#e9efea" />
+                  <stop offset="100%" stop-color="#aab8ad" />
+                </linearGradient>
+              </defs>
+              <rect x="40" y="340" width="820" height="14" rx="7" class="ground-line" />
+              <path d="M150 248 L280 160 H600 L742 236 L714 324 H186 Z" class="diag-body" />
+              <path d="M265 164 H438 V246 H170 Z" class="diag-cabin" />
+              <rect x="448" y="176" width="122" height="86" rx="14" class="diag-engine" />
+              <rect x="590" y="206" width="132" height="54" rx="12" class="diag-grain" />
+              <path d="M78 290 L190 232 L230 252 L130 324 Z" class="diag-header" />
+              <rect x="68" y="286" width="160" height="20" rx="10" class="diag-cutter" />
+              <path d="M742 238 C788 226 844 242 900 278" class="diag-auger" />
+              <line x1="762" y1="244" x2="902" y2="276" class="diag-auger-line" />
+              <circle cx="250" cy="346" r="68" class="diag-wheel" />
+              <circle cx="250" cy="346" r="28" class="diag-hub" />
+              <circle cx="656" cy="346" r="46" class="diag-wheel" />
+              <circle cx="656" cy="346" r="18" class="diag-hub" />
+              <g class="callouts">
+                <line x1="510" y1="178" x2="510" y2="95"></line>
+                <text x="510" y="80" text-anchor="middle" data-svg-i18n="callEngine">Engine</text>
+                <line x1="144" y1="284" x2="94" y2="168"></line>
+                <text x="82" y="152" data-svg-i18n="callCutter">Cutter bar</text>
+                <line x1="650" y1="210" x2="712" y2="120"></line>
+                <text x="718" y="108" data-svg-i18n="callGrain">Grain tank</text>
+                <line x1="250" y1="346" x2="166" y2="412"></line>
+                <text x="74" y="438" data-svg-i18n="callTyres">Steel tyres / wheels</text>
+                <line x1="818" y1="250" x2="896" y2="176"></line>
+                <text x="900" y="164" data-svg-i18n="callAuger">Unloading auger</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="parts-card reveal" id="service">
+            <span class="panel-kicker" data-i18n="partsKicker">Parts & support</span>
+            <h3 data-i18n="partsTitle">Promote genuine spare parts and after-sales service.</h3>
+            <p data-i18n="partsLead">This section is useful for convincing farmers that service backup is strong, spare parts are available, and seasonal maintenance will be easy.</p>
+            <div class="parts-grid" id="partsGrid"></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section enquiry-section" id="enquiry">
-      <div class="section-heading reveal">
-        <p class="eyebrow" data-i18n="enquiryEyebrow">Farmer enquiry</p>
-        <h2 data-i18n="enquiryTitle">Capture leads directly into Firebase.</h2>
-        <p data-i18n="enquiryLead">Paste your Firebase config later. Until then, submissions are stored locally so you can test the full flow.</p>
-      </div>
 
-      <div class="enquiry-layout">
-        <form class="enquiry-form reveal" id="enquiryForm">
-          <div class="form-row two">
-            <label>
-              <span data-i18n="fieldName">Full name</span>
-              <input name="name" type="text" required minlength="2" data-i18n-placeholder="fieldNamePlaceholder" placeholder="Farmer name" />
-            </label>
-            <label>
-              <span data-i18n="fieldPhone">Phone / WhatsApp</span>
-              <input name="phone" type="tel" required pattern="[0-9+\-\s]{8,15}" data-i18n-placeholder="fieldPhonePlaceholder" placeholder="+91 98765 43210" />
-            </label>
+    <section class="gallery-section section" id="gallery">
+      <div class="container">
+        <div class="section-intro reveal">
+          <p class="eyebrow" data-i18n="galleryEyebrow">Premium gallery presentation</p>
+          <h2 data-i18n="galleryTitle">A more luxurious product story for an agricultural machine.</h2>
+          <p data-i18n="galleryLead">This section is inspired by premium automotive storytelling: bold words, focused highlights and immersive product moments adapted for the combine harvester market.</p>
+        </div>
+        <div class="gallery-grid">
+          <article class="gallery-card reveal">
+            <span class="panel-kicker" data-i18n="galleryCard1Kicker">Commanding front profile</span>
+            <h3 data-i18n="galleryCard1Title">Presence that looks engineered for serious harvesting.</h3>
+            <p data-i18n="galleryCard1Body">Use real harvester photography later here. The layout is already ready for bold image-led storytelling.</p>
+          </article>
+          <article class="gallery-card warm reveal">
+            <span class="panel-kicker" data-i18n="galleryCard2Kicker">Operator perspective</span>
+            <h3 data-i18n="galleryCard2Title">Clear controls, confident visibility and field-focused comfort.</h3>
+            <p data-i18n="galleryCard2Body">Talk about operator ease, control access, maintenance visibility and harvesting confidence in this block.</p>
+          </article>
+          <article class="gallery-card dark reveal">
+            <span class="panel-kicker" data-i18n="galleryCard3Kicker">Built to support business</span>
+            <h3 data-i18n="galleryCard3Title">Spare parts, service backup and seasonal support make the difference.</h3>
+            <p data-i18n="galleryCard3Body">Use this to show why farmers should trust New Hira not only for the machine, but also for support after purchase.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="offer-section section">
+      <div class="container offer-grid">
+        <div class="offer-copy reveal">
+          <p class="eyebrow" data-i18n="offerEyebrow">Seasonal campaign</p>
+          <h2 data-i18n="offerTitle">Offer-driven landing pages can increase calls and form enquiries.</h2>
+          <p data-i18n="offerLead">Use the offer amount your father confirms later. Right now the slider is interactive so the website feels alive and the offer value gets pushed into the enquiry form automatically.</p>
+          <div class="offer-value-card">
+            <span data-i18n="offerValueLabel">Current promotional offer</span>
+            <strong id="offerAmountDisplay">₹1,00,000</strong>
+            <small data-i18n="offerValueCaption">Discount / exchange / booking benefit — edit later</small>
           </div>
-          <div class="form-row two">
-            <label>
-              <span data-i18n="fieldDistrict">District</span>
-              <input name="district" type="text" data-i18n-placeholder="fieldDistrictPlaceholder" placeholder="Example: Patiala" />
-            </label>
-            <label>
-              <span data-i18n="fieldState">State</span>
-              <select name="state">
-                <option value="Punjab" data-i18n="statePunjab">Punjab</option>
-                <option value="Haryana" data-i18n="stateHaryana">Haryana</option>
-                <option value="Rajasthan" data-i18n="stateRajasthan">Rajasthan</option>
-                <option value="Uttar Pradesh" data-i18n="stateUP">Uttar Pradesh</option>
-                <option value="Other" data-i18n="stateOther">Other</option>
-              </select>
-            </label>
+          <div class="slider-wrap accent">
+            <label for="offerRange" data-i18n="offerSliderLabel">Adjust offer amount</label>
+            <input id="offerRange" type="range" min="25000" max="200000" step="5000" value="100000" />
           </div>
-          <div class="form-row two">
-            <label>
-              <span data-i18n="fieldCrop">Main crop</span>
-              <select name="crop">
-                <option value="Wheat" data-i18n="cropWheat">Wheat</option>
-                <option value="Paddy" data-i18n="cropPaddy">Paddy</option>
-                <option value="Maize" data-i18n="cropMaize">Maize</option>
-                <option value="Other" data-i18n="cropOther">Other</option>
-              </select>
-            </label>
-            <label>
-              <span data-i18n="fieldOffer">Selected offer</span>
-              <input name="offer" id="offerInput" type="text" readonly value="₹1,00,000" />
-            </label>
+          <button class="btn btn-primary" type="button" id="applyOfferBtn" data-i18n="applyOffer">Apply this offer to enquiry</button>
+        </div>
+
+        <div class="offer-panel reveal">
+          <div class="offer-box">
+            <span class="chip" data-i18n="offerBoxTag">Campaign message</span>
+            <h3 data-i18n="offerBoxTitle">Smart booking benefits for serious buyers.</h3>
+            <ul id="offerList"></ul>
           </div>
-          <label>
-            <span data-i18n="fieldMessage">Requirement</span>
-            <textarea name="message" rows="4" data-i18n-placeholder="fieldMessagePlaceholder" placeholder="Tell us model, crop, location, and buying timeline"></textarea>
-          </label>
-          <label class="checkbox-line">
-            <input type="checkbox" required />
-            <span data-i18n="consentText">I agree to be contacted by New Hira team about this enquiry.</span>
-          </label>
-          <button class="btn primary full" type="submit" data-i18n="submitEnquiry">Submit enquiry</button>
-          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-        </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="enquiry-section section" id="enquiry">
+      <div class="container enquiry-grid">
+        <div class="form-card reveal">
+          <p class="eyebrow" data-i18n="formEyebrow">Direct farmer enquiries</p>
+          <h2 data-i18n="formTitle">Connect the website to Firebase and capture every lead.</h2>
+          <p data-i18n="formLead">This form is already prepared for Firebase. If Firebase is unavailable, enquiries are stored locally for testing so nothing feels broken.</p>
+
+          <form id="enquiryForm" novalidate>
+            <div class="field-grid">
+              <label>
+                <span data-i18n="fieldName">Full name</span>
+                <input type="text" name="name" required data-i18n-placeholder="fieldNamePlaceholder" placeholder="Farmer name" />
+              </label>
+              <label>
+                <span data-i18n="fieldPhone">Phone / WhatsApp</span>
+                <input type="tel" name="phone" required data-i18n-placeholder="fieldPhonePlaceholder" placeholder="+91 98765 43210" />
+              </label>
+            </div>
+            <div class="field-grid">
+              <label>
+                <span data-i18n="fieldDistrict">District</span>
+                <input type="text" name="district" data-i18n-placeholder="fieldDistrictPlaceholder" placeholder="e.g. Patiala" />
+              </label>
+              <label>
+                <span data-i18n="fieldState">State</span>
+                <select name="state" id="stateSelect"></select>
+              </label>
+            </div>
+            <div class="field-grid">
+              <label>
+                <span data-i18n="fieldCrop">Main crop</span>
+                <select name="crop" id="cropSelect"></select>
+              </label>
+              <label>
+                <span data-i18n="fieldOffer">Selected offer</span>
+                <input type="text" name="offer" id="offerInput" readonly />
+              </label>
+            </div>
+            <label>
+              <span data-i18n="fieldMessage">Requirement</span>
+              <textarea name="message" rows="5" data-i18n-placeholder="fieldMessagePlaceholder" placeholder="Tell us about crop, location and purchase timeline"></textarea>
+            </label>
+            <label class="consent-row">
+              <input type="checkbox" name="consent" required />
+              <span data-i18n="consentText">I agree that New Hira team can contact me regarding this enquiry.</span>
+            </label>
+            <button class="btn btn-primary full" type="submit" data-i18n="submitLabel">Submit enquiry</button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
 
         <aside class="contact-card reveal">
-          <h3 data-i18n="contactTitle">Talk to sales</h3>
-          <p data-i18n="contactLead">Replace these placeholder details with your real phone, WhatsApp, email, and address before publishing.</p>
-          <div class="contact-item">
-            <span data-i18n="contactPhoneLabel">Phone</span>
-            <strong>+91-XXXXXXXXXX</strong>
+          <span class="panel-kicker" data-i18n="contactKicker">Contact block</span>
+          <h3 data-i18n="contactTitle">Publish real sales details here.</h3>
+          <p data-i18n="contactLead">Replace this draft contact information with the exact phone number, WhatsApp number, address and working hours of New Hira Farm Equipments.</p>
+          <div class="contact-list">
+            <div>
+              <small data-i18n="contactPhoneLabel">Sales phone</small>
+              <strong>+91 98xxx xxxxx</strong>
+            </div>
+            <div>
+              <small data-i18n="contactWhatsappLabel">WhatsApp</small>
+              <strong>+91 98xxx xxxxx</strong>
+            </div>
+            <div>
+              <small data-i18n="contactLocationLabel">Location</small>
+              <strong data-i18n="contactLocationValue">Punjab, India</strong>
+            </div>
+            <div>
+              <small data-i18n="contactHoursLabel">Working hours</small>
+              <strong data-i18n="contactHoursValue">Mon - Sat • 9 AM to 6 PM</strong>
+            </div>
           </div>
-          <div class="contact-item">
-            <span data-i18n="contactLocationLabel">Location</span>
-            <strong data-i18n="contactLocation">Nabha, Punjab</strong>
-          </div>
-          <div class="contact-item">
-            <span data-i18n="contactHoursLabel">Hours</span>
-            <strong data-i18n="contactHours">Mon–Sat, 9 AM–6 PM</strong>
-          </div>
+          <div class="contact-note" data-i18n="contactNote">Tip: once you confirm pricing, warranty, finance and discount details, update them in the JavaScript content file and the whole site will change everywhere.</div>
         </aside>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div>
-      <strong>New Hira</strong>
-      <p data-i18n="footerText">Dynamic website draft for combine harvester promotion.</p>
+    <div class="container footer-wrap">
+      <div>
+        <strong>New Hira</strong>
+        <p data-i18n="footerText">Dynamic agricultural harvester landing page with English, Hindi and Punjabi translation support.</p>
+      </div>
+      <a href="#top" class="btn btn-small btn-outline" data-i18n="footerBackTop">Back to top</a>
     </div>
-    <a href="#top" data-i18n="backTop">Back to top</a>
   </footer>
 
   <script type="module" src="script.js"></script>
