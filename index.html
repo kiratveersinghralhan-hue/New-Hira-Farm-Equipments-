@@ -6,14 +6,10 @@
   <meta name="theme-color" content="#0b0d10" />
   <meta name="description" content="New Hira Farm Equipments premium combine harvester website with multilingual content, animated intro, interactive visuals and Firebase enquiry form." />
   <title>New Hira Farm Equipments</title>
-  <meta property="og:title" content="New Hira Farm Equipments" />
-  <meta property="og:description" content="Premium combine harvester landing page with multilingual enquiry and Firebase lead capture." />
-  <meta property="og:type" content="website" />
-  <link rel="icon" href="logo.svg" type="image/svg+xml" />
-  <link rel="manifest" href="site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -49,8 +45,6 @@
         <a href="#specs" data-i18n="navSpecs">Specifications</a>
         <a href="#service" data-i18n="navService">Parts & Service</a>
         <a href="#gallery" data-i18n="navGallery">Gallery</a>
-        <a href="#finance" data-i18n="navFinance">Finance</a>
-        <a href="#dealers" data-i18n="navDealers">Dealers</a>
         <a href="#enquiry" data-i18n="navEnquire">Enquire</a>
       </nav>
 
@@ -296,44 +290,6 @@
       </div>
     </section>
 
-
-    <section class="finance-section section" id="finance">
-      <div class="container finance-grid">
-        <div class="finance-copy reveal">
-          <p class="eyebrow" data-i18n="financeEyebrow">Finance and buying support</p>
-          <h2 data-i18n="financeTitle">Make the next step simple for farmers.</h2>
-          <p data-i18n="financeLead">Add real bank, finance, subsidy, exchange and booking terms after confirmation. The section is ready to explain the complete purchase journey clearly.</p>
-          <div class="finance-note">
-            <span data-i18n="financeBadge">Production ready block</span>
-            <strong data-i18n="financeBadgeText">Update values once pricing and documents are final.</strong>
-          </div>
-        </div>
-        <div class="finance-steps reveal" id="financeSteps"></div>
-      </div>
-    </section>
-
-    <section class="dealer-section section" id="dealers">
-      <div class="container">
-        <div class="section-intro reveal">
-          <p class="eyebrow" data-i18n="dealerEyebrow">Dealer and service network</p>
-          <h2 data-i18n="dealerTitle">Show where buyers can get help, service and spare parts.</h2>
-          <p data-i18n="dealerLead">Use this area for factory address, dealers, service vans, technicians, spare-part availability and seasonal check-up camps.</p>
-        </div>
-        <div class="dealer-grid" id="dealerGrid"></div>
-      </div>
-    </section>
-
-    <section class="faq-section section">
-      <div class="container faq-grid">
-        <div class="section-intro reveal">
-          <p class="eyebrow" data-i18n="faqEyebrow">Buyer questions</p>
-          <h2 data-i18n="faqTitle">Answer common questions before the farmer calls.</h2>
-          <p data-i18n="faqLead">This FAQ makes the site feel complete and reduces confusion about offers, service, documents and model specifications.</p>
-        </div>
-        <div class="faq-list reveal" id="faqList"></div>
-      </div>
-    </section>
-
     <section class="enquiry-section section" id="enquiry">
       <div class="container enquiry-grid">
         <div class="form-card reveal">
@@ -413,11 +369,10 @@
     </section>
   </main>
 
-
-  <div class="floating-cta" aria-label="Quick contact actions">
-    <a href="tel:+919800000000" data-i18n="floatCall">Call</a>
-    <a href="https://wa.me/919800000000" target="_blank" rel="noopener" data-i18n="floatWhatsapp">WhatsApp</a>
-    <a href="#enquiry" data-i18n="floatEnquiry">Enquire</a>
+  <div class="floating-cta" aria-label="Quick contact">
+    <a href="tel:+919800000000" class="cta-call">Call</a>
+    <a href="https://wa.me/919800000000" target="_blank" rel="noopener" class="cta-wa">WhatsApp</a>
+    <a href="#enquiry" class="cta-enquire">Enquire</a>
   </div>
 
   <footer class="site-footer">
@@ -430,38 +385,21 @@
     </div>
   </footer>
 
-
   <script>
-    // Fallback: lets mobile users enter the site even if the main animation script fails.
-    (function () {
-      function closeIntro() {
-        var intro = document.getElementById('introOverlay');
-        if (!intro) return;
-        intro.classList.add('hidden');
-        intro.style.opacity = '0';
-        intro.style.visibility = 'hidden';
-        intro.style.pointerEvents = 'none';
-        intro.setAttribute('aria-hidden', 'true');
+    (function(){
+      function closeIntro(){
+        var intro=document.getElementById("introOverlay");
+        if(!intro) return;
+        intro.classList.add("hidden");
+        intro.style.opacity="0";
+        intro.style.visibility="hidden";
+        intro.style.pointerEvents="none";
       }
-
-      function bindIntroButton() {
-        var btn = document.getElementById('skipIntro');
-        if (!btn) return;
-        btn.addEventListener('click', closeIntro);
-        btn.addEventListener('touchend', function (event) {
-          event.preventDefault();
-          closeIntro();
-        }, { passive: false });
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', bindIntroButton);
-      } else {
-        bindIntroButton();
-      }
-
-      window.NewHiraCloseIntro = closeIntro;
-      setTimeout(closeIntro, 5200);
+      var btn=document.getElementById("skipIntro");
+      if(btn){btn.addEventListener("click", closeIntro); btn.addEventListener("touchend", function(e){ e.preventDefault(); closeIntro(); }, {passive:false});}
+      setTimeout(closeIntro, 4200);
+      setTimeout(function(){document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("visible")})}, 500);
+      window.NewHiraCloseIntro=closeIntro;
     })();
   </script>
   <script type="module" src="script.js"></script>

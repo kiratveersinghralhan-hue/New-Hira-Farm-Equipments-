@@ -1,61 +1,41 @@
-# New Hira Farm Equipments — Final Production Website
+# New Hira Farm Equipments Website v2
 
-Static production-ready landing page for a premium agricultural combine harvester brand.
+Premium static landing page for a combine harvester brand.
 
-## Included
-- Premium luxury-inspired homepage
-- Animated intro with combine harvester
-- Animated hero machine showcase
-- Lightweight 3D-style model viewer
-- 2D annotated part diagram
-- Gallery storytelling section
-- Finance / buying support section
-- Dealer and service network section
-- FAQ section
-- Floating Call / WhatsApp / Enquiry buttons
-- English, Hindi and Punjabi full-page translations
-- Firebase Firestore lead capture
-- SEO basics, favicon, manifest and robots.txt
-- No npm, no build step, no subfolder required
+## Features
+- luxury-inspired dark design
+- animated intro screen
+- animated combine harvester hero canvas
+- lightweight 3D-style machine viewer
+- 2D annotated parts diagram
+- gallery-style premium storytelling section
+- English / Hindi / Punjabi full-page translation
+- Firebase Firestore enquiry form integration
+- no build step and no npm install
 
 ## Files
-Upload all files directly into your GitHub repository root:
-
 - `index.html`
 - `styles.css`
 - `script.js`
 - `firebase-config.js`
 - `firestore.rules`
-- `logo.svg`
-- `site.webmanifest`
-- `robots.txt`
-- `.gitignore`
 - `README.md`
+- `.gitignore`
 
 ## Firebase
-Your Firebase config is already in `firebase-config.js`.
+The included `firebase-config.js` already contains the Firebase values that were shared in chat.
+Collection name: `harvester_enquiries`
 
-Firestore collection used by the enquiry form:
+## GitHub Pages publish steps
+1. Create a new repository on GitHub.
+2. Upload all files from this ZIP directly into the repository root.
+3. Open **Settings** of the repo.
+4. Open **Pages**.
+5. Under **Build and deployment**, choose **Deploy from a branch**.
+6. Select branch **main** and folder **/root**.
+7. Save.
+8. Wait 1–3 minutes and open the published link.
 
-```txt
-harvester_enquiries
-```
-
-Publish the included `firestore.rules` in Firebase Console → Firestore Database → Rules.
-
-## Before publishing officially
-Replace these draft items:
-- real phone number and WhatsApp number in `index.html`
-- real company address and working hours
-- confirmed harvester specs in `script.js`
-- confirmed offer amount and terms
-- final warranty, finance and dealer details
-- real machine photos/videos if available
-
-## GitHub Pages
-1. Create or open your GitHub repository.
-2. Upload all files from this ZIP directly to the repository root.
-3. Go to Settings → Pages.
-4. Source: Deploy from a branch.
-5. Branch: `main`, folder: `/root`.
-6. Save and wait a few minutes.
+## Notes
+- Technical specs are draft values from public listings and should be confirmed before final publishing.
+- Replace draft contact details with real company phone, WhatsApp and address.
