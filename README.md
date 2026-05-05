@@ -1,42 +1,37 @@
-# New Hira — Single Page 3D Parts Finder Website
+# New Hira Advertisement Website
 
-This is a one-page premium website for New Hira.
+A one-page premium advertisement website for New Hira, ready for GitHub Pages.
 
 ## Included
-- Premium moving intro animation
-- About company section
-- 360° rotatable combine harvester 3D viewer
-- Live dynamic part labels
-- Search part by name
-- Part location focus in the 3D model
-- Working explanation + common issue + removal/replacement guidance
-- Login / Sign up prepared with Firebase Auth
-- Firebase Firestore enquiry form
-- Offer slider
-- WhatsApp floating button
-- Share website button
-- Root-level files only, ready for GitHub upload
+- Obys/agency-style moving intro
+- Side slider / page progress navigation
+- Procedure-style scroll cards
+- Company brief
+- Combine harvester advertising section
+- Spare parts list
+- Warranty / guarantee policy
+- Referral and badge network marketing section
+- 360° procedural 3D combine model
+- Searchable parts + repair guidance
+- Firebase Auth login/signup preparation
+- Firebase Firestore enquiry capture
+- WhatsApp, call, share buttons
+- Uploaded photos/videos used from Random.zip
 
-## Firebase setup
-Your Firebase config is already inserted in `firebase-config.js`.
+## Root-level files
+Upload all files directly to your GitHub repository root. No build step is needed.
 
-In Firebase Console:
-1. Go to Authentication
-2. Enable Email/Password sign-in
-3. Go to Firestore Rules
-4. Paste the contents of `firestore.rules`
-5. Publish
+## Firebase
+1. Go to Firebase Console > Authentication.
+2. Enable Email/Password login.
+3. Go to Firestore > Rules.
+4. Paste `firestore.rules`.
+5. Publish rules.
 
-## For true precision 3D model
-The current website includes a procedural demonstration model. For exact real-part precision, send:
-- Real 3D model: GLB/GLTF preferred, or STEP/STP/IGES/OBJ/FBX/CAD
-- Real machine photos: front, back, left, right, top, engine, cabin, cutter, auger, tyres
-- Parts list: part names, part numbers, locations, Hindi/Punjabi names
-- Repair guide: tools, safety steps, removal order, bolt locations, replacement steps
-- Brand data: phone, WhatsApp, address, logo, tagline, warranty, offer terms
-- Specs/brochure: engine, tyres, gears, emissions, electrical system, body/steel info
+## To make the 3D repair system exact
+Send a real GLB/GLTF/CAD model, detailed photos, part numbers, service manual and repair steps. The current model is an adjustable procedural demo for advertisement and planning.
 
-## Replace WhatsApp/Call number
-In `index.html`, replace:
-`919800000000`
-with your real WhatsApp/call number including country code.
+## Contact used
+Phone / WhatsApp: 9216107700
+Email: newhira985@gmail.com
+Address: New Hira, Nabha

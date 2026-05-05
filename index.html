@@ -3,198 +3,209 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#090A0D" />
-  <meta name="description" content="New Hira premium single-page combine harvester 3D model, parts finder, repair guide, offers and enquiry." />
-  <title>New Hira | Combine Harvester 3D Parts Finder</title>
+  <meta name="theme-color" content="#07080b" />
+  <meta name="description" content="New Hira advertisement website: combine harvester, spare parts, warranty, referral network, and 3D repair finder." />
+  <title>New Hira | Harvest King Advertisement Experience</title>
   <script>document.documentElement.classList.add('js');</script>
   <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-      }
-    }
+    {"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="intro" id="intro">
     <canvas id="introCanvas" aria-hidden="true"></canvas>
-    <div class="introGlass">
-      <p class="micro">Exclusive digital service experience</p>
-      <h1>New Hira</h1>
-      <p>360° combine harvester parts intelligence</p>
-      <div class="introBar"><span></span></div>
+    <div class="introText">
+      <p>New Hira presents</p>
+      <h1>Harvest King</h1>
+      <span>Combine • Parts • Service • Network</span>
     </div>
-    <button class="skipIntro" id="skipIntro" type="button">Enter website</button>
+    <button type="button" id="skipIntro" class="skipIntro">Enter</button>
   </div>
 
+  <aside class="sideSlider" aria-label="Page progress">
+    <button data-target="hero" class="active"><span>01</span><b>Title</b></button>
+    <button data-target="company"><span>02</span><b>Company</b></button>
+    <button data-target="combine"><span>03</span><b>Combine</b></button>
+    <button data-target="spares"><span>04</span><b>Parts</b></button>
+    <button data-target="warranty"><span>05</span><b>Warranty</b></button>
+    <button data-target="network"><span>06</span><b>Network</b></button>
+    <button data-target="repair"><span>07</span><b>3D Repair</b></button>
+    <button data-target="enquiry"><span>08</span><b>Enquiry</b></button>
+  </aside>
+
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="New Hira home">
-      <span>NH</span>
-      <strong>New Hira</strong>
-    </a>
-    <button class="menuButton" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav">
-      <span></span><span></span><span></span>
-    </button>
-    <nav id="mainNav" class="mainNav" aria-label="Main navigation">
-      <a href="#about">Company</a>
-      <a href="#model">3D Parts Finder</a>
-      <a href="#parts">Repair Guide</a>
-      <a href="#offer">Offer</a>
+    <a class="brand" href="#hero"><span>NH</span><strong>New Hira</strong></a>
+    <button type="button" class="menu" id="menuBtn" aria-expanded="false"><i></i><i></i><i></i></button>
+    <nav class="nav" id="nav">
+      <a href="#company">Company</a>
+      <a href="#combine">Combine</a>
+      <a href="#spares">Parts</a>
+      <a href="#repair">3D Repair</a>
       <a href="#enquiry">Enquiry</a>
     </nav>
-    <div class="topActions">
-      <button class="textButton" id="shareButton" type="button">Share</button>
-      <button class="loginButton" id="authOpen" type="button">Login / Sign up</button>
+    <div class="topCtas">
+      <button type="button" id="shareTop">Share</button>
+      <button type="button" id="loginOpen">Login</button>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="grain"></div>
-      <div class="heroCopy reveal">
-        <p class="eyebrow">Premium combine harvester support platform</p>
-        <h1>One page for the machine, its parts, its repairs and every farmer enquiry.</h1>
-        <p class="lead">A Bugatti/Rolls-Royce inspired single-page experience for New Hira: 360° rotatable combine harvester, searchable parts, repair guidance, offer capture, login and Firebase-ready enquiries.</p>
+  <main>
+    <section class="hero story" id="hero" data-step="Title slogans">
+      <video class="heroVideo" src="promo-loop.mp4" autoplay muted loop playsinline></video>
+      <div class="heroShade"></div>
+      <div class="heroContent reveal">
+        <p class="eyebrow">Advertisement experience</p>
+        <h1>New Hira<br><span>Built for Indian fields.</span></h1>
+        <p class="lead">A premium advertisement website for the New Hira combine harvester: power, durability, spare parts, warranty, referral network and 3D repair guidance in one continuous scroll.</p>
         <div class="heroActions">
-          <a href="#model" class="primaryBtn">Open 3D model</a>
-          <a href="#enquiry" class="ghostBtn">Send enquiry</a>
+          <a href="#repair" class="primaryBtn">Explore 3D repair</a>
+          <a href="tel:+919216107700" class="glassBtn">Call 9216107700</a>
         </div>
       </div>
-      <div class="heroPanel reveal">
-        <canvas id="heroCanvas" aria-label="Animated New Hira combine harvester preview"></canvas>
-        <div class="heroStats">
-          <div><strong>360°</strong><span>Rotatable model</span></div>
-          <div><strong>Parts</strong><span>Search + location</span></div>
-          <div><strong>Firebase</strong><span>Auth + enquiry</span></div>
-        </div>
+      <div class="heroBadge reveal"><strong>985</strong><span>Multicrop combine legacy</span></div>
+    </section>
+
+    <section class="section story twoCol" id="company" data-step="Company brief">
+      <div class="copy reveal">
+        <p class="eyebrow">Little about company</p>
+        <h2>New Hira, Nabha — a farmer-first agricultural machinery name.</h2>
+        <p>New Hira is presented as a manufacturer-led brand from Nabha, Punjab, guided by Jatinder Singh. Public business listings describe New Hira as a manufacturer, exporter and supplier of agricultural machines and tools from Nabha, with roots in combine harvesters and agricultural equipment.</p>
+        <p>The website copy is written as an advertisement draft: replace or approve it after your father checks final company history, exact claims, and legal wording.</p>
+        <div class="contactStrip"><a href="tel:+919216107700">Call</a><a href="mailto:newhira985@gmail.com">Email</a><a href="https://wa.me/919216107700" target="_blank" rel="noopener">WhatsApp</a></div>
+      </div>
+      <div class="visualCard reveal"><img src="hero.jpg" alt="New Hira combine harvester front view"><div><span>Founder / Owner</span><strong>Jatinder Singh</strong></div></div>
+    </section>
+
+    <section class="section story adDeck" id="combine" data-step="Brief of combine">
+      <div class="stickyVisual reveal">
+        <img src="field.jpg" alt="New Hira combine in field">
+        <canvas id="miniCombineCanvas"></canvas>
+      </div>
+      <div class="scrollCards">
+        <article class="procedureCard reveal"><span>01</span><h2>Brief of combine</h2><p>New Hira combine harvesters are advertised for multicrop harvesting, strong field presence, easy operation and practical service support for Indian farming conditions.</p></article>
+        <article class="procedureCard reveal"><span>02</span><h2>Harvest with confidence</h2><p>Use this space to promote cutter width, crop compatibility, grain handling, tyres, transmission and operator comfort after final specs are confirmed.</p></article>
+        <article class="procedureCard reveal"><span>03</span><h2>Built for visibility</h2><p>The advertisement style uses big visuals, moving cards and 3D interaction so farmers remember the brand and share it with other buyers.</p></article>
       </div>
     </section>
 
-    <section class="about section" id="about">
+    <section class="section story" id="spares" data-step="Spare parts list">
       <div class="sectionHead reveal">
-        <p class="eyebrow">About the company</p>
-        <h2>New Hira is presented as a precision-first agricultural machinery brand.</h2>
-        <p>This single-page website is designed to promote the combine harvester, explain machine parts clearly, support farmers when they need replacement guidance, and turn visitors into enquiries.</p>
+        <p class="eyebrow">Spare parts list</p>
+        <h2>Show every important spare part like a product catalogue.</h2>
+        <p>Farmers can scan the list, search in the 3D section, and send an enquiry for the exact part.</p>
       </div>
-      <div class="aboutGrid">
-        <article class="infoCard reveal"><span>01</span><h3>Manufacturer identity</h3><p>Shows New Hira as the machine maker, not just a seller. Replace this draft copy with your father’s real company history, manufacturing location and experience.</p></article>
-        <article class="infoCard reveal"><span>02</span><h3>Farmer support</h3><p>Farmers can search for parts such as shaft, fingers, blades, thresher drum, belt and pulley, then see a location and repair instructions.</p></article>
-        <article class="infoCard reveal"><span>03</span><h3>Sales conversion</h3><p>Inquiry form, offer amount, login/signup, WhatsApp button and share button help turn the website into a promotion and lead generation tool.</p></article>
+      <div class="partsGrid" id="partsGrid"></div>
+    </section>
+
+    <section class="section story warranty" id="warranty" data-step="Guarantee warranty policy">
+      <div class="warrantyCard reveal">
+        <p class="eyebrow">Guarantee / Warranty policy</p>
+        <h2>1 season or 500 hours — whichever is earlier.</h2>
+        <p>Guarantee policy is same as warranty. Final terms should be approved by New Hira before publishing.</p>
+        <div class="policyGrid">
+          <div><strong>Coverage</strong><span>Manufacturing-related defects as per company terms.</span></div>
+          <div><strong>Period</strong><span>1 season or 500 working hours, whichever is earlier.</span></div>
+          <div><strong>Service area</strong><span>Nabha and supported nearby service routes.</span></div>
+          <div><strong>Support</strong><span>Inspection, genuine spare parts guidance and service coordination.</span></div>
+        </div>
+      </div>
+      <img class="warrantyImg reveal" src="side.jpg" alt="New Hira combine side profile">
+    </section>
+
+    <section class="section story network" id="network" data-step="Networking marketing">
+      <div class="sectionHead reveal">
+        <p class="eyebrow">Networking marketing</p>
+        <h2>Referral income, badges and farmer-to-farmer promotion.</h2>
+        <p>Users can login, share their referral link and send buyer enquiries. If an enquiry converts and a combine is booked, New Hira can reward ₹50,000 as cash or spare parts.</p>
+      </div>
+      <div class="networkGrid">
+        <article class="rankCard reveal"><span>Seed Rank</span><h3>1 enquiry</h3><p>Start sharing New Hira details with farmers.</p></article>
+        <article class="rankCard reveal"><span>Field Rank</span><h3>5 enquiries</h3><p>Earn visibility as an active promoter.</p></article>
+        <article class="rankCard reveal"><span>Harvest Rank</span><h3>1 booking</h3><p>Eligible for referral incentive after company confirmation.</p></article>
+        <article class="rankCard reveal"><span>King Rank</span><h3>3+ bookings</h3><p>Top promoter badge for high-performing network partners.</p></article>
+      </div>
+      <div class="referralBox reveal">
+        <div><strong>Your referral link</strong><p id="refStatus">Login to generate your personal link.</p></div>
+        <button type="button" id="copyReferral">Copy referral link</button>
       </div>
     </section>
 
-    <section class="modelSection section" id="model">
-      <div class="modelIntro reveal">
-        <p class="eyebrow">360° 3D parts finder</p>
-        <h2>Rotate the combine harvester, search parts, and see live part names on the model.</h2>
-        <p>The included model is a premium procedural model. For exact millimetre-level precision, replace it later with your real GLB/CAD model and mapped part coordinates.</p>
+    <section class="section story repair" id="repair" data-step="3D repair system">
+      <div class="sectionHead reveal">
+        <p class="eyebrow">3D model repair system</p>
+        <h2>Rotate the combine 360°, search a part, and view repair guidance.</h2>
+        <p>This is an adjustable procedural 3D model until you send the real GLB/CAD model. After that, the exact part positions can be mapped precisely.</p>
       </div>
-      <div class="modelShell reveal">
-        <div class="viewerTop">
-          <div><p class="viewerLabel">Live model viewer</p><h3 id="selectedPartTitle">Select a part</h3></div>
-          <div class="viewerTools"><button type="button" id="resetView">Reset view</button><button type="button" id="toggleLabels">Labels on</button></div>
-        </div>
+      <div class="viewerShell reveal">
+        <div class="viewerTop"><div><span>Selected part</span><h3 id="partTitle">Select a part</h3></div><div><button id="resetView" type="button">Reset</button><button id="toggleLabels" type="button">Labels on</button></div></div>
         <div class="viewerGrid">
-          <div class="viewerWrap">
-            <div id="threeContainer" class="threeContainer">
-              <div id="partLabels" class="partLabels"></div>
-              <div id="viewerLoading" class="viewerLoading">Loading 3D model...</div>
-            </div>
-          </div>
-          <aside class="partsPanel">
-            <label class="searchBox"><span>Search part name</span><input id="partSearch" type="search" placeholder="Search shaft, blades, thresher, pulley..." autocomplete="off" /></label>
-            <div id="partList" class="partList"></div>
+          <div class="viewer" id="viewer"><div class="labels" id="labels"></div><div class="loading" id="viewerLoading">Loading 3D model...</div></div>
+          <aside class="partPanel">
+            <input id="partSearch" type="search" placeholder="Search shaft, fingers, blades, thresher, belt, pulley...">
+            <div id="partList"></div>
           </aside>
         </div>
-        <div class="partDetails" id="partDetails">
-          <div><p class="detailLabel">Function</p><p id="partFunction">Select any part from the list or click a label on the 3D model.</p></div>
-          <div><p class="detailLabel">Common issue</p><p id="partIssue">The model will focus on the selected location.</p></div>
-          <div><p class="detailLabel">Remove / replace / repair method</p><p id="partRepair">Send the real service manual later and I can make this method exact for every part.</p></div>
+        <div class="repairGuide">
+          <div><b>Working</b><p id="partWorking">Select a part to see its function.</p></div>
+          <div><b>Common issue</b><p id="partIssue">The model will focus on its location.</p></div>
+          <div><b>Replace / repair procedure</b><p id="partRepair">General guidance appears here. Exact procedure requires real manual and model.</p></div>
         </div>
       </div>
     </section>
 
-    <section class="partsGuide section" id="parts">
-      <div class="sectionHead reveal"><p class="eyebrow">All parts and working explanation</p><h2>Searchable guide for common combine harvester parts.</h2><p>This is a starter technical guide. After you send real part numbers, photos and repair steps, it can become a proper service-support page.</p></div>
-      <div class="guideGrid" id="guideGrid"></div>
-    </section>
-
-    <section class="offer section" id="offer">
-      <div class="offerCard reveal">
-        <div class="offerCopy"><p class="eyebrow">Promotional offer</p><h2>Attach a booking offer to every enquiry.</h2><p>Set the discount amount after confirming with your father. The selected offer is automatically added to the enquiry form.</p><label class="rangeLine"><span>Offer amount</span><input id="offerRange" type="range" min="25000" max="200000" step="5000" value="100000" /></label></div>
-        <div class="offerNumber"><span>Current offer</span><strong id="offerDisplay">₹1,00,000</strong><p>Discount / booking benefit / exchange benefit</p></div>
-      </div>
-    </section>
-
-    <section class="enquiry section" id="enquiry">
-      <div class="enquiryGrid">
-        <div class="authCard reveal">
-          <p class="eyebrow">Login / Sign up</p><h2>Customers can create an account before enquiry.</h2><p>Firebase Authentication is prepared. Enable Email/Password login in Firebase console for live account creation.</p>
-          <div id="authStatus" class="authStatus">Not logged in</div>
-          <div class="authMiniActions"><button type="button" id="authOpen2">Login / Sign up</button><button type="button" id="logoutButton">Logout</button></div>
+    <section class="section story enquiry" id="enquiry" data-step="Inquiry">
+      <div class="enquiryLayout">
+        <div class="loginCard reveal">
+          <p class="eyebrow">Account system</p>
+          <h2>Login, share, earn badges.</h2>
+          <p>Firebase Auth is prepared. Enable Email/Password in Firebase to make signup active. Referral code will be attached to enquiries.</p>
+          <div class="authStatus" id="authStatus">Not logged in</div>
+          <button type="button" id="loginOpen2">Login / Sign up</button>
+          <button type="button" id="logoutBtn">Logout</button>
         </div>
-        <form class="enquiryForm reveal" id="enquiryForm">
-          <p class="eyebrow">Enquiry form</p><h2>Ask for price, service or part support.</h2>
-          <div class="formGrid"><label>Full name<input name="name" required placeholder="Farmer / customer name" /></label><label>Phone / WhatsApp<input name="phone" required placeholder="+91 98765 43210" /></label></div>
-          <div class="formGrid"><label>District<input name="district" placeholder="Patiala" /></label><label>Main crop<select name="crop"><option>Wheat</option><option>Paddy</option><option>Maize</option><option>Barley</option><option>Other</option></select></label></div>
-          <div class="formGrid"><label>Selected part / topic<input id="enquiryPart" name="selectedPart" readonly placeholder="Select a part from 3D model" /></label><label>Offer<input id="enquiryOffer" name="offer" readonly /></label></div>
-          <label>Message<textarea name="message" rows="5" placeholder="Tell us what you need: machine price, spare part, repair help, service visit..."></textarea></label>
+        <form id="enquiryForm" class="enquiryForm reveal">
+          <p class="eyebrow">Enquiry + offer</p>
+          <h2>Book combine, ask for spare part, or claim offer.</h2>
+          <div class="formGrid"><label>Name<input name="name" required placeholder="Your name"></label><label>Phone<input name="phone" required placeholder="+91"></label></div>
+          <div class="formGrid"><label>District<input name="district" placeholder="Nabha / Patiala"></label><label>Interest<select name="interest"><option>New combine booking</option><option>Paddy 2025-26 offer</option><option>Spare parts</option><option>Service / repair</option><option>Referral / affiliate</option></select></label></div>
+          <div class="formGrid"><label>Selected part<input name="selectedPart" id="selectedPartInput" readonly placeholder="Selected from 3D model"></label><label>Offer<input name="offer" id="offerInput" readonly></label></div>
+          <label>Message<textarea name="message" rows="5" placeholder="Tell us your requirement..."></textarea></label>
           <button class="primaryBtn full" type="submit">Submit enquiry</button>
-          <p id="formStatus" class="formStatus" role="status"></p>
+          <p class="formStatus" id="formStatus"></p>
         </form>
-      </div>
-    </section>
-
-    <section class="requirements section">
-      <div class="sectionHead reveal"><p class="eyebrow">For exact precision</p><h2>Send these files to make the 3D model exact.</h2></div>
-      <div class="requirementsGrid">
-        <div class="requirement reveal"><strong>3D model</strong><span>GLB/GLTF preferred. STEP, STP, IGES, OBJ, FBX or CAD also works.</span></div>
-        <div class="requirement reveal"><strong>Photos</strong><span>Front, back, left, right, top, cabin, engine bay, cutter, auger, tyres and internal panels.</span></div>
-        <div class="requirement reveal"><strong>Parts list</strong><span>Part names, part numbers, Hindi/Punjabi names, categories and exact positions.</span></div>
-        <div class="requirement reveal"><strong>Repair guide</strong><span>Tools needed, safety steps, bolts/removal order, replacement method and warnings.</span></div>
-        <div class="requirement reveal"><strong>Brand details</strong><span>Logo, colors, phone, WhatsApp, address, warranty, finance and offer details.</span></div>
-        <div class="requirement reveal"><strong>Brochure/specs</strong><span>Engine, emissions, tyres, gears, electrical system, steel body and service specs.</span></div>
       </div>
     </section>
   </main>
 
-  <footer class="footer"><strong>New Hira</strong><p>Single-page premium combine harvester website with 3D parts finder, Firebase enquiry, WhatsApp and share tools.</p></footer>
+  <footer class="footer"><strong>New Hira</strong><span>New Hira, Nabha • 9216107700 • newhira985@gmail.com</span></footer>
 
-  <div class="floatActions"><a id="whatsappFloat" href="https://wa.me/919800000000" target="_blank" rel="noopener">WhatsApp</a><button id="shareFloat" type="button">Share</button><a href="#enquiry">Enquire</a></div>
+  <div class="floatBar">
+    <a href="tel:+919216107700">Call</a>
+    <a class="whatsapp" href="https://wa.me/919216107700" target="_blank" rel="noopener">WhatsApp</a>
+    <button type="button" id="shareFloat">Share</button>
+  </div>
 
   <dialog id="authDialog" class="authDialog">
-    <form method="dialog" class="dialogCloseForm"><button aria-label="Close">×</button></form>
+    <form method="dialog" class="closeForm"><button aria-label="Close">×</button></form>
     <div class="dialogInner">
-      <p class="eyebrow">Customer account</p><h2>Login or sign up</h2><p>Use Firebase Email/Password Authentication. If Firebase Auth is not enabled, this will show an error.</p>
-      <label>Email<input id="authEmail" type="email" placeholder="customer@example.com" /></label>
-      <label>Password<input id="authPassword" type="password" placeholder="Minimum 6 characters" /></label>
-      <div class="authActions"><button type="button" id="loginSubmit">Login</button><button type="button" id="signupSubmit">Sign up</button></div>
-      <p id="authMessage" class="authMessage"></p>
+      <p class="eyebrow">New Hira account</p>
+      <h2>Login / Sign up</h2>
+      <label>Email<input id="authEmail" type="email" placeholder="name@example.com"></label>
+      <label>Password<input id="authPassword" type="password" placeholder="Minimum 6 characters"></label>
+      <div class="authActions"><button id="loginBtn" type="button">Login</button><button id="signupBtn" type="button">Sign up</button></div>
+      <p id="authMessage"></p>
     </div>
   </dialog>
 
   <script>
-    (function () {
-      function closeIntro() {
-        const intro = document.getElementById('intro');
-        if (!intro) return;
-        intro.classList.add('hidden');
-        intro.style.opacity = '0';
-        intro.style.visibility = 'hidden';
-        intro.style.pointerEvents = 'none';
-      }
-      const btn = document.getElementById('skipIntro');
-      if (btn) {
-        btn.addEventListener('click', closeIntro);
-        btn.addEventListener('touchend', function (e) { e.preventDefault(); closeIntro(); }, { passive: false });
-      }
-      window.NewHiraCloseIntro = closeIntro;
-      setTimeout(closeIntro, 5200);
+    (function(){
+      function closeIntro(){var el=document.getElementById('intro'); if(!el)return; el.classList.add('hidden'); el.style.opacity='0'; el.style.visibility='hidden'; el.style.pointerEvents='none';}
+      document.getElementById('skipIntro')?.addEventListener('click', closeIntro);
+      setTimeout(closeIntro, 5200); window.NewHiraCloseIntro=closeIntro;
     })();
   </script>
   <script type="module" src="script.js"></script>
