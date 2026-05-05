@@ -1,815 +1,197 @@
-import { enableFirebase, leadsCollectionName, firebaseConfig } from './firebase-config.js';
+import { enableFirebase, firebaseConfig, enquiriesCollection, usersCollection } from './firebase-config.js';
 
-const appState = {
-  lang: localStorage.getItem('newHiraLang') || 'en',
-  specTab: 'power',
-  offerAmount: Number(localStorage.getItem('newHiraOffer') || 100000),
-  autoRotate: true,
-  modelAngle: 30,
-  firestore: null,
-  addDoc: null,
-  collection: null,
-  serverTimestamp: null
-};
-
-const content = {
-  en: {
-    pageTitle: 'New Hira Farm Equipments | Premium Harvester Website',
-    introKicker: 'Punjab Crafted • Field Ready',
-    introBrandA: 'New Hira',
-    introBrandB: 'Farm Equipments',
-    introCaption: 'Premium combine harvester experience',
-    skipIntro: 'Skip intro',
-    skipLink: 'Skip to content',
-    brandSub: 'Farm Equipments',
-    languageLabel: 'Language',
-    navOverview: 'Overview',
-    navMachine: 'Machine',
-    navSpecs: 'Specifications',
-    navService: 'Parts & Service',
-    navGallery: 'Gallery',
-    navEnquire: 'Enquire',
-    navCta: 'Get offer',
-    heroEyebrow: 'Agricultural harvester experience',
-    heroTitle: 'A premium website concept for a powerful New Hira combine harvester.',
-    heroLead: 'Inspired by high-end automotive storytelling and modern product pages, this design presents New Hira as a trusted manufacturer with dynamic visuals, multilingual content and direct farmer enquiries.',
-    heroCtaPrimary: 'Enquire now',
-    heroCtaSecondary: 'Explore machine',
-    heroStageLabel: 'Animated machine showcase',
-    heroStageStatus: 'Dynamic visual active',
-    heroFooterLabelA: 'Story style',
-    heroFooterValueA: 'Premium / cinematic',
-    heroFooterLabelB: 'Language mode',
-    heroFooterLabelC: 'Lead backend',
-    heroPoints: [
-      ['Premium first impression', 'Luxury style layout adapted for an agricultural brand'],
-      ['Multilingual experience', 'English, Hindi and Punjabi switch the full page'],
-      ['Interactive visuals', 'Animated hero, 3D style model and part diagram'],
-      ['Direct lead capture', 'Firebase-ready enquiry form for real customer data']
-    ],
-    metrics: [
-      ['128 HP', 'Draft engine power'],
-      ['14 ft', 'Draft cutter width'],
-      ['7+', 'Crop types listed'],
-      ['24/7', 'Enquiry collection']
-    ],
-    storyEyebrow: 'Manufacturer story',
-    storyTitle: 'Built for demanding fields, presented with a modern premium identity.',
-    storyLead: 'This layout mixes the elegance of luxury landing pages with practical agricultural communication — so farmers see strength, reliability, service support and value.',
-    storyCardTag: 'New Hira 985 • Draft showcase',
-    storyCardMini: 'Editable after final model confirmation',
-    storyCardTitle: 'One machine. One premium message. Multiple crops.',
-    storyCardBody: 'Use this space to communicate manufacturing confidence, crop compatibility, operator comfort, and the availability of genuine service and spare parts.',
-    storyItems: [
-      ['Manufacturer-led branding', 'Show your father’s company as the maker, not just a seller.'],
-      ['Visual storytelling', 'Hero motion, dramatic lighting and bold headlines improve trust.'],
-      ['Product clarity', 'Explain engine, tyres, gears, grain system, electrics and service.'],
-      ['Conversion focus', 'Push visitors toward calling, messaging or filling the enquiry form.']
-    ],
-    panelKicker: 'Machine highlights',
-    panelTitle: 'Designed to convert attention into enquiries.',
-    highlights: [
-      ['Powerful presence', 'Strong visual surfaces and contrast inspired by premium product sites.'],
-      ['Farmer-friendly details', 'Core specs and service information are shown in practical sections.'],
-      ['Future-ready backend', 'Firebase can capture and store all enquiries for follow-up.']
-    ],
-    experienceEyebrow: '2D + 3D product experience',
-    experienceTitle: 'Interactive visuals that explain the machine better than a plain brochure.',
-    experienceLead: 'A lightweight 3D model preview and an annotated 2D diagram help visitors understand the machine quickly on mobile or desktop.',
-    threeDLabel: 'Interactive 3D view',
-    threeDTitle: 'Rotate the combine harvester',
-    pauseRotate: 'Pause',
-    playRotate: 'Play',
-    rotationLabel: 'Rotation',
-    specLabel: 'Machine data',
-    specDefaultTitle: 'Power & engine',
-    tabPower: 'Power',
-    tabHarvesting: 'Harvesting',
-    tabDrive: 'Drive',
-    tabServiceSpecs: 'Service',
-    specNote: 'Draft technical information from public listings. Confirm final values before publishing.',
-    diagramKicker: '2D annotated diagram',
-    diagramTitle: 'Important parts at a glance',
-    diagramButton: 'Highlight parts',
-    callEngine: 'Engine',
-    callCutter: 'Cutter bar',
-    callGrain: 'Grain tank',
-    callTyres: 'Tyres / wheels',
-    callAuger: 'Unloading auger',
-    partsKicker: 'Parts & support',
-    partsTitle: 'Promote genuine spare parts and after-sales service.',
-    partsLead: 'This section is useful for convincing farmers that service backup is strong, spare parts are available, and seasonal maintenance will be easy.',
-    parts: [
-      ['Cutter blades', 'Harvesting edge and cutting efficiency'],
-      ['Belts & chains', 'Smooth drive and transmission support'],
-      ['Sieves', 'Cleaning and grain separation'],
-      ['Straw walkers', 'Crop separation performance'],
-      ['Filters', 'Engine protection and service kits'],
-      ['Bearings', 'Low downtime maintenance support'],
-      ['Tyres / wheels', 'Field movement and traction'],
-      ['Auger parts', 'Reliable unloading operation']
-    ],
-    galleryEyebrow: 'Premium gallery presentation',
-    galleryTitle: 'A more luxurious product story for an agricultural machine.',
-    galleryLead: 'This section is inspired by premium automotive storytelling: bold words, focused highlights and immersive product moments adapted for the combine harvester market.',
-    galleryCard1Kicker: 'Commanding front profile',
-    galleryCard1Title: 'Presence that looks engineered for serious harvesting.',
-    galleryCard1Body: 'Use real harvester photography later here. The layout is already ready for bold image-led storytelling.',
-    galleryCard2Kicker: 'Operator perspective',
-    galleryCard2Title: 'Clear controls, confident visibility and field-focused comfort.',
-    galleryCard2Body: 'Talk about operator ease, control access, maintenance visibility and harvesting confidence in this block.',
-    galleryCard3Kicker: 'Built to support business',
-    galleryCard3Title: 'Spare parts, service backup and seasonal support make the difference.',
-    galleryCard3Body: 'Use this to show why farmers should trust New Hira not only for the machine, but also for support after purchase.',
-    offerEyebrow: 'Seasonal campaign',
-    offerTitle: 'Offer-driven landing pages can increase calls and form enquiries.',
-    offerLead: 'Use the offer amount your father confirms later. Right now the slider is interactive so the website feels alive and the offer value gets pushed into the enquiry form automatically.',
-    offerValueLabel: 'Current promotional offer',
-    offerValueCaption: 'Discount / exchange / booking benefit — edit later',
-    offerSliderLabel: 'Adjust offer amount',
-    applyOffer: 'Apply this offer to enquiry',
-    offerBoxTag: 'Campaign message',
-    offerBoxTitle: 'Smart booking benefits for serious buyers.',
-    offerList: [
-      ['Booking discount', 'Show a strong visible amount such as ₹1 lakh to attract attention.'],
-      ['Priority callback', 'Let your sales team contact serious buyers quickly.'],
-      ['Service support message', 'Mention spare parts support, field visit and guidance.']
-    ],
-    formEyebrow: 'Direct farmer enquiries',
-    formTitle: 'Connect the website to Firebase and capture every lead.',
-    formLead: 'This form is already prepared for Firebase. If Firebase is unavailable, enquiries are stored locally for testing so nothing feels broken.',
-    fieldName: 'Full name',
-    fieldNamePlaceholder: 'Farmer name',
-    fieldPhone: 'Phone / WhatsApp',
-    fieldPhonePlaceholder: '+91 98765 43210',
-    fieldDistrict: 'District',
-    fieldDistrictPlaceholder: 'e.g. Patiala',
-    fieldState: 'State',
-    fieldCrop: 'Main crop',
-    fieldOffer: 'Selected offer',
-    fieldMessage: 'Requirement',
-    fieldMessagePlaceholder: 'Tell us about crop, location and purchase timeline',
-    consentText: 'I agree that New Hira team can contact me regarding this enquiry.',
-    submitLabel: 'Submit enquiry',
-    statusSubmitting: 'Submitting enquiry...',
-    statusSuccess: 'Enquiry submitted successfully. It should now appear in Firebase.',
-    statusLocal: 'Firebase is not available, so the enquiry was saved locally in this browser for testing.',
-    statusError: 'Something went wrong. Please check Firebase setup and try again.',
-    contactKicker: 'Contact block',
-    contactTitle: 'Publish real sales details here.',
-    contactLead: 'Replace this draft contact information with the exact phone number, WhatsApp number, address and working hours of New Hira Farm Equipments.',
-    contactPhoneLabel: 'Sales phone',
-    contactWhatsappLabel: 'WhatsApp',
-    contactLocationLabel: 'Location',
-    contactLocationValue: 'Punjab, India',
-    contactHoursLabel: 'Working hours',
-    contactHoursValue: 'Mon - Sat • 9 AM to 6 PM',
-    contactNote: 'Tip: once you confirm pricing, warranty, finance and discount details, update them in the JavaScript content file and the whole site will change everywhere.',
-    footerText: 'Dynamic agricultural harvester landing page with English, Hindi and Punjabi translation support.',
-    footerBackTop: 'Back to top',
-    states: ['Punjab', 'Haryana', 'Rajasthan', 'Uttar Pradesh', 'Other'],
-    crops: ['Wheat', 'Paddy', 'Maize', 'Barley', 'Other'],
-    specTitles: {
-      power: 'Power & engine',
-      harvesting: 'Harvesting & grain',
-      drive: 'Drive, gears & tyres',
-      service: 'Service & support'
-    },
-    specs: {
-      power: [
-        ['Model', 'New Hira 985 self-propelled combine harvester'],
-        ['Engine', 'Ashok Leyland 412 turbocharged diesel (draft public listing; confirm latest)'],
-        ['Power', '128 HP @ 2200 RPM shown by one public source; another listing shows 133 HP'],
-        ['Electrical system', 'Starter, battery, work lamps and switches — confirm exact ratings'],
-        ['Emission', 'Public listings mention TREM III; update after confirming latest compliance']
-      ],
-      harvesting: [
-        ['Cutter bar', '4350 mm / 14 ft draft listing'],
-        ['Crop support', 'Wheat, paddy, barley, maize, sunflower, pulses and gram'],
-        ['Grain tank', 'Around 1900 kg / 2 ton listed publicly — confirm final model'],
-        ['Threshing', '6 straw walkers and 2 sieve style layout in public listings'],
-        ['Output', 'Approx. 1.5 acre/hour shown by one listing — verify with actual field performance']
-      ],
-      drive: [
-        ['Front tyres', '18.4 / 30 listed publicly'],
-        ['Rear tyres', '9.00 x 16 listed publicly'],
-        ['Gears', '1st: 1.5–3.5 km/h • 2nd: 3.5–9 km/h • 3rd: 9–21 km/h'],
-        ['Reverse', 'Approx. 3.5–9.5 km/h draft range'],
-        ['Construction', 'Steel body and durable field-focused structure']
-      ],
-      service: [
-        ['Spare parts', 'Blades, sieves, filters, belts, chains, bearings, auger and wheel parts'],
-        ['Hydraulics', 'Add pump and hose service support details if available'],
-        ['Warranty', 'Add actual warranty after confirmation'],
-        ['On-site service', 'Add service radius, timing and availability'],
-        ['Documents', 'Add brochure, finance support and compliance papers later']
-      ]
-    }
-  },
-  hi: {
-    pageTitle: 'न्यू हीरा फार्म इक्विपमेंट्स | प्रीमियम हार्वेस्टर वेबसाइट',
-    introKicker: 'पंजाब में निर्मित • खेतों के लिए तैयार',
-    introBrandA: 'न्यू हीरा',
-    introBrandB: 'फार्म इक्विपमेंट्स',
-    introCaption: 'प्रीमियम कंबाइन हार्वेस्टर अनुभव',
-    skipIntro: 'इंट्रो छोड़ें',
-    skipLink: 'मुख्य सामग्री पर जाएँ',
-    brandSub: 'फार्म इक्विपमेंट्स',
-    languageLabel: 'भाषा',
-    navOverview: 'ओवरव्यू',
-    navMachine: 'मशीन',
-    navSpecs: 'स्पेसिफिकेशन',
-    navService: 'पार्ट्स और सर्विस',
-    navGallery: 'गैलरी',
-    navEnquire: 'पूछताछ',
-    navCta: 'ऑफर लें',
-    heroEyebrow: 'एग्रीकल्चरल हार्वेस्टर अनुभव',
-    heroTitle: 'एक शक्तिशाली न्यू हीरा कंबाइन हार्वेस्टर के लिए प्रीमियम वेबसाइट कॉन्सेप्ट।',
-    heroLead: 'हाई-एंड ऑटोमोबाइल और मॉडर्न प्रोडक्ट वेबसाइट्स से प्रेरित यह डिज़ाइन न्यू हीरा को एक भरोसेमंद निर्माता के रूप में दिखाता है, जिसमें डायनेमिक विज़ुअल्स, बहुभाषी कंटेंट और सीधी किसान पूछताछ शामिल है।',
-    heroCtaPrimary: 'अभी पूछताछ करें',
-    heroCtaSecondary: 'मशीन देखें',
-    heroStageLabel: 'एनिमेटेड मशीन शोकेस',
-    heroStageStatus: 'डायनेमिक विज़ुअल चालू है',
-    heroFooterLabelA: 'स्टोरी स्टाइल',
-    heroFooterValueA: 'प्रीमियम / सिनेमैटिक',
-    heroFooterLabelB: 'भाषा मोड',
-    heroFooterLabelC: 'लीड बैकएंड',
-    heroPoints: [
-      ['प्रीमियम पहली छाप', 'लक्ज़री स्टाइल लेआउट जिसे एग्रीकल्चर ब्रांड के लिए अपनाया गया है'],
-      ['पूरी बहुभाषी साइट', 'English, Hindi और Punjabi पूरी वेबसाइट बदलते हैं'],
-      ['इंटरैक्टिव विज़ुअल्स', 'एनिमेटेड हीरो, 3D स्टाइल मॉडल और पार्ट डायग्राम'],
-      ['सीधी लीड कैप्चर', 'Firebase-ready फॉर्म असली ग्राहक डेटा के लिए']
-    ],
-    metrics: [
-      ['128 HP', 'ड्राफ्ट इंजन पावर'],
-      ['14 ft', 'ड्राफ्ट कटर चौड़ाई'],
-      ['7+', 'सूचीबद्ध फसलें'],
-      ['24/7', 'पूछताछ संग्रह']
-    ],
-    storyEyebrow: 'निर्माता की कहानी',
-    storyTitle: 'कठिन खेतों के लिए बनी मशीन, आधुनिक प्रीमियम पहचान के साथ प्रस्तुत।',
-    storyLead: 'यह लेआउट लक्ज़री लैंडिंग पेज की खूबसूरती और व्यावहारिक कृषि जानकारी को जोड़ता है — ताकि किसान ताकत, भरोसा, सर्विस सपोर्ट और वैल्यू देखें।',
-    storyCardTag: 'न्यू हीरा 985 • ड्राफ्ट शोकेस',
-    storyCardMini: 'अंतिम मॉडल कन्फर्म होने के बाद एडिट करें',
-    storyCardTitle: 'एक मशीन। एक प्रीमियम संदेश। कई फसलें।',
-    storyCardBody: 'इस भाग में निर्माण क्षमता, फसल संगतता, ऑपरेटर आराम और असली सर्विस/स्पेयर पार्ट्स उपलब्धता को दिखाएँ।',
-    storyItems: [
-      ['निर्माता आधारित ब्रांडिंग', 'आपके पिता की कंपनी को निर्माता के रूप में दिखाएँ, सिर्फ विक्रेता नहीं।'],
-      ['विज़ुअल स्टोरीटेलिंग', 'हीरो मोशन, ड्रामेटिक लाइटिंग और बोल्ड हेडलाइन भरोसा बढ़ाती हैं।'],
-      ['स्पष्ट प्रोडक्ट जानकारी', 'इंजन, टायर, गियर, ग्रेन सिस्टम, इलेक्ट्रिक्स और सर्विस समझाएँ।'],
-      ['कन्वर्ज़न फोकस', 'विज़िटर को कॉल, मैसेज या फॉर्म की ओर पुश करें।']
-    ],
-    panelKicker: 'मशीन हाइलाइट्स',
-    panelTitle: 'ध्यान को पूछताछ में बदलने के लिए डिज़ाइन किया गया।',
-    highlights: [
-      ['शक्तिशाली प्रेज़ेन्स', 'प्रीमियम प्रोडक्ट साइट्स से प्रेरित मजबूत विज़ुअल सरफेस और कॉन्ट्रास्ट।'],
-      ['किसान-हितैषी जानकारी', 'मुख्य स्पेक्स और सर्विस जानकारी आसान सेक्शन में दिखाई जाती है।'],
-      ['भविष्य के लिए तैयार', 'Firebase सभी पूछताछ सेव कर सकता है और फॉलो-अप आसान बनाता है।']
-    ],
-    experienceEyebrow: '2D + 3D प्रोडक्ट अनुभव',
-    experienceTitle: 'इंटरैक्टिव विज़ुअल्स मशीन को साधारण ब्रोशर से बेहतर समझाते हैं।',
-    experienceLead: 'हल्का 3D मॉडल प्रीव्यू और एनोटेटेड 2D डायग्राम मोबाइल और डेस्कटॉप दोनों पर मशीन को जल्दी समझने में मदद करता है।',
-    threeDLabel: 'इंटरैक्टिव 3D व्यू',
-    threeDTitle: 'कंबाइन हार्वेस्टर घुमाएँ',
-    pauseRotate: 'रोकें',
-    playRotate: 'चलाएँ',
-    rotationLabel: 'रोटेशन',
-    specLabel: 'मशीन डेटा',
-    specDefaultTitle: 'पावर और इंजन',
-    tabPower: 'पावर',
-    tabHarvesting: 'कटाई',
-    tabDrive: 'ड्राइव',
-    tabServiceSpecs: 'सर्विस',
-    specNote: 'तकनीकी जानकारी सार्वजनिक लिस्टिंग से ड्राफ्ट रूप में है। प्रकाशित करने से पहले अंतिम वैल्यू कन्फर्म करें।',
-    diagramKicker: '2D एनोटेटेड डायग्राम',
-    diagramTitle: 'महत्वपूर्ण पार्ट्स एक नज़र में',
-    diagramButton: 'पार्ट्स हाईलाइट करें',
-    callEngine: 'इंजन',
-    callCutter: 'कटर बार',
-    callGrain: 'ग्रेन टैंक',
-    callTyres: 'टायर / व्हील',
-    callAuger: 'अनलोडिंग ऑगर',
-    partsKicker: 'पार्ट्स और सपोर्ट',
-    partsTitle: 'असली स्पेयर पार्ट्स और आफ्टर-सेल्स सर्विस को प्रमोट करें।',
-    partsLead: 'यह सेक्शन किसानों को भरोसा दिलाने के लिए उपयोगी है कि सर्विस बैकअप मजबूत है, पार्ट्स उपलब्ध हैं और मेंटेनेंस आसान रहेगा।',
-    parts: [
-      ['कटर ब्लेड', 'कटाई की धार और कटिंग दक्षता'],
-      ['बेल्ट और चेन', 'स्मूद ड्राइव और ट्रांसमिशन सपोर्ट'],
-      ['सिव', 'सफाई और ग्रेन सेपरेशन'],
-      ['स्ट्रॉ वॉकर', 'फसल सेपरेशन प्रदर्शन'],
-      ['फिल्टर', 'इंजन सुरक्षा और सर्विस किट'],
-      ['बेयरिंग', 'कम डाउनटाइम मेंटेनेंस सपोर्ट'],
-      ['टायर / व्हील', 'फील्ड मूवमेंट और ट्रैक्शन'],
-      ['ऑगर पार्ट्स', 'विश्वसनीय अनलोडिंग ऑपरेशन']
-    ],
-    galleryEyebrow: 'प्रीमियम गैलरी प्रेज़ेंटेशन',
-    galleryTitle: 'एक कृषि मशीन के लिए और भी शानदार प्रोडक्ट स्टोरी।',
-    galleryLead: 'यह सेक्शन प्रीमियम ऑटोमोबाइल स्टोरीटेलिंग से प्रेरित है: बोल्ड टेक्स्ट, फोकस्ड हाइलाइट्स और इमर्सिव प्रोडक्ट मोमेंट्स जिन्हें कंबाइन हार्वेस्टर मार्केट के लिए अपनाया गया है।',
-    galleryCard1Kicker: 'प्रभावशाली फ्रंट प्रोफाइल',
-    galleryCard1Title: 'ऐसी मौजूदगी जो गंभीर हार्वेस्टिंग के लिए इंजीनियर्ड लगे।',
-    galleryCard1Body: 'बाद में यहाँ असली हार्वेस्टर फोटोग्राफी लगाएँ। यह लेआउट पहले से बोल्ड इमेज-लीड स्टोरीटेलिंग के लिए तैयार है।',
-    galleryCard2Kicker: 'ऑपरेटर पर्सपेक्टिव',
-    galleryCard2Title: 'साफ कंट्रोल, बेहतर विज़िबिलिटी और फील्ड-फोकस्ड आराम।',
-    galleryCard2Body: 'इस ब्लॉक में ऑपरेटर सुविधा, कंट्रोल एक्सेस, मेंटेनेंस विज़िबिलिटी और हार्वेस्टिंग कॉन्फिडेंस के बारे में लिखें।',
-    galleryCard3Kicker: 'व्यवसाय को सपोर्ट करने के लिए बना',
-    galleryCard3Title: 'स्पेयर पार्ट्स, सर्विस बैकअप और सीज़नल सपोर्ट फर्क पैदा करते हैं।',
-    galleryCard3Body: 'यह दिखाने के लिए उपयोग करें कि किसानों को सिर्फ मशीन ही नहीं, खरीद के बाद सपोर्ट के लिए भी न्यू हीरा पर भरोसा करना चाहिए।',
-    offerEyebrow: 'सीज़नल कैंपेन',
-    offerTitle: 'ऑफर-आधारित लैंडिंग पेज कॉल और फॉर्म पूछताछ बढ़ा सकता है।',
-    offerLead: 'बाद में आपके पिता जो राशि कन्फर्म करें उसे रखें। अभी स्लाइडर इंटरैक्टिव है ताकि वेबसाइट जीवंत लगे और ऑफर वैल्यू अपने-आप फॉर्म में चली जाए।',
-    offerValueLabel: 'वर्तमान प्रचार ऑफर',
-    offerValueCaption: 'डिस्काउंट / एक्सचेंज / बुकिंग लाभ — बाद में एडिट करें',
-    offerSliderLabel: 'ऑफर राशि बदलें',
-    applyOffer: 'इस ऑफर को पूछताछ में लगाएँ',
-    offerBoxTag: 'कैंपेन संदेश',
-    offerBoxTitle: 'गंभीर खरीदारों के लिए स्मार्ट बुकिंग लाभ।',
-    offerList: [
-      ['बुकिंग डिस्काउंट', 'ध्यान खींचने के लिए ₹1 लाख जैसी मजबूत राशि दिखाएँ।'],
-      ['प्राथमिकता कॉलबैक', 'गंभीर खरीदारों से आपकी सेल्स टीम जल्दी संपर्क कर सके।'],
-      ['सर्विस सपोर्ट संदेश', 'स्पेयर पार्ट्स, फील्ड विज़िट और मार्गदर्शन का उल्लेख करें।']
-    ],
-    formEyebrow: 'सीधी किसान पूछताछ',
-    formTitle: 'वेबसाइट को Firebase से जोड़ें और हर लीड कैप्चर करें।',
-    formLead: 'यह फॉर्म Firebase के लिए तैयार है। यदि Firebase उपलब्ध न हो, तो टेस्टिंग के लिए पूछताछ इस ब्राउज़र में सेव होगी।',
-    fieldName: 'पूरा नाम',
-    fieldNamePlaceholder: 'किसान का नाम',
-    fieldPhone: 'फोन / WhatsApp',
-    fieldPhonePlaceholder: '+91 98765 43210',
-    fieldDistrict: 'जिला',
-    fieldDistrictPlaceholder: 'जैसे पटियाला',
-    fieldState: 'राज्य',
-    fieldCrop: 'मुख्य फसल',
-    fieldOffer: 'चुना गया ऑफर',
-    fieldMessage: 'जरूरत',
-    fieldMessagePlaceholder: 'फसल, लोकेशन और खरीदने का समय बताइए',
-    consentText: 'मैं सहमत हूँ कि न्यू हीरा टीम इस पूछताछ के संबंध में मुझसे संपर्क कर सकती है।',
-    submitLabel: 'पूछताछ सबमिट करें',
-    statusSubmitting: 'पूछताछ भेजी जा रही है...',
-    statusSuccess: 'पूछताछ सफलतापूर्वक सबमिट हुई। अब यह Firebase में दिखाई देनी चाहिए।',
-    statusLocal: 'Firebase उपलब्ध नहीं है, इसलिए पूछताछ टेस्टिंग के लिए इस ब्राउज़र में सेव कर दी गई।',
-    statusError: 'कुछ गलत हुआ। कृपया Firebase सेटअप जाँचें और फिर कोशिश करें।',
-    contactKicker: 'कॉन्टैक्ट ब्लॉक',
-    contactTitle: 'यहाँ असली बिक्री विवरण प्रकाशित करें।',
-    contactLead: 'इस ड्राफ्ट जानकारी की जगह न्यू हीरा फार्म इक्विपमेंट्स का सही फोन, WhatsApp, पता और समय डालें।',
-    contactPhoneLabel: 'सेल्स फोन',
-    contactWhatsappLabel: 'WhatsApp',
-    contactLocationLabel: 'लोकेशन',
-    contactLocationValue: 'पंजाब, भारत',
-    contactHoursLabel: 'कार्य समय',
-    contactHoursValue: 'सोम - शनि • सुबह 9 से शाम 6 बजे',
-    contactNote: 'टिप: जैसे ही आप कीमत, वारंटी, फाइनेंस और डिस्काउंट कन्फर्म करें, JavaScript कंटेंट फाइल में बदल दें और पूरी साइट अपने-आप हर जगह बदल जाएगी।',
-    footerText: 'English, Hindi और Punjabi सपोर्ट वाली डायनेमिक एग्रीकल्चरल हार्वेस्टर लैंडिंग पेज।',
-    footerBackTop: 'ऊपर जाएँ',
-    states: ['पंजाब', 'हरियाणा', 'राजस्थान', 'उत्तर प्रदेश', 'अन्य'],
-    crops: ['गेहूँ', 'धान', 'मक्का', 'जौ', 'अन्य'],
-    specTitles: {
-      power: 'पावर और इंजन',
-      harvesting: 'कटाई और अनाज',
-      drive: 'ड्राइव, गियर और टायर',
-      service: 'सर्विस और सपोर्ट'
-    },
-    specs: {
-      power: [
-        ['मॉडल', 'न्यू हीरा 985 सेल्फ-प्रोपेल्ड कंबाइन हार्वेस्टर'],
-        ['इंजन', 'Ashok Leyland 412 टर्बोचार्ज्ड डीज़ल (ड्राफ्ट सार्वजनिक लिस्टिंग; नवीनतम कन्फर्म करें)'],
-        ['पावर', 'एक सार्वजनिक स्रोत पर 128 HP @ 2200 RPM; दूसरी लिस्टिंग में 133 HP'],
-        ['इलेक्ट्रिकल सिस्टम', 'स्टार्टर, बैटरी, वर्क लैंप और स्विच — सटीक रेटिंग कन्फर्म करें'],
-        ['उत्सर्जन', 'पब्लिक लिस्टिंग में TREM III; नवीनतम अनुपालन बाद में अपडेट करें']
-      ],
-      harvesting: [
-        ['कटर बार', '4350 mm / 14 ft ड्राफ्ट लिस्टिंग'],
-        ['फसल सपोर्ट', 'गेहूँ, धान, जौ, मक्का, सूरजमुखी, दालें और चना'],
-        ['ग्रेन टैंक', 'लगभग 1900 kg / 2 टन सार्वजनिक लिस्टिंग — अंतिम मॉडल कन्फर्म करें'],
-        ['थ्रेशिंग', 'पब्लिक लिस्टिंग में 6 स्ट्रॉ वॉकर और 2 सिव लेआउट'],
-        ['आउटपुट', 'एक लिस्टिंग में लगभग 1.5 acre/hour — असली फील्ड परफॉर्मेंस से जाँचें']
-      ],
-      drive: [
-        ['फ्रंट टायर', '18.4 / 30 सार्वजनिक रूप से सूचीबद्ध'],
-        ['रियर टायर', '9.00 x 16 सार्वजनिक रूप से सूचीबद्ध'],
-        ['गियर', '1st: 1.5–3.5 km/h • 2nd: 3.5–9 km/h • 3rd: 9–21 km/h'],
-        ['रिवर्स', 'लगभग 3.5–9.5 km/h ड्राफ्ट रेंज'],
-        ['निर्माण', 'स्टील बॉडी और मजबूत फील्ड-फोकस्ड स्ट्रक्चर']
-      ],
-      service: [
-        ['स्पेयर पार्ट्स', 'ब्लेड, सिव, फिल्टर, बेल्ट, चेन, बेयरिंग, ऑगर और व्हील पार्ट्स'],
-        ['हाइड्रोलिक्स', 'यदि उपलब्ध हो तो पंप और होज़ सर्विस डिटेल्स जोड़ें'],
-        ['वारंटी', 'कन्फर्म होने के बाद असली वारंटी जोड़ें'],
-        ['ऑन-साइट सर्विस', 'सर्विस रेंज, समय और उपलब्धता जोड़ें'],
-        ['दस्तावेज़', 'बाद में ब्रोशर, फाइनेंस सपोर्ट और अनुपालन पेपर जोड़ें']
-      ]
-    }
-  },
-  pa: {
-    pageTitle: 'ਨਿਊ ਹੀਰਾ ਫਾਰਮ ਇਕੁਇਪਮੈਂਟਸ | ਪ੍ਰੀਮੀਅਮ ਹਾਰਵੇਸਟਰ ਵੈਬਸਾਈਟ',
-    introKicker: 'ਪੰਜਾਬ ਵਿੱਚ ਤਿਆਰ • ਖੇਤਾਂ ਲਈ ਰੈਡੀ',
-    introBrandA: 'ਨਿਊ ਹੀਰਾ',
-    introBrandB: 'ਫਾਰਮ ਇਕੁਇਪਮੈਂਟਸ',
-    introCaption: 'ਪ੍ਰੀਮੀਅਮ ਕੰਬਾਈਨ ਹਾਰਵੇਸਟਰ ਅਨੁਭਵ',
-    skipIntro: 'ਇੰਟਰੋ ਛੱਡੋ',
-    skipLink: 'ਮੁੱਖ ਸਮੱਗਰੀ ਤੇ ਜਾਓ',
-    brandSub: 'ਫਾਰਮ ਇਕੁਇਪਮੈਂਟਸ',
-    languageLabel: 'ਭਾਸ਼ਾ',
-    navOverview: 'ਓਵਰਵਿਊ',
-    navMachine: 'ਮਸ਼ੀਨ',
-    navSpecs: 'ਸਪੈਸਿਫਿਕੇਸ਼ਨ',
-    navService: 'ਪਾਰਟਸ ਅਤੇ ਸਰਵਿਸ',
-    navGallery: 'ਗੈਲਰੀ',
-    navEnquire: 'ਪੁੱਛਗਿੱਛ',
-    navCta: 'ਆਫਰ ਲਓ',
-    heroEyebrow: 'ਐਗਰੀਕਲਚਰਲ ਹਾਰਵੇਸਟਰ ਅਨੁਭਵ',
-    heroTitle: 'ਇੱਕ ਤਾਕਤਵਰ ਨਿਊ ਹੀਰਾ ਕੰਬਾਈਨ ਹਾਰਵੇਸਟਰ ਲਈ ਪ੍ਰੀਮੀਅਮ ਵੈਬਸਾਈਟ ਕਾਂਸੈਪਟ।',
-    heroLead: 'ਹਾਈ-ਐਂਡ ਆਟੋਮੋਟਿਵ ਅਤੇ ਮਾਡਰਨ ਪ੍ਰੋਡਕਟ ਵੈਬਸਾਈਟਾਂ ਤੋਂ ਪ੍ਰੇਰਿਤ ਇਹ ਡਿਜ਼ਾਇਨ ਨਿਊ ਹੀਰਾ ਨੂੰ ਇੱਕ ਭਰੋਸੇਯੋਗ ਨਿਰਮਾਤਾ ਵਜੋਂ ਪੇਸ਼ ਕਰਦਾ ਹੈ, ਜਿਸ ਵਿੱਚ ਡਾਇਨਾਮਿਕ ਵਿਜ਼ੂਅਲ, ਬਹੁਭਾਸ਼ੀ ਸਮੱਗਰੀ ਅਤੇ ਸਿੱਧੀਆਂ ਕਿਸਾਨ ਪੁੱਛਗਿੱਛ ਸ਼ਾਮਲ ਹਨ।',
-    heroCtaPrimary: 'ਹੁਣ ਪੁੱਛਗਿੱਛ ਕਰੋ',
-    heroCtaSecondary: 'ਮਸ਼ੀਨ ਵੇਖੋ',
-    heroStageLabel: 'ਐਨੀਮੇਟਡ ਮਸ਼ੀਨ ਸ਼ੋਕੇਸ',
-    heroStageStatus: 'ਡਾਇਨਾਮਿਕ ਵਿਜ਼ੂਅਲ ਚਾਲੂ ਹੈ',
-    heroFooterLabelA: 'ਸਟੋਰੀ ਸਟਾਈਲ',
-    heroFooterValueA: 'ਪ੍ਰੀਮੀਅਮ / ਸਿਨੇਮੈਟਿਕ',
-    heroFooterLabelB: 'ਭਾਸ਼ਾ ਮੋਡ',
-    heroFooterLabelC: 'ਲੀਡ ਬੈਕਐਂਡ',
-    heroPoints: [
-      ['ਪ੍ਰੀਮੀਅਮ ਪਹਿਲੀ ਛਾਪ', 'ਲਗਜ਼ਰੀ ਸਟਾਈਲ ਲੇਆਉਟ ਜੋ ਐਗਰੀਕਲਚਰ ਬ੍ਰਾਂਡ ਲਈ ਅਨੁਕੂਲ ਹੈ'],
-      ['ਪੂਰਾ ਬਹੁਭਾਸ਼ੀ ਅਨੁਭਵ', 'English, Hindi ਅਤੇ Punjabi ਪੂਰਾ ਪੇਜ ਬਦਲ ਦਿੰਦੇ ਹਨ'],
-      ['ਇੰਟਰਐਕਟਿਵ ਵਿਜ਼ੂਅਲ', 'ਐਨੀਮੇਟਡ ਹੀਰੋ, 3D ਸਟਾਈਲ ਮਾਡਲ ਅਤੇ ਪਾਰਟ ਡਾਇਗ੍ਰਾਮ'],
-      ['ਸਿੱਧੀ ਲੀਡ ਕੈਪਚਰ', 'Firebase-ready ਫਾਰਮ ਅਸਲੀ ਗਾਹਕ ਡਾਟਾ ਲਈ']
-    ],
-    metrics: [
-      ['128 HP', 'ਡਰਾਫਟ ਇੰਜਨ ਪਾਵਰ'],
-      ['14 ft', 'ਡਰਾਫਟ ਕਟਰ ਚੌੜਾਈ'],
-      ['7+', 'ਲਿਸਟ ਕੀਤੀਆਂ ਫਸਲਾਂ'],
-      ['24/7', 'ਪੁੱਛਗਿੱਛ ਇਕੱਠੀ ਹੋਣੀ']
-    ],
-    storyEyebrow: 'ਨਿਰਮਾਤਾ ਦੀ ਕਹਾਣੀ',
-    storyTitle: 'ਮੁਸ਼ਕਲ ਖੇਤਾਂ ਲਈ ਬਣੀ ਮਸ਼ੀਨ, ਮਾਡਰਨ ਪ੍ਰੀਮੀਅਮ ਪਹਿਚਾਣ ਨਾਲ ਪੇਸ਼।',
-    storyLead: 'ਇਹ ਲੇਆਉਟ ਲਗਜ਼ਰੀ ਲੈਂਡਿੰਗ ਪੇਜਾਂ ਦੀ ਖੂਬਸੂਰਤੀ ਅਤੇ ਵਿਹਾਰਕ ਖੇਤੀ ਸੰਚਾਰ ਨੂੰ ਜੋੜਦਾ ਹੈ — ਤਾਂ ਕਿ ਕਿਸਾਨ ਤਾਕਤ, ਭਰੋਸਾ, ਸਰਵਿਸ ਸਹਾਇਤਾ ਅਤੇ ਵੈਲਯੂ ਵੇਖਣ।',
-    storyCardTag: 'ਨਿਊ ਹੀਰਾ 985 • ਡਰਾਫਟ ਸ਼ੋਕੇਸ',
-    storyCardMini: 'ਫਾਈਨਲ ਮਾਡਲ ਕਨਫਰਮ ਹੋਣ ਤੋਂ ਬਾਅਦ ਐਡਿਟ ਕਰੋ',
-    storyCardTitle: 'ਇੱਕ ਮਸ਼ੀਨ। ਇੱਕ ਪ੍ਰੀਮੀਅਮ ਸੰਦੇਸ਼। ਕਈ ਫਸਲਾਂ।',
-    storyCardBody: 'ਇਸ ਭਾਗ ਵਿੱਚ ਨਿਰਮਾਣ ਸਮਰੱਥਾ, ਫਸਲ ਅਨੁਕੂਲਤਾ, ਓਪਰੇਟਰ ਆਰਾਮ ਅਤੇ ਅਸਲੀ ਸਰਵਿਸ/ਸਪੇਅਰ ਪਾਰਟਸ ਦੀ ਉਪਲਬਧਤਾ ਦਿਖਾਓ।',
-    storyItems: [
-      ['ਨਿਰਮਾਤਾ-ਆਧਾਰਿਤ ਬ੍ਰਾਂਡਿੰਗ', 'ਤੁਹਾਡੇ ਪਿਤਾ ਦੀ ਕੰਪਨੀ ਨੂੰ ਨਿਰਮਾਤਾ ਵਜੋਂ ਦਿਖਾਓ, ਕੇਵਲ ਵੇਚਣ ਵਾਲੇ ਵਜੋਂ ਨਹੀਂ।'],
-      ['ਵਿਜ਼ੂਅਲ ਸਟੋਰੀਟੈਲਿੰਗ', 'ਹੀਰੋ ਮੋਸ਼ਨ, ਡਰਾਮੈਟਿਕ ਲਾਈਟਿੰਗ ਅਤੇ ਬੋਲਡ ਹੈਡਲਾਈਨ ਭਰੋਸਾ ਵਧਾਉਂਦੇ ਹਨ।'],
-      ['ਸਪੱਸ਼ਟ ਪ੍ਰੋਡਕਟ ਜਾਣਕਾਰੀ', 'ਇੰਜਨ, ਟਾਇਰ, ਗੀਅਰ, ਗ੍ਰੇਨ ਸਿਸਟਮ, ਇਲੈਕਟ੍ਰਿਕਸ ਅਤੇ ਸਰਵਿਸ ਸਮਝਾਓ।'],
-      ['ਕਨਵਰਜ਼ਨ ਫੋਕਸ', 'ਵਿਜ਼ਿਟਰ ਨੂੰ ਕਾਲ, ਮੈਸੇਜ ਜਾਂ ਫਾਰਮ ਭਰਨ ਵੱਲ ਧੱਕੋ।']
-    ],
-    panelKicker: 'ਮਸ਼ੀਨ ਹਾਈਲਾਈਟਸ',
-    panelTitle: 'ਧਿਆਨ ਨੂੰ ਪੁੱਛਗਿੱਛ ਵਿੱਚ ਬਦਲਣ ਲਈ ਡਿਜ਼ਾਇਨ ਕੀਤੀ ਗਈ।',
-    highlights: [
-      ['ਤਾਕਤਵਰ ਮੌਜੂਦਗੀ', 'ਪ੍ਰੀਮੀਅਮ ਪ੍ਰੋਡਕਟ ਸਾਈਟਾਂ ਤੋਂ ਪ੍ਰੇਰਿਤ ਮਜ਼ਬੂਤ ਵਿਜ਼ੂਅਲ ਸਰਫੇਸ ਅਤੇ ਕਨਟ੍ਰਾਸਟ।'],
-      ['ਕਿਸਾਨ-ਦੋਸਤ ਜਾਣਕਾਰੀ', 'ਮੁੱਖ ਸਪੈਕਸ ਅਤੇ ਸਰਵਿਸ ਜਾਣਕਾਰੀ ਸੌਖੇ ਸੈਕਸ਼ਨਾਂ ਵਿੱਚ ਦਿਖਾਈ ਜਾਂਦੀ ਹੈ।'],
-      ['ਭਵਿੱਖ ਲਈ ਤਿਆਰ', 'Firebase ਸਾਰੀਆਂ ਪੁੱਛਗਿੱਛਾਂ ਨੂੰ ਸੇਵ ਕਰ ਸਕਦਾ ਹੈ ਅਤੇ ਫਾਲੋ-ਅੱਪ ਆਸਾਨ ਬਣਾਂਦਾ ਹੈ।']
-    ],
-    experienceEyebrow: '2D + 3D ਪ੍ਰੋਡਕਟ ਅਨੁਭਵ',
-    experienceTitle: 'ਇੰਟਰਐਕਟਿਵ ਵਿਜ਼ੂਅਲ ਮਸ਼ੀਨ ਨੂੰ ਸਧਾਰਣ ਬ੍ਰੋਸ਼ਰ ਤੋਂ ਵਧੀਆ ਸਮਝਾਉਂਦੇ ਹਨ।',
-    experienceLead: 'ਹਲਕਾ 3D ਮਾਡਲ ਪ੍ਰੀਵਿਊ ਅਤੇ ਐਨੋਟੇਟ ਕੀਤੀ 2D ਡਾਇਗ੍ਰਾਮ ਮੋਬਾਈਲ ਅਤੇ ਡੈਸਕਟਾਪ ਦੋਵੇਂ ਤੇ ਮਸ਼ੀਨ ਨੂੰ ਜ਼ਲਦੀ ਸਮਝਣ ਵਿੱਚ ਮਦਦ ਕਰਦੇ ਹਨ।',
-    threeDLabel: 'ਇੰਟਰਐਕਟਿਵ 3D ਵਿਊ',
-    threeDTitle: 'ਕੰਬਾਈਨ ਹਾਰਵੇਸਟਰ ਘੁਮਾਓ',
-    pauseRotate: 'ਰੋਕੋ',
-    playRotate: 'ਚਲਾਓ',
-    rotationLabel: 'ਰੋਟੇਸ਼ਨ',
-    specLabel: 'ਮਸ਼ੀਨ ਡਾਟਾ',
-    specDefaultTitle: 'ਪਾਵਰ ਅਤੇ ਇੰਜਨ',
-    tabPower: 'ਪਾਵਰ',
-    tabHarvesting: 'ਕਟਾਈ',
-    tabDrive: 'ਡਰਾਈਵ',
-    tabServiceSpecs: 'ਸਰਵਿਸ',
-    specNote: 'ਤਕਨੀਕੀ ਜਾਣਕਾਰੀ ਪਬਲਿਕ ਲਿਸਟਿੰਗਾਂ ਤੋਂ ਡਰਾਫਟ ਰੂਪ ਵਿੱਚ ਹੈ। ਪਬਲਿਸ਼ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਫਾਈਨਲ ਵੈਲਯੂਜ਼ ਕਨਫਰਮ ਕਰੋ।',
-    diagramKicker: '2D ਐਨੋਟੇਟ ਕੀਤੀ ਡਾਇਗ੍ਰਾਮ',
-    diagramTitle: 'ਮਹੱਤਵਪੂਰਣ ਪਾਰਟਸ ਇੱਕ ਨਜ਼ਰ ਵਿੱਚ',
-    diagramButton: 'ਪਾਰਟਸ ਹਾਈਲਾਈਟ ਕਰੋ',
-    callEngine: 'ਇੰਜਨ',
-    callCutter: 'ਕਟਰ ਬਾਰ',
-    callGrain: 'ਗ੍ਰੇਨ ਟੈਂਕ',
-    callTyres: 'ਟਾਇਰ / ਵੀਲ',
-    callAuger: 'ਅਨਲੋਡਿੰਗ ਆਗਰ',
-    partsKicker: 'ਪਾਰਟਸ ਅਤੇ ਸਹਾਇਤਾ',
-    partsTitle: 'ਅਸਲੀ ਸਪੇਅਰ ਪਾਰਟਸ ਅਤੇ ਆਫ਼ਟਰ-ਸੇਲਜ਼ ਸਰਵਿਸ ਨੂੰ ਪ੍ਰੋਮੋਟ ਕਰੋ।',
-    partsLead: 'ਇਹ ਭਾਗ ਕਿਸਾਨਾਂ ਨੂੰ ਇਹ ਭਰੋਸਾ ਦੇਣ ਲਈ ਬਹੁਤ ਉਪਯੋਗੀ ਹੈ ਕਿ ਸਰਵਿਸ ਬੈਕਅੱਪ ਮਜ਼ਬੂਤ ਹੈ, ਪਾਰਟਸ ਉਪਲਬਧ ਹਨ ਅਤੇ ਮੈਨਟੇਨੈਂਸ ਆਸਾਨ ਰਹੇਗਾ।',
-    parts: [
-      ['ਕਟਰ ਬਲੇਡ', 'ਕਟਾਈ ਦੀ ਧਾਰ ਅਤੇ ਕਟਿੰਗ ਕੁਸ਼ਲਤਾ'],
-      ['ਬੈਲਟ ਅਤੇ ਚੇਨ', 'ਸਮੂਥ ਡਰਾਈਵ ਅਤੇ ਟ੍ਰਾਂਸਮਿਸ਼ਨ ਸਹਾਇਤਾ'],
-      ['ਸੀਵ', 'ਸਫਾਈ ਅਤੇ ਗ੍ਰੇਨ ਸੈਪਰੇਸ਼ਨ'],
-      ['ਸਟ੍ਰਾ ਵਾਕਰ', 'ਫਸਲ ਵੱਖ ਕਰਨ ਦੀ ਕਾਰਗੁਜ਼ਾਰੀ'],
-      ['ਫਿਲਟਰ', 'ਇੰਜਨ ਸੁਰੱਖਿਆ ਅਤੇ ਸਰਵਿਸ ਕਿਟ'],
-      ['ਬੇਅਰਿੰਗ', 'ਘੱਟ ਡਾਊਨਟਾਈਮ ਮੈਨਟੇਨੈਂਸ ਸਹਾਇਤਾ'],
-      ['ਟਾਇਰ / ਵੀਲ', 'ਫੀਲਡ ਮੂਵਮੈਂਟ ਅਤੇ ਟ੍ਰੈਕਸ਼ਨ'],
-      ['ਆਗਰ ਪਾਰਟਸ', 'ਭਰੋਸੇਯੋਗ ਅਨਲੋਡਿੰਗ ਓਪਰੇਸ਼ਨ']
-    ],
-    galleryEyebrow: 'ਪ੍ਰੀਮੀਅਮ ਗੈਲਰੀ ਪ੍ਰੇਜ਼ੈਂਟੇਸ਼ਨ',
-    galleryTitle: 'ਇੱਕ ਖੇਤੀ ਮਸ਼ੀਨ ਲਈ ਹੋਰ ਵੀ ਸ਼ਾਨਦਾਰ ਪ੍ਰੋਡਕਟ ਕਹਾਣੀ।',
-    galleryLead: 'ਇਹ ਸੈਕਸ਼ਨ ਪ੍ਰੀਮੀਅਮ ਆਟੋਮੋਟਿਵ ਸਟੋਰੀਟੈਲਿੰਗ ਤੋਂ ਪ੍ਰੇਰਿਤ ਹੈ: ਬੋਲਡ ਸ਼ਬਦ, ਫੋਕਸ ਹਾਈਲਾਈਟਸ ਅਤੇ ਇਮਰਸਿਵ ਪ੍ਰੋਡਕਟ ਮੋਮੈਂਟਸ ਜੋ ਕੰਬਾਈਨ ਹਾਰਵੇਸਟਰ ਮਾਰਕੀਟ ਲਈ ਅਨੁਕੂਲ ਕੀਤੇ ਗਏ ਹਨ।',
-    galleryCard1Kicker: 'ਪ੍ਰਭਾਵਸ਼ਾਲੀ ਫਰੰਟ ਪ੍ਰੋਫਾਈਲ',
-    galleryCard1Title: 'ਐਸੀ ਮੌਜੂਦਗੀ ਜੋ ਗੰਭੀਰ ਹਾਰਵੇਸਟਿੰਗ ਲਈ ਇੰਜੀਨੀਅਰਡ ਲੱਗੇ।',
-    galleryCard1Body: 'ਬਾਅਦ ਵਿੱਚ ਇੱਥੇ ਅਸਲੀ ਹਾਰਵੇਸਟਰ ਫੋਟੋਗ੍ਰਾਫੀ ਲਗਾਓ। ਇਹ ਲੇਆਉਟ ਪਹਿਲਾਂ ਤੋਂ ਹੀ ਬੋਲਡ ਇਮੇਜ-ਲੀਡ ਸਟੋਰੀਟੈਲਿੰਗ ਲਈ ਤਿਆਰ ਹੈ।',
-    galleryCard2Kicker: 'ਓਪਰੇਟਰ ਪਰਸਪੈਕਟਿਵ',
-    galleryCard2Title: 'ਸਾਫ ਕੰਟਰੋਲ, ਵਧੀਆ ਵਿਜ਼ਿਬਿਲਟੀ ਅਤੇ ਫੀਲਡ-ਫੋਕਸਡ ਆਰਾਮ।',
-    galleryCard2Body: 'ਇਸ ਬਲਾਕ ਵਿੱਚ ਓਪਰੇਟਰ ਸੁਵਿਧਾ, ਕੰਟਰੋਲ ਐਕਸੈੱਸ, ਮੈਨਟੇਨੈਂਸ ਵਿਜ਼ਿਬਿਲਟੀ ਅਤੇ ਹਾਰਵੇਸਟਿੰਗ ਕਾਨਫਿਡੈਂਸ ਬਾਰੇ ਦੱਸੋ।',
-    galleryCard3Kicker: 'ਕਾਰੋਬਾਰ ਨੂੰ ਸਹਾਇਤਾ ਦੇਣ ਲਈ ਬਣਿਆ',
-    galleryCard3Title: 'ਸਪੇਅਰ ਪਾਰਟਸ, ਸਰਵਿਸ ਬੈਕਅਪ ਅਤੇ ਸੀਜ਼ਨਲ ਸਹਾਇਤਾ ਵੱਡਾ ਫਰਕ ਪੈਦਾ ਕਰਦੇ ਹਨ।',
-    galleryCard3Body: 'ਇਸ ਨਾਲ ਦਿਖਾਓ ਕਿ ਕਿਸਾਨਾਂ ਨੂੰ ਸਿਰਫ਼ ਮਸ਼ੀਨ ਲਈ ਹੀ ਨਹੀਂ, ਖਰੀਦ ਤੋਂ ਬਾਅਦ ਦੀ ਸਹਾਇਤਾ ਲਈ ਵੀ ਨਿਊ ਹੀਰਾ ਤੇ ਭਰੋਸਾ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ।',
-    offerEyebrow: 'ਸੀਜ਼ਨਲ ਕੈਂਪੇਨ',
-    offerTitle: 'ਆਫਰ ਵਾਲਾ ਲੈਂਡਿੰਗ ਪੇਜ ਕਾਲਾਂ ਅਤੇ ਫਾਰਮ ਪੁੱਛਗਿੱਛ ਨੂੰ ਵਧਾ ਸਕਦਾ ਹੈ।',
-    offerLead: 'ਬਾਅਦ ਵਿੱਚ ਤੁਹਾਡੇ ਪਿਤਾ ਜੋ ਰਕਮ ਕਨਫਰਮ ਕਰਨ, ਉਹ ਲਗਾਓ। ਇਸ ਵੇਲੇ ਸਲਾਈਡਰ ਇੰਟਰਐਕਟਿਵ ਹੈ ਤਾਂ ਕਿ ਵੈਬਸਾਈਟ ਜ਼ਿੰਦਾ ਮਹਿਸੂਸ ਹੋਵੇ ਅਤੇ ਆਫਰ ਦੀ ਵੈਲਯੂ ਆਪਣੇ-ਆਪ ਫਾਰਮ ਵਿੱਚ ਭਰ ਜਾਵੇ।',
-    offerValueLabel: 'ਮੌਜੂਦਾ ਪ੍ਰਮੋਸ਼ਨਲ ਆਫਰ',
-    offerValueCaption: 'ਡਿਸਕਾਉਂਟ / ਐਕਸਚੇਂਜ / ਬੁਕਿੰਗ ਲਾਭ — ਬਾਅਦ ਵਿੱਚ ਐਡਿਟ ਕਰੋ',
-    offerSliderLabel: 'ਆਫਰ ਰਕਮ ਬਦਲੋ',
-    applyOffer: 'ਇਹ ਆਫਰ ਪੁੱਛਗਿੱਛ ਵਿੱਚ ਲਗਾਓ',
-    offerBoxTag: 'ਕੈਂਪੇਨ ਮੈਸੇਜ',
-    offerBoxTitle: 'ਗੰਭੀਰ ਖਰੀਦਦਾਰਾਂ ਲਈ ਸਮਾਰਟ ਬੁਕਿੰਗ ਫਾਇਦੇ।',
-    offerList: [
-      ['ਬੁਕਿੰਗ ਡਿਸਕਾਉਂਟ', 'ਧਿਆਨ ਖਿੱਚਣ ਲਈ ₹1 ਲੱਖ ਵਰਗੀ ਮਜ਼ਬੂਤ ਰਕਮ ਦਿਖਾਓ।'],
-      ['ਪ੍ਰਾਥਮਿਕਤਾ ਕਾਲਬੈਕ', 'ਤੁਹਾਡੀ ਸੇਲਜ਼ ਟੀਮ ਗੰਭੀਰ ਖਰੀਦਦਾਰਾਂ ਨਾਲ ਜਲਦੀ ਸੰਪਰਕ ਕਰ ਸਕਦੀ ਹੈ।'],
-      ['ਸਰਵਿਸ ਸਹਾਇਤਾ ਸੰਦੇਸ਼', 'ਸਪੇਅਰ ਪਾਰਟਸ, ਫੀਲਡ ਵਿਜ਼ਿਟ ਅਤੇ ਗਾਈਡੈਂਸ ਦਾ ਜ਼ਿਕਰ ਕਰੋ।']
-    ],
-    formEyebrow: 'ਸਿੱਧੀਆਂ ਕਿਸਾਨ ਪੁੱਛਗਿੱਛਾਂ',
-    formTitle: 'ਵੈਬਸਾਈਟ ਨੂੰ Firebase ਨਾਲ ਜੋੜੋ ਅਤੇ ਹਰ ਲੀਡ ਕੈਪਚਰ ਕਰੋ।',
-    formLead: 'ਇਹ ਫਾਰਮ Firebase ਲਈ ਤਿਆਰ ਹੈ। ਜੇ Firebase ਉਪਲਬਧ ਨਾ ਹੋਵੇ, ਤਾਂ ਟੈਸਟਿੰਗ ਲਈ ਪੁੱਛਗਿੱਛ ਇਸ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਸੇਵ ਹੋ ਜਾਵੇਗੀ।',
-    fieldName: 'ਪੂਰਾ ਨਾਮ',
-    fieldNamePlaceholder: 'ਕਿਸਾਨ ਦਾ ਨਾਮ',
-    fieldPhone: 'ਫੋਨ / WhatsApp',
-    fieldPhonePlaceholder: '+91 98765 43210',
-    fieldDistrict: 'ਜ਼ਿਲ੍ਹਾ',
-    fieldDistrictPlaceholder: 'ਜਿਵੇਂ ਪਟਿਆਲਾ',
-    fieldState: 'ਰਾਜ',
-    fieldCrop: 'ਮੁੱਖ ਫਸਲ',
-    fieldOffer: 'ਚੁਣਿਆ ਗਿਆ ਆਫਰ',
-    fieldMessage: 'ਜ਼ਰੂਰਤ',
-    fieldMessagePlaceholder: 'ਫਸਲ, ਲੋਕੇਸ਼ਨ ਅਤੇ ਖਰੀਦਣ ਦਾ ਸਮਾਂ ਦੱਸੋ',
-    consentText: 'ਮੈਂ ਸਹਿਮਤ ਹਾਂ ਕਿ ਨਿਊ ਹੀਰਾ ਟੀਮ ਇਸ ਪੁੱਛਗਿੱਛ ਬਾਰੇ ਮੈਨੂੰ ਸੰਪਰਕ ਕਰ ਸਕਦੀ ਹੈ।',
-    submitLabel: 'ਪੁੱਛਗਿੱਛ ਸਬਮਿਟ ਕਰੋ',
-    statusSubmitting: 'ਪੁੱਛਗਿੱਛ ਭੇਜੀ ਜਾ ਰਹੀ ਹੈ...',
-    statusSuccess: 'ਪੁੱਛਗਿੱਛ ਸਫਲਤਾਪੂਰਵਕ ਸਬਮਿਟ ਹੋ ਗਈ। ਹੁਣ ਇਹ Firebase ਵਿੱਚ ਦਿਖਣੀ ਚਾਹੀਦੀ ਹੈ।',
-    statusLocal: 'Firebase ਉਪਲਬਧ ਨਹੀਂ ਹੈ, ਇਸ ਲਈ ਟੈਸਟਿੰਗ ਲਈ ਪੁੱਛਗਿੱਛ ਇਸ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਸੇਵ ਕੀਤੀ ਗਈ।',
-    statusError: 'ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ Firebase ਸੈਟਅੱਪ ਚੈੱਕ ਕਰੋ ਅਤੇ ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
-    contactKicker: 'ਸੰਪਰਕ ਬਲਾਕ',
-    contactTitle: 'ਇੱਥੇ ਅਸਲੀ ਸੇਲਜ਼ ਵੇਰਵਾ ਪਬਲਿਸ਼ ਕਰੋ।',
-    contactLead: 'ਇਸ ਡਰਾਫਟ ਜਾਣਕਾਰੀ ਦੀ ਥਾਂ ਨਿਊ ਹੀਰਾ ਫਾਰਮ ਇਕੁਇਪਮੈਂਟਸ ਦਾ ਸਹੀ ਫੋਨ, WhatsApp, ਪਤਾ ਅਤੇ ਕੰਮ ਦੇ ਘੰਟੇ ਪਾਓ।',
-    contactPhoneLabel: 'ਸੇਲਜ਼ ਫੋਨ',
-    contactWhatsappLabel: 'WhatsApp',
-    contactLocationLabel: 'ਲੋਕੇਸ਼ਨ',
-    contactLocationValue: 'ਪੰਜਾਬ, ਭਾਰਤ',
-    contactHoursLabel: 'ਕੰਮ ਦੇ ਘੰਟੇ',
-    contactHoursValue: 'ਸੋਮ - ਸ਼ਨੀ • ਸਵੇਰੇ 9 ਵਜੇ ਤੋਂ ਸ਼ਾਮ 6 ਵਜੇ ਤੱਕ',
-    contactNote: 'ਟਿਪ: ਜਿਵੇਂ ਹੀ ਤੁਸੀਂ ਕੀਮਤ, ਵਾਰੰਟੀ, ਫਾਇਨੈਂਸ ਅਤੇ ਡਿਸਕਾਉਂਟ ਕਨਫਰਮ ਕਰੋ, JavaScript ਸਮੱਗਰੀ ਫਾਈਲ ਵਿੱਚ ਅੱਪਡੇਟ ਕਰੋ ਅਤੇ ਪੂਰੀ ਸਾਈਟ ਆਪੇ ਹੀ ਹਰ ਜਗ੍ਹਾ ਬਦਲ ਜਾਵੇਗੀ।',
-    footerText: 'English, Hindi ਅਤੇ Punjabi ਸਹਾਇਤਾ ਨਾਲ ਡਾਇਨਾਮਿਕ ਐਗਰੀਕਲਚਰਲ ਹਾਰਵੇਸਟਰ ਲੈਂਡਿੰਗ ਪੇਜ।',
-    footerBackTop: 'ਉੱਪਰ ਜਾਓ',
-    states: ['ਪੰਜਾਬ', 'ਹਰਿਆਣਾ', 'ਰਾਜਸਥਾਨ', 'ਉੱਤਰ ਪ੍ਰਦੇਸ਼', 'ਹੋਰ'],
-    crops: ['ਗੇਹੂੰ', 'ਧਾਨ', 'ਮੱਕੀ', 'ਜੌ', 'ਹੋਰ'],
-    specTitles: {
-      power: 'ਪਾਵਰ ਅਤੇ ਇੰਜਨ',
-      harvesting: 'ਕਟਾਈ ਅਤੇ ਅਨਾਜ',
-      drive: 'ਡਰਾਈਵ, ਗੀਅਰ ਅਤੇ ਟਾਇਰ',
-      service: 'ਸਰਵਿਸ ਅਤੇ ਸਹਾਇਤਾ'
-    },
-    specs: {
-      power: [
-        ['ਮਾਡਲ', 'ਨਿਊ ਹੀਰਾ 985 ਸੈਲਫ-ਪ੍ਰੋਪੈਲਡ ਕੰਬਾਈਨ ਹਾਰਵੇਸਟਰ'],
-        ['ਇੰਜਨ', 'Ashok Leyland 412 ਟਰਬੋਚਾਰਜਡ ਡੀਜ਼ਲ (ਡਰਾਫਟ ਪਬਲਿਕ ਲਿਸਟਿੰਗ; ਨਵਾਂ ਵਰਜਨ ਕਨਫਰਮ ਕਰੋ)'],
-        ['ਪਾਵਰ', 'ਇੱਕ ਪਬਲਿਕ ਸਰੋਤ ਵਿੱਚ 128 HP @ 2200 RPM; ਦੂਜੇ ਵਿੱਚ 133 HP'],
-        ['ਇਲੈਕਟ੍ਰਿਕਲ ਸਿਸਟਮ', 'ਸਟਾਰਟਰ, ਬੈਟਰੀ, ਵਰਕ ਲੈਂਪ ਅਤੇ ਸਵਿਚ — ਸਹੀ ਰੇਟਿੰਗ ਕਨਫਰਮ ਕਰੋ'],
-        ['ਇਮੀਸ਼ਨ', 'ਪਬਲਿਕ ਲਿਸਟਿੰਗ ਵਿੱਚ TREM III; ਨਵਾਂ ਕੰਪਲਾਇੰਸ ਬਾਅਦ ਵਿੱਚ ਅੱਪਡੇਟ ਕਰੋ']
-      ],
-      harvesting: [
-        ['ਕਟਰ ਬਾਰ', '4350 mm / 14 ft ਡਰਾਫਟ ਲਿਸਟਿੰਗ'],
-        ['ਫਸਲ ਸਹਾਇਤਾ', 'ਗੇਹੂੰ, ਧਾਨ, ਜੌ, ਮੱਕੀ, ਸੂਰਜਮੁਖੀ, ਦਾਲਾਂ ਅਤੇ ਚਣਾ'],
-        ['ਗ੍ਰੇਨ ਟੈਂਕ', 'ਲਗਭਗ 1900 kg / 2 ਟਨ ਪਬਲਿਕ ਲਿਸਟਿੰਗ — ਫਾਈਨਲ ਮਾਡਲ ਕਨਫਰਮ ਕਰੋ'],
-        ['ਥ੍ਰੈਸ਼ਿੰਗ', 'ਪਬਲਿਕ ਲਿਸਟਿੰਗ ਵਿੱਚ 6 ਸਟ੍ਰਾ ਵਾਕਰ ਅਤੇ 2 ਸੀਵ ਲੇਆਉਟ'],
-        ['ਆਉਟਪੁੱਟ', 'ਇੱਕ ਲਿਸਟਿੰਗ ਵਿੱਚ ਲਗਭਗ 1.5 acre/hour — ਅਸਲੀ ਫੀਲਡ ਪਰਫਾਰਮੈਂਸ ਨਾਲ ਜਾਂਚੋ']
-      ],
-      drive: [
-        ['ਫਰੰਟ ਟਾਇਰ', '18.4 / 30 ਪਬਲਿਕਲੀ ਲਿਸਟ ਕੀਤੇ ਗਏ'],
-        ['ਰੀਅਰ ਟਾਇਰ', '9.00 x 16 ਪਬਲਿਕਲੀ ਲਿਸਟ ਕੀਤੇ ਗਏ'],
-        ['ਗੀਅਰ', '1st: 1.5–3.5 km/h • 2nd: 3.5–9 km/h • 3rd: 9–21 km/h'],
-        ['ਰਿਵਰਸ', 'ਲਗਭਗ 3.5–9.5 km/h ਡਰਾਫਟ ਰੇਂਜ'],
-        ['ਨਿਰਮਾਣ', 'ਸਟਿਲ ਬਾਡੀ ਅਤੇ ਮਜ਼ਬੂਤ ਫੀਲਡ-ਫੋਕਸਡ ਸਟਰਕਚਰ']
-      ],
-      service: [
-        ['ਸਪੇਅਰ ਪਾਰਟਸ', 'ਬਲੇਡ, ਸੀਵ, ਫਿਲਟਰ, ਬੈਲਟ, ਚੇਨ, ਬੇਅਰਿੰਗ, ਆਗਰ ਅਤੇ ਵੀਲ ਪਾਰਟਸ'],
-        ['ਹਾਈਡ੍ਰੌਲਿਕਸ', 'ਜੇ ਉਪਲਬਧ ਹੋਵੇ ਤਾਂ ਪੰਪ ਅਤੇ ਹੋਜ਼ ਸਰਵਿਸ ਡੀਟੇਲ ਜੋੜੋ'],
-        ['ਵਾਰੰਟੀ', 'ਕਨਫਰਮ ਹੋਣ ਤੋਂ ਬਾਅਦ ਅਸਲੀ ਵਾਰੰਟੀ ਜੋੜੋ'],
-        ['ਆਨ-ਸਾਈਟ ਸਰਵਿਸ', 'ਸਰਵਿਸ ਰੇਡੀਅਸ, ਟਾਈਮਿੰਗ ਅਤੇ ਉਪਲਬਧਤਾ ਜੋੜੋ'],
-        ['ਦਸਤਾਵੇਜ਼', 'ਬਾਅਦ ਵਿੱਚ ਬ੍ਰੋਸ਼ਰ, ਫਾਇਨੈਂਸ ਸਹਾਇਤਾ ਅਤੇ ਕੰਪਲਾਇੰਸ ਪੇਪਰ ਜੋੜੋ']
-      ]
-    }
-  }
-};
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => [...document.querySelectorAll(sel)];
 
 const els = {
-  introOverlay: document.getElementById('introOverlay'),
-  introCanvas: document.getElementById('introCanvas'),
-  skipIntro: document.getElementById('skipIntro'),
-  navToggle: document.getElementById('navToggle'),
-  navLinks: document.getElementById('navLinks'),
-  languageSelect: document.getElementById('languageSelect'),
-  currentLanguageLabel: document.getElementById('currentLanguageLabel'),
-  heroPoints: document.getElementById('heroPoints'),
-  metricsGrid: document.getElementById('metricsGrid'),
-  storyList: document.getElementById('storyList'),
-  highlightStack: document.getElementById('highlightStack'),
-  modelCanvas: document.getElementById('modelCanvas'),
-  heroCanvas: document.getElementById('heroCanvas'),
-  rotateToggle: document.getElementById('rotateToggle'),
-  rotationRange: document.getElementById('rotationRange'),
-  specTabs: [...document.querySelectorAll('.spec-tab')],
-  specTitle: document.getElementById('specTitle'),
-  specTable: document.getElementById('specTable'),
-  flashParts: document.getElementById('flashParts'),
-  diagram: document.querySelector('.harvester-diagram'),
-  partsGrid: document.getElementById('partsGrid'),
-  offerRange: document.getElementById('offerRange'),
-  offerAmountDisplay: document.getElementById('offerAmountDisplay'),
-  applyOfferBtn: document.getElementById('applyOfferBtn'),
-  offerList: document.getElementById('offerList'),
-  enquiryForm: document.getElementById('enquiryForm'),
-  stateSelect: document.getElementById('stateSelect'),
-  cropSelect: document.getElementById('cropSelect'),
-  offerInput: document.getElementById('offerInput'),
-  formStatus: document.getElementById('formStatus')
+  intro: $('#intro'),
+  introCanvas: $('#introCanvas'),
+  heroCanvas: $('#heroCanvas'),
+  menuButton: $('#menuButton'),
+  mainNav: $('#mainNav'),
+  shareButton: $('#shareButton'),
+  shareFloat: $('#shareFloat'),
+  authOpen: $('#authOpen'),
+  authOpen2: $('#authOpen2'),
+  authDialog: $('#authDialog'),
+  authEmail: $('#authEmail'),
+  authPassword: $('#authPassword'),
+  loginSubmit: $('#loginSubmit'),
+  signupSubmit: $('#signupSubmit'),
+  logoutButton: $('#logoutButton'),
+  authMessage: $('#authMessage'),
+  authStatus: $('#authStatus'),
+  threeContainer: $('#threeContainer'),
+  partLabels: $('#partLabels'),
+  viewerLoading: $('#viewerLoading'),
+  partSearch: $('#partSearch'),
+  partList: $('#partList'),
+  guideGrid: $('#guideGrid'),
+  selectedPartTitle: $('#selectedPartTitle'),
+  partFunction: $('#partFunction'),
+  partIssue: $('#partIssue'),
+  partRepair: $('#partRepair'),
+  enquiryPart: $('#enquiryPart'),
+  resetView: $('#resetView'),
+  toggleLabels: $('#toggleLabels'),
+  offerRange: $('#offerRange'),
+  offerDisplay: $('#offerDisplay'),
+  enquiryOffer: $('#enquiryOffer'),
+  enquiryForm: $('#enquiryForm'),
+  formStatus: $('#formStatus')
 };
 
-function formatCurrency(value) {
+const appState = {
+  firebaseReady: false,
+  db: null,
+  auth: null,
+  user: null,
+  labelsVisible: true,
+  selectedPart: null,
+  offer: 100000,
+  three: null,
+  controls: null,
+  camera: null,
+  scene: null,
+  renderer: null,
+  partObjects: new Map(),
+  labelNodes: new Map(),
+  originalMaterials: new Map()
+};
+
+const parts = [
+  {
+    id: 'cutter_blades',
+    name: 'Cutter Blades',
+    aliases: ['blade', 'knife', 'cutter', 'cutting section'],
+    category: 'Cutting',
+    position: [-4.5, -0.65, 1.15],
+    functionText: 'Cutter blades slice the crop at the header so the reel can feed it into the machine smoothly.',
+    issue: 'Dull, bent or broken blades cause uneven cutting, missed crop and extra load on the header.',
+    repair: 'Stop engine, lock header safely, wear gloves, remove guard/bolts, replace damaged blade sections, tighten to correct torque, then rotate the cutter manually to check free movement.'
+  },
+  {
+    id: 'reel_fingers',
+    name: 'Reel Fingers',
+    aliases: ['finger', 'reel tine', 'crop finger'],
+    category: 'Feeding',
+    position: [-4.2, 0.05, 1.3],
+    functionText: 'Reel fingers guide standing crop into the cutter bar and feeding auger.',
+    issue: 'Bent or missing fingers make crop feeding uneven and can create bunching near the header.',
+    repair: 'Lower header, secure reel, remove retaining clip/bolt, replace damaged finger, align with nearby fingers and rotate reel slowly to confirm clearance.'
+  },
+  {
+    id: 'main_shaft',
+    name: 'Main Shaft',
+    aliases: ['shaft', 'drive shaft', 'main drive'],
+    category: 'Drive',
+    position: [-1.2, 0.25, 0],
+    functionText: 'The main shaft transfers drive power through the machine to important rotating assemblies.',
+    issue: 'Vibration, noise, bearing heat or misalignment can indicate shaft wear or coupling issues.',
+    repair: 'Disconnect power, remove guards, mark coupler position, loosen bearing blocks, inspect shaft runout, replace worn bearings/couplers and realign before tightening.'
+  },
+  {
+    id: 'thresher_drum',
+    name: 'Thresher / Ga-Drum',
+    aliases: ['thresher', 'drum', 'ga drum', 'gadrum', 'threshing drum'],
+    category: 'Threshing',
+    position: [-0.35, 0.22, 0.2],
+    functionText: 'The thresher drum separates grain from the crop by rubbing and beating crop against the concave.',
+    issue: 'Poor threshing, cracked grain or excessive loss can come from wrong clearance, worn rasp bars or imbalance.',
+    repair: 'Open inspection cover, lock drum, clean packed material, inspect rasp bars and concave, replace worn elements in matched sets and check clearance before running.'
+  },
+  {
+    id: 'belt_pulley',
+    name: 'Belt Pulley',
+    aliases: ['belt', 'pulley', 'v belt', 'belt drive'],
+    category: 'Drive',
+    position: [1.15, 0.25, 1.05],
+    functionText: 'Belt and pulley assemblies transfer rotation from the engine/drive system to machine functions.',
+    issue: 'Slipping, squealing, cracks or heat show belt tension or pulley alignment problems.',
+    repair: 'Stop engine, remove guard, loosen tensioner, remove belt, inspect pulley grooves, fit correct belt, align pulleys and adjust tension to specification.'
+  },
+  {
+    id: 'engine',
+    name: 'Engine',
+    aliases: ['motor', 'diesel engine', 'power'],
+    category: 'Power',
+    position: [1.0, 0.45, -0.95],
+    functionText: 'The engine provides power for travel, threshing, cleaning, hydraulics and unloading operations.',
+    issue: 'Overheating, smoke, low power or hard starting can indicate filter, cooling, fuel or service issues.',
+    repair: 'Check oil/coolant, clean radiator, replace air/fuel filters, inspect belts and wiring, then call service team if abnormal noise, smoke or overheating continues.'
+  },
+  {
+    id: 'grain_tank',
+    name: 'Grain Tank',
+    aliases: ['tank', 'hopper', 'grain box'],
+    category: 'Storage',
+    position: [0.85, 1.05, 0.05],
+    functionText: 'The grain tank stores cleaned grain before unloading into a trailer or trolley.',
+    issue: 'Slow unloading, grain leakage or contamination may indicate auger, door or seal problems.',
+    repair: 'Empty tank, clean dust, inspect tank floor and auger intake, check seals and panels, tighten fasteners and replace worn flighting if needed.'
+  },
+  {
+    id: 'unloading_auger',
+    name: 'Unloading Auger',
+    aliases: ['auger', 'grain auger', 'unloader'],
+    category: 'Unloading',
+    position: [2.95, 0.95, -0.35],
+    functionText: 'The unloading auger moves grain from the grain tank into a trolley or transport vehicle.',
+    issue: 'Low unloading speed, rattling or blockage can happen due to worn flighting, bearing damage or wet grain blockage.',
+    repair: 'Disengage drive, empty grain, open access cover, clear blockage, inspect bearing and flighting, replace damaged parts and test at low speed first.'
+  },
+  {
+    id: 'straw_walkers',
+    name: 'Straw Walkers',
+    aliases: ['walker', 'straw walker', 'separation'],
+    category: 'Separation',
+    position: [0.65, -0.1, -1.15],
+    functionText: 'Straw walkers shake crop residue to separate remaining grain before straw exits the machine.',
+    issue: 'High grain loss from rear or broken straw can indicate walker damage, blockage or speed/setting issue.',
+    repair: 'Open rear access, clean walkers, inspect bearings and keys, check for cracks, repair/replace damaged walker sections and verify smooth oscillation.'
+  },
+  {
+    id: 'sieves',
+    name: 'Cleaning Sieves',
+    aliases: ['sieve', 'cleaning shoe', 'chaffer'],
+    category: 'Cleaning',
+    position: [0.1, -0.55, -0.85],
+    functionText: 'Sieves clean grain by separating grain from chaff using airflow and shaking motion.',
+    issue: 'Dirty grain or grain loss can come from blocked sieves, wrong opening or fan setting.',
+    repair: 'Stop fan, remove access panel, clean sieve openings, check adjustment, inspect shaking linkage and set openings according to crop.'
+  },
+  {
+    id: 'front_tyre',
+    name: 'Front Tyre / Wheel',
+    aliases: ['front tyre', 'front tire', 'wheel'],
+    category: 'Movement',
+    position: [-1.55, -1.2, 1.05],
+    functionText: 'The front wheel carries major load and provides field movement and traction.',
+    issue: 'Low pressure, cracks, wobble or uneven wear can affect steering and field traction.',
+    repair: 'Park on level ground, chock machine, lift safely, check pressure and rim nuts, inspect tyre sidewall, replace only with correct load-rated tyre.'
+  },
+  {
+    id: 'rear_tyre',
+    name: 'Rear Tyre / Steering Wheel',
+    aliases: ['rear tyre', 'rear tire', 'steering wheel'],
+    category: 'Movement',
+    position: [1.75, -1.12, 1.0],
+    functionText: 'The rear wheel supports steering and rear stability while operating in the field.',
+    issue: 'Loose steering, tyre wobble or linkage play can affect control during field movement.',
+    repair: 'Inspect wheel nuts, steering linkages and bearings. Replace worn bearing or tie-rod part, grease points and test steering slowly.'
+  }
+];
+
+function inr(value) {
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value);
 }
 
-function setText(el, value) {
-  if (el) el.textContent = value;
+function safe(fn, label) {
+  try { return fn(); } catch (err) { console.error('New Hira error:', label, err); }
 }
 
-function applyStaticTranslations() {
-  const t = content[appState.lang];
-  document.documentElement.lang = appState.lang;
-  document.title = t.pageTitle;
-
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
-    const key = el.dataset.i18n;
-    if (t[key] !== undefined) {
-      el.textContent = t[key];
-    }
-  });
-
-  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
-    const key = el.dataset.i18nPlaceholder;
-    if (t[key] !== undefined) {
-      el.setAttribute('placeholder', t[key]);
-    }
-  });
-
-  document.querySelectorAll('[data-svg-i18n]').forEach((el) => {
-    const key = el.dataset.svgI18n;
-    if (t[key] !== undefined) {
-      el.textContent = t[key];
-    }
-  });
-
-  const selectedOption = els.languageSelect.querySelector(`option[value="${appState.lang}"]`);
-  setText(els.currentLanguageLabel, selectedOption ? selectedOption.textContent : 'English');
-  setText(els.rotateToggle, appState.autoRotate ? t.pauseRotate : t.playRotate);
-}
-
-function renderHeroPoints() {
-  const t = content[appState.lang];
-  els.heroPoints.innerHTML = t.heroPoints.map(([title, body]) => `
-    <article class="hero-point">
-      <strong>${title}</strong>
-      <small>${body}</small>
-    </article>
-  `).join('');
-}
-
-function renderMetrics() {
-  const t = content[appState.lang];
-  els.metricsGrid.innerHTML = t.metrics.map(([value, label]) => `
-    <article class="metric-card reveal-child">
-      <strong>${value}</strong>
-      <small>${label}</small>
-    </article>
-  `).join('');
-}
-
-function renderStory() {
-  const t = content[appState.lang];
-  els.storyList.innerHTML = t.storyItems.map(([title, body]) => `
-    <div class="story-item">
-      <strong>${title}</strong>
-      <span>${body}</span>
-    </div>
-  `).join('');
-
-  els.highlightStack.innerHTML = t.highlights.map(([title, body], index) => `
-    <div class="highlight-item">
-      <span class="highlight-number">0${index + 1}</span>
-      <div>
-        <strong>${title}</strong>
-        <span>${body}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderParts() {
-  const t = content[appState.lang];
-  els.partsGrid.innerHTML = t.parts.map(([title, body]) => `
-    <article class="part-item">
-      <strong>${title}</strong>
-      <small>${body}</small>
-    </article>
-  `).join('');
-}
-
-function renderOfferList() {
-  const t = content[appState.lang];
-  els.offerList.innerHTML = t.offerList.map(([title, body]) => `
-    <li><strong>${title}</strong><span>${body}</span></li>
-  `).join('');
-}
-
-function renderSpecTable() {
-  const t = content[appState.lang];
-  setText(els.specTitle, t.specTitles[appState.specTab]);
-  const rows = t.specs[appState.specTab];
-  els.specTable.innerHTML = rows.map(([label, value]) => `
-    <div class="spec-row">
-      <strong>${label}</strong>
-      <span>${value}</span>
-    </div>
-  `).join('');
-}
-
-function renderFormOptions() {
-  const t = content[appState.lang];
-  els.stateSelect.innerHTML = t.states.map((state) => `<option value="${state}">${state}</option>`).join('');
-  els.cropSelect.innerHTML = t.crops.map((crop) => `<option value="${crop}">${crop}</option>`).join('');
-  els.offerInput.value = formatCurrency(appState.offerAmount);
-}
-
-function applyLanguage(lang) {
-  appState.lang = lang;
-  localStorage.setItem('newHiraLang', lang);
-  els.languageSelect.value = lang;
-  applyStaticTranslations();
-  renderHeroPoints();
-  renderMetrics();
-  renderStory();
-  renderParts();
-  renderOfferList();
-  renderSpecTable();
-  renderFormOptions();
-}
-
-function bindInteractions() {
-  els.languageSelect.addEventListener('change', (e) => applyLanguage(e.target.value));
-  els.navToggle.addEventListener('click', () => {
-    const open = els.navLinks.classList.toggle('open');
-    els.navToggle.setAttribute('aria-expanded', String(open));
-  });
-  els.navLinks.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => els.navLinks.classList.remove('open'));
-  });
-
-  els.rotateToggle.addEventListener('click', () => {
-    appState.autoRotate = !appState.autoRotate;
-    setText(els.rotateToggle, appState.autoRotate ? content[appState.lang].pauseRotate : content[appState.lang].playRotate);
-  });
-
-  els.rotationRange.addEventListener('input', (e) => {
-    appState.modelAngle = Number(e.target.value);
-  });
-
-  els.specTabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      appState.specTab = tab.dataset.tab;
-      els.specTabs.forEach((button) => {
-        button.classList.toggle('active', button === tab);
-        button.setAttribute('aria-selected', String(button === tab));
-      });
-      renderSpecTable();
-    });
-  });
-
-  els.flashParts.addEventListener('click', () => {
-    els.diagram.classList.add('flash');
-    setTimeout(() => els.diagram.classList.remove('flash'), 700);
-  });
-
-  els.offerRange.value = String(appState.offerAmount);
-  els.offerRange.addEventListener('input', (e) => {
-    appState.offerAmount = Number(e.target.value);
-    localStorage.setItem('newHiraOffer', String(appState.offerAmount));
-    updateOfferDisplay();
-  });
-
-  els.applyOfferBtn.addEventListener('click', () => {
-    els.offerInput.value = formatCurrency(appState.offerAmount);
-    els.offerInput.focus();
-  });
-
-  els.skipIntro.addEventListener('click', hideIntro);
-}
-
-function updateOfferDisplay() {
-  const text = formatCurrency(appState.offerAmount);
-  els.offerAmountDisplay.textContent = text;
-  els.offerInput.value = text;
+function revealAll() {
+  $$('.reveal').forEach((el) => el.classList.add('visible'));
 }
 
 function setupReveal() {
@@ -818,424 +200,524 @@ function setupReveal() {
       if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.12 });
-
-  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  $$('.reveal').forEach((el) => observer.observe(el));
+  setTimeout(revealAll, 900);
 }
 
-function setupCanvases() {
-  [els.introCanvas, els.heroCanvas, els.modelCanvas].forEach((canvas) => {
-    const dpr = Math.max(window.devicePixelRatio || 1, 1);
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = Math.max(300, Math.floor(rect.width * dpr));
-    canvas.height = Math.max(180, Math.floor(rect.height * dpr));
-    const ctx = canvas.getContext('2d');
+function setupMenu() {
+  els.menuButton?.addEventListener('click', () => {
+    const open = els.mainNav.classList.toggle('open');
+    els.menuButton.setAttribute('aria-expanded', String(open));
+  });
+  $$('#mainNav a').forEach((a) => a.addEventListener('click', () => els.mainNav.classList.remove('open')));
+}
+
+function setupShare() {
+  async function share() {
+    const data = {
+      title: 'New Hira Combine Harvester',
+      text: 'Check New Hira 360° combine harvester parts finder.',
+      url: location.href
+    };
+    try {
+      if (navigator.share) await navigator.share(data);
+      else {
+        await navigator.clipboard.writeText(location.href);
+        alert('Website link copied.');
+      }
+    } catch {}
+  }
+  els.shareButton?.addEventListener('click', share);
+  els.shareFloat?.addEventListener('click', share);
+}
+
+function setupOffer() {
+  const update = () => {
+    appState.offer = Number(els.offerRange.value);
+    const amount = inr(appState.offer);
+    els.offerDisplay.textContent = amount;
+    els.enquiryOffer.value = amount;
+  };
+  els.offerRange?.addEventListener('input', update);
+  update();
+}
+
+function setupIntroCanvas() {
+  const canvas = els.introCanvas;
+  const ctx = canvas.getContext('2d');
+  let w, h, dpr;
+  function resize() {
+    dpr = Math.max(1, devicePixelRatio || 1);
+    w = canvas.clientWidth || innerWidth;
+    h = canvas.clientHeight || innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  addEventListener('resize', resize);
+
+  function machine(ctx, x, y, s, t) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+    ctx.fillStyle = '#f6a13a';
+    ctx.beginPath();
+    ctx.moveTo(-160, 35); ctx.lineTo(-110, -55); ctx.lineTo(90, -58); ctx.lineTo(170, 20); ctx.lineTo(145, 55); ctx.lineTo(-130, 55); ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#dfe4e0';
+    ctx.beginPath(); ctx.moveTo(-105, -58); ctx.lineTo(-12, -58); ctx.lineTo(20, 0); ctx.lineTo(-130, 0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(5,8,12,.75)';
+    ctx.fillRect(-82, -45, 78, 38);
+    ctx.fillStyle = 'rgba(255,255,255,.18)';
+    ctx.fillRect(30, -34, 70, 44);
+    ctx.strokeStyle = 'rgba(255,255,255,.32)';
+    ctx.lineWidth = 8;
+    ctx.beginPath(); ctx.moveTo(158, 0); ctx.quadraticCurveTo(230, -28, 285, 30); ctx.stroke();
+    ctx.fillStyle = '#db7d24';
+    ctx.beginPath(); ctx.moveTo(-205, 32); ctx.lineTo(-160, 0); ctx.lineTo(-128, 20); ctx.lineTo(-185, 55); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.22)';
+    ctx.lineWidth = 4;
+    for (let i=0;i<10;i++) { ctx.beginPath(); ctx.moveTo(-225+i*12, 42); ctx.lineTo(-205+i*12, 20 + Math.sin(t/300+i)*4); ctx.stroke(); }
+    wheel(ctx, -72, 72, 43, t/240);
+    wheel(ctx, 105, 72, 31, t/240);
+    ctx.restore();
+  }
+  function wheel(ctx, x, y, r, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.fillStyle = '#0a0d11'; ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.24)'; ctx.lineWidth = 6; ctx.stroke();
+    for (let i=0;i<8;i++){ ctx.rotate(Math.PI/4); ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(r*.72,0); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.beginPath(); ctx.arc(0,0,r*.32,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+  function frame(t) {
+    ctx.clearRect(0,0,w,h);
+    const bg = ctx.createLinearGradient(0,0,0,h);
+    bg.addColorStop(0,'#08090c'); bg.addColorStop(.55,'#11100e'); bg.addColorStop(1,'#2a190d');
+    ctx.fillStyle = bg; ctx.fillRect(0,0,w,h);
+    const sun = ctx.createRadialGradient(w*.72,h*.28,10,w*.72,h*.28,w*.34);
+    sun.addColorStop(0,'rgba(255,199,116,.45)'); sun.addColorStop(.35,'rgba(255,122,28,.18)'); sun.addColorStop(1,'transparent');
+    ctx.fillStyle = sun; ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle = 'rgba(255,255,255,.065)'; ctx.lineWidth = 1;
+    for (let i=0;i<18;i++){ ctx.beginPath(); ctx.moveTo((i/18)*w, h*.76); ctx.lineTo(w*.5, h); ctx.stroke(); }
+    const x = (t/8 % (w+620)) - 310;
+    machine(ctx, x, h*.66, Math.min(1.1, Math.max(.72, w/900)), t);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function setupHeroCanvas() {
+  const canvas = els.heroCanvas;
+  const ctx = canvas.getContext('2d');
+  let w, h, dpr;
+  function resize() {
+    dpr = Math.max(1, devicePixelRatio || 1);
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  addEventListener('resize', resize);
+  function frame(t) {
+    ctx.clearRect(0,0,w,h);
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#10161e'); grad.addColorStop(1,'#080a0f');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const glow = ctx.createRadialGradient(w*.72,h*.18,20,w*.72,h*.18,w*.42);
+    glow.addColorStop(0,'rgba(243,180,91,.36)'); glow.addColorStop(1,'transparent');
+    ctx.fillStyle = glow; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(243,180,91,.13)'; ctx.fillRect(0,h*.72,w,h*.28);
+    ctx.strokeStyle = 'rgba(255,255,255,.05)';
+    for(let i=0;i<18;i++){ctx.beginPath();ctx.moveTo(i*w/17,h*.72);ctx.lineTo(w*.5,h);ctx.stroke();}
+    drawHarvester2D(ctx, w*.16, h*.47 + Math.sin(t*.002)*5, Math.min(1.2, w/600), t);
+    ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.font = '800 34px Manrope'; ctx.fillText('NEW HIRA', w*.08, h*.13);
+    ctx.font = '600 13px Inter'; ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.fillText('360° PARTS FINDER', w*.08, h*.18);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function drawHarvester2D(ctx, x, y, s, t) {
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s);
+  const body = ctx.createLinearGradient(0,-60,310,70); body.addColorStop(0,'#f3b45b'); body.addColorStop(1,'#ff7a1c');
+  ctx.fillStyle = body;
+  ctx.beginPath(); ctx.moveTo(20,60); ctx.lineTo(75,-55); ctx.lineTo(250,-58); ctx.lineTo(340,35); ctx.lineTo(310,70); ctx.lineTo(35,70); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#dce2de'; ctx.beginPath(); ctx.moveTo(65,-54); ctx.lineTo(158,-54); ctx.lineTo(185,12); ctx.lineTo(30,12); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#17202a'; ctx.fillRect(88,-40,74,38);
+  ctx.fillStyle = 'rgba(255,255,255,.15)'; ctx.fillRect(196,-33,74,42); ctx.fillRect(278,7,48,28);
+  ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(332,18); ctx.quadraticCurveTo(420,-20,480,52); ctx.stroke();
+  ctx.fillStyle = '#e68829'; ctx.beginPath(); ctx.moveTo(-65,40); ctx.lineTo(25,2); ctx.lineTo(66,22); ctx.lineTo(-30,75); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(-82,40,130,14);
+  drawWheel2D(ctx,100,90,52,t*.004); drawWheel2D(ctx,280,88,36,t*.004);
+  ctx.restore();
+}
+function drawWheel2D(ctx,x,y,r,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.fillStyle='#090b0f';ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=6;ctx.stroke();for(let i=0;i<8;i++){ctx.rotate(Math.PI/4);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r*.72,0);ctx.stroke();}ctx.fillStyle='rgba(255,255,255,.17)';ctx.beginPath();ctx.arc(0,0,r*.35,0,Math.PI*2);ctx.fill();ctx.restore();}
+
+function renderPartsList(filter = '') {
+  const q = filter.trim().toLowerCase();
+  const filtered = parts.filter((part) => {
+    return !q || part.name.toLowerCase().includes(q) || part.aliases.some((a) => a.includes(q)) || part.category.toLowerCase().includes(q);
+  });
+  els.partList.innerHTML = filtered.map((part) => `
+    <button class="partItem ${appState.selectedPart === part.id ? 'active' : ''}" type="button" data-part="${part.id}">
+      <strong>${part.name}</strong>
+      <span>${part.category} • ${part.aliases.slice(0, 3).join(', ')}</span>
+    </button>
+  `).join('');
+  $$('.partItem').forEach((button) => button.addEventListener('click', () => selectPart(button.dataset.part)));
+}
+
+function renderGuide() {
+  els.guideGrid.innerHTML = parts.map((part) => `
+    <article class="guideCard reveal">
+      <span class="tag">${part.category}</span>
+      <h3>${part.name}</h3>
+      <p>${part.functionText}</p>
+      <ul>
+        <li><strong>Problem:</strong> ${part.issue}</li>
+        <li><strong>Repair:</strong> ${part.repair}</li>
+      </ul>
+    </article>
+  `).join('');
+  revealAll();
+}
+
+function updateDetails(part) {
+  els.selectedPartTitle.textContent = part.name;
+  els.partFunction.textContent = part.functionText;
+  els.partIssue.textContent = part.issue;
+  els.partRepair.textContent = part.repair;
+  els.enquiryPart.value = part.name;
+}
+
+async function setup3D() {
+  const THREE = await import('three');
+  const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+  appState.three = THREE;
+  const container = els.threeContainer;
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x080a0f, 9, 28);
+  const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.set(6, 4.2, 7.2);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  container.prepend(renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.065;
+  controls.target.set(0, 0, 0);
+  controls.maxDistance = 14;
+  controls.minDistance = 4.5;
+
+  scene.add(new THREE.HemisphereLight(0xffedd2, 0x12151d, 1.3));
+  const key = new THREE.DirectionalLight(0xffd39a, 2.6);
+  key.position.set(4, 8, 5);
+  scene.add(key);
+  const rim = new THREE.DirectionalLight(0x8fd6ff, 1.2);
+  rim.position.set(-5, 3, -6);
+  scene.add(rim);
+
+  const ground = new THREE.Mesh(
+    new THREE.CircleGeometry(8, 96),
+    new THREE.MeshStandardMaterial({ color: 0x161312, roughness: 0.88, metalness: 0.05 })
+  );
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -1.55;
+  scene.add(ground);
+
+  buildCombineModel(THREE, scene);
+  appState.scene = scene;
+  appState.camera = camera;
+  appState.renderer = renderer;
+  appState.controls = controls;
+  els.viewerLoading.style.display = 'none';
+
+  parts.forEach((part) => {
+    const node = document.createElement('button');
+    node.type = 'button';
+    node.className = 'partLabel';
+    node.textContent = part.name;
+    node.style.pointerEvents = 'auto';
+    node.addEventListener('click', () => selectPart(part.id));
+    els.partLabels.appendChild(node);
+    appState.labelNodes.set(part.id, node);
+  });
+
+  function resize() {
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize);
+
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  renderer.domElement.addEventListener('pointerdown', (event) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObjects([...appState.partObjects.values()], true);
+    if (hits[0]?.object?.userData?.partId) selectPart(hits[0].object.userData.partId);
+  });
+
+  function animate() {
+    controls.update();
+    renderer.render(scene, camera);
+    updateLabels(THREE);
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function material(THREE, color, metalness = 0.15, roughness = 0.55) {
+  return new THREE.MeshStandardMaterial({ color, metalness, roughness });
+}
+
+function box(THREE, scene, name, size, pos, color, partId = null) {
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material(THREE, color));
+  mesh.position.set(...pos);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  if (partId) {
+    mesh.userData.partId = partId;
+    appState.partObjects.set(partId, mesh);
+    appState.originalMaterials.set(partId, mesh.material);
+  }
+  scene.add(mesh);
+  return mesh;
+}
+
+function cyl(THREE, scene, partId, radiusTop, radiusBot, depth, pos, rot, color) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBot, depth, 48), material(THREE, color));
+  mesh.position.set(...pos);
+  mesh.rotation.set(...rot);
+  if (partId) {
+    mesh.userData.partId = partId;
+    appState.partObjects.set(partId, mesh);
+    appState.originalMaterials.set(partId, mesh.material);
+  }
+  scene.add(mesh);
+  return mesh;
+}
+
+function buildCombineModel(THREE, scene) {
+  const orange = 0xff8a24;
+  const gold = 0xf3b45b;
+  const steel = 0xabb1b7;
+  const dark = 0x11151b;
+  box(THREE, scene, 'body', [3.8, 1.4, 2.0], [0.1, 0, 0], orange);
+  box(THREE, scene, 'grain_tank', [1.8, .9, 1.5], [.95, 1.05, .02], 0xd88127, 'grain_tank');
+  box(THREE, scene, 'engine', [1.1, .75, .9], [1.0, .45, -0.95], 0x555e67, 'engine');
+  const cabin = box(THREE, scene, 'cabin', [1.25, 1.25, 1.2], [-1.3, .65, .25], 0xdfe5e0);
+  cabin.material = new THREE.MeshStandardMaterial({ color: 0xdfe5e0, metalness: .06, roughness: .4 });
+  box(THREE, scene, 'window', [.9, .78, 1.24], [-1.34, .74, .28], 0x17202a);
+  box(THREE, scene, 'header', [1.65, .38, 2.55], [-4.15, -.82, .38], gold, 'cutter_blades');
+  cyl(THREE, scene, 'reel_fingers', .22, .22, 2.55, [-4.25, -.24, .75], [Math.PI/2, 0, 0], 0xffc06d);
+  for (let i = -5; i <= 5; i++) {
+    const tine = box(THREE, scene, 'finger', [.05, .55, .04], [-4.25, -.22, .75 + i*.22], 0xffe0a8);
+    tine.rotation.x = Math.PI * .1;
+    tine.userData.partId = 'reel_fingers';
+  }
+  cyl(THREE, scene, 'main_shaft', .11, .11, 2.45, [-1.2, .25, 0], [Math.PI/2, 0, 0], steel);
+  cyl(THREE, scene, 'thresher_drum', .48, .48, 1.6, [-.35, .22, .2], [Math.PI/2, 0, 0], 0x8f969c);
+  cyl(THREE, scene, 'belt_pulley', .38, .38, .18, [1.15, .25, 1.05], [Math.PI/2, 0, 0], 0x303943);
+  cyl(THREE, scene, null, .24, .24, .18, [1.8, .58, 1.05], [Math.PI/2, 0, 0], 0x303943);
+  box(THREE, scene, 'belt', [.08, .08, 1.2], [1.46, .42, 1.05], 0x0a0d10);
+  box(THREE, scene, 'straw_walkers', [1.8, .25, .9], [.65, -.1, -1.15], 0xc9924b, 'straw_walkers');
+  box(THREE, scene, 'sieves', [1.65, .18, .85], [.1, -.55, -.85], 0x7b858f, 'sieves');
+  cyl(THREE, scene, 'unloading_auger', .13, .13, 2.55, [2.95, .95, -.35], [0.65, 0, 1.2], steel);
+  cyl(THREE, scene, 'front_tyre', .72, .72, .55, [-1.55, -1.2, 1.05], [Math.PI/2, 0, 0], dark);
+  cyl(THREE, scene, null, .36, .36, .58, [-1.55, -1.2, 1.05], [Math.PI/2, 0, 0], 0x626a72);
+  cyl(THREE, scene, 'rear_tyre', .48, .48, .38, [1.75, -1.12, 1.0], [Math.PI/2, 0, 0], dark);
+  cyl(THREE, scene, null, .23, .23, .40, [1.75, -1.12, 1.0], [Math.PI/2, 0, 0], 0x626a72);
+}
+
+function updateLabels(THREE) {
+  if (!appState.camera || !appState.labelsVisible) {
+    els.partLabels.style.display = appState.labelsVisible ? 'block' : 'none';
+    return;
+  }
+  els.partLabels.style.display = 'block';
+  const rect = els.threeContainer.getBoundingClientRect();
+  parts.forEach((part) => {
+    const node = appState.labelNodes.get(part.id);
+    const vector = new THREE.Vector3(...part.position).project(appState.camera);
+    const x = (vector.x * 0.5 + 0.5) * rect.width;
+    const y = (-vector.y * 0.5 + 0.5) * rect.height;
+    node.style.left = `${x}px`;
+    node.style.top = `${y}px`;
+    node.style.opacity = vector.z < 1 ? '1' : '0';
+    node.classList.toggle('active', appState.selectedPart === part.id);
   });
 }
 
-function drawCombineSide(ctx, x, y, scale, wheelSpin = 0, glow = false) {
-  const bodyW = 190 * scale;
-  const bodyH = 70 * scale;
-  const cabinW = 72 * scale;
-  const cabinH = 52 * scale;
-  const orange = ctx.createLinearGradient(x, y, x + bodyW, y + bodyH);
-  orange.addColorStop(0, '#f0a53a');
-  orange.addColorStop(1, '#ff6b1c');
-
-  ctx.save();
-  if (glow) {
-    ctx.shadowColor = 'rgba(240,165,58,0.35)';
-    ctx.shadowBlur = 30;
-  }
-  ctx.beginPath();
-  ctx.moveTo(x + 26 * scale, y + bodyH);
-  ctx.lineTo(x + 56 * scale, y + 18 * scale);
-  ctx.lineTo(x + bodyW - 54 * scale, y + 18 * scale);
-  ctx.lineTo(x + bodyW, y + bodyH - 10 * scale);
-  ctx.lineTo(x + bodyW - 16 * scale, y + bodyH);
-  ctx.closePath();
-  ctx.fillStyle = orange;
-  ctx.fill();
-  ctx.restore();
-
-  ctx.fillStyle = '#d9ddd9';
-  ctx.beginPath();
-  ctx.moveTo(x + 62 * scale, y + 18 * scale);
-  ctx.lineTo(x + 128 * scale, y + 18 * scale);
-  ctx.lineTo(x + 144 * scale, y + 54 * scale);
-  ctx.lineTo(x + 32 * scale, y + 54 * scale);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.fillStyle = 'rgba(18,24,31,0.75)';
-  ctx.fillRect(x + 74 * scale, y + 24 * scale, cabinW, cabinH);
-
-  ctx.fillStyle = 'rgba(255,255,255,0.12)';
-  ctx.fillRect(x + 132 * scale, y + 24 * scale, 42 * scale, 34 * scale);
-  ctx.fillRect(x + 178 * scale, y + 40 * scale, 40 * scale, 24 * scale);
-
-  ctx.save();
-  ctx.translate(x - 2 * scale, y + bodyH - 6 * scale);
-  ctx.beginPath();
-  ctx.moveTo(-42 * scale, 16 * scale);
-  ctx.lineTo(18 * scale, -8 * scale);
-  ctx.lineTo(40 * scale, 6 * scale);
-  ctx.lineTo(-10 * scale, 28 * scale);
-  ctx.closePath();
-  ctx.fillStyle = '#ec8a2e';
-  ctx.fill();
-  ctx.fillStyle = 'rgba(235,235,235,0.18)';
-  ctx.fillRect(-48 * scale, 14 * scale, 70 * scale, 10 * scale);
-  ctx.restore();
-
-  ctx.strokeStyle = 'rgba(255,255,255,0.28)';
-  ctx.lineWidth = 5 * scale;
-  ctx.beginPath();
-  ctx.moveTo(x + bodyW - 6 * scale, y + 48 * scale);
-  ctx.quadraticCurveTo(x + bodyW + 42 * scale, y + 40 * scale, x + bodyW + 78 * scale, y + 72 * scale);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x + bodyW + 14 * scale, y + 50 * scale);
-  ctx.lineTo(x + bodyW + 80 * scale, y + 72 * scale);
-  ctx.stroke();
-
-  drawWheel(ctx, x + 56 * scale, y + bodyH + 10 * scale, 28 * scale, wheelSpin);
-  drawWheel(ctx, x + bodyW - 44 * scale, y + bodyH + 10 * scale, 20 * scale, wheelSpin);
-}
-
-function drawWheel(ctx, cx, cy, r, spin) {
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.fillStyle = 'rgba(12,14,18,0.95)';
-  ctx.beginPath();
-  ctx.arc(0, 0, r, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.lineWidth = Math.max(2, r * 0.14);
-  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-  ctx.stroke();
-  ctx.rotate(spin);
-  ctx.strokeStyle = 'rgba(255,255,255,0.30)';
-  ctx.lineWidth = Math.max(1.4, r * 0.08);
-  for (let i = 0; i < 6; i++) {
-    ctx.rotate(Math.PI / 3);
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(r * 0.72, 0);
-    ctx.stroke();
-  }
-  ctx.fillStyle = 'rgba(255,255,255,0.20)';
-  ctx.beginPath();
-  ctx.arc(0, 0, r * 0.35, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-}
-
-function animateIntro() {
-  const ctx = els.introCanvas.getContext('2d');
-  const start = performance.now();
-  let stopped = false;
-
-  function frame(now) {
-    if (stopped) return;
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / 3200, 1);
-    const w = els.introCanvas.clientWidth;
-    const h = els.introCanvas.clientHeight;
-    ctx.clearRect(0, 0, w, h);
-
-    const sky = ctx.createLinearGradient(0, 0, 0, h);
-    sky.addColorStop(0, '#090b10');
-    sky.addColorStop(0.45, '#10161d');
-    sky.addColorStop(1, '#25160d');
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, w, h);
-
-    const sunX = w * 0.75;
-    const sunY = h * 0.28;
-    const sunRadius = 90 + progress * 15;
-    const glow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, sunRadius * 2.4);
-    glow.addColorStop(0, 'rgba(255,196,106,0.9)');
-    glow.addColorStop(0.35, 'rgba(255,134,56,0.40)');
-    glow.addColorStop(1, 'rgba(255,134,56,0)');
-    ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(sunX, sunY, sunRadius * 2.4, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#1f2316';
-    ctx.beginPath();
-    ctx.moveTo(0, h * 0.76);
-    for (let i = 0; i <= 10; i++) {
-      const px = (i / 10) * w;
-      const py = h * 0.72 + Math.sin(i * 0.65 + progress * 5) * 18;
-      ctx.lineTo(px, py);
+function selectPart(id) {
+  const part = parts.find((p) => p.id === id);
+  if (!part) return;
+  appState.selectedPart = id;
+  updateDetails(part);
+  renderPartsList(els.partSearch.value || '');
+  if (appState.three && appState.camera && appState.controls) {
+    const THREE = appState.three;
+    appState.partObjects.forEach((mesh, meshId) => {
+      mesh.material = appState.originalMaterials.get(meshId) || mesh.material;
+    });
+    const mesh = appState.partObjects.get(id);
+    if (mesh) {
+      mesh.material = new THREE.MeshStandardMaterial({ color: 0x6be284, emissive: 0x1a6f34, metalness: .25, roughness: .3 });
     }
-    ctx.lineTo(w, h);
-    ctx.lineTo(0, h);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.strokeStyle = 'rgba(255,201,135,0.16)';
-    ctx.lineWidth = 2;
-    for (let i = 0; i < 16; i++) {
-      ctx.beginPath();
-      ctx.moveTo((i / 16) * w, h * 0.76);
-      ctx.lineTo(w / 2, h);
-      ctx.stroke();
-    }
-
-    const machineX = -220 + progress * (w * 0.72);
-    const machineY = h * 0.64;
-    drawCombineSide(ctx, machineX, machineY, Math.max(0.85, w / 1280), progress * 10, true);
-
-    if (progress < 1) requestAnimationFrame(frame);
-    else setTimeout(hideIntro, 350);
+    const target = new THREE.Vector3(...part.position);
+    appState.controls.target.copy(target);
+    appState.camera.position.lerp(new THREE.Vector3(target.x + 4, target.y + 2.5, target.z + 4), .65);
+    appState.controls.update();
   }
-
-  requestAnimationFrame(frame);
-  return () => { stopped = true; };
 }
 
-function hideIntro() {
-  els.introOverlay.classList.add('hidden');
-  els.introOverlay.setAttribute('aria-hidden', 'true');
+function setupParts() {
+  renderPartsList();
+  renderGuide();
+  els.partSearch?.addEventListener('input', (e) => renderPartsList(e.target.value));
+  els.resetView?.addEventListener('click', () => {
+    if (!appState.camera || !appState.controls) return;
+    appState.camera.position.set(6, 4.2, 7.2);
+    appState.controls.target.set(0, 0, 0);
+    appState.controls.update();
+  });
+  els.toggleLabels?.addEventListener('click', () => {
+    appState.labelsVisible = !appState.labelsVisible;
+    els.toggleLabels.textContent = appState.labelsVisible ? 'Labels on' : 'Labels off';
+    els.partLabels.style.display = appState.labelsVisible ? 'block' : 'none';
+  });
 }
 
-function animateHero() {
-  const ctx = els.heroCanvas.getContext('2d');
-  function loop(now) {
-    const w = els.heroCanvas.clientWidth;
-    const h = els.heroCanvas.clientHeight;
-    ctx.clearRect(0, 0, w, h);
-
-    const bg = ctx.createLinearGradient(0, 0, 0, h);
-    bg.addColorStop(0, '#11161d');
-    bg.addColorStop(0.55, '#0b0f14');
-    bg.addColorStop(1, '#0a0d12');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, w, h);
-
-    const glow = ctx.createRadialGradient(w * 0.72, h * 0.24, 20, w * 0.72, h * 0.24, w * 0.28);
-    glow.addColorStop(0, 'rgba(255,177,94,0.52)');
-    glow.addColorStop(0.35, 'rgba(255,107,28,0.18)');
-    glow.addColorStop(1, 'rgba(255,107,28,0)');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, w, h);
-
-    ctx.fillStyle = 'rgba(245,165,58,0.16)';
-    ctx.fillRect(0, h * 0.7, w, h * 0.3);
-    ctx.fillStyle = 'rgba(0,0,0,0.14)';
-    for (let i = 0; i < 22; i++) {
-      const x = (i / 21) * w;
-      ctx.beginPath();
-      ctx.moveTo(x, h * 0.68);
-      ctx.lineTo(w * 0.55, h);
-      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    const bob = Math.sin(now * 0.0014) * 5;
-    drawCombineSide(ctx, w * 0.18, h * 0.44 + bob, Math.min(w / 620, 1.12), now * 0.006);
-
-    ctx.fillStyle = 'rgba(255,255,255,0.10)';
-    ctx.font = '600 14px Inter';
-    ctx.fillText('NEW HIRA 985', w * 0.07, h * 0.12);
-    ctx.font = '800 36px Manrope';
-    ctx.fillStyle = 'rgba(255,255,255,0.94)';
-    ctx.fillText('FIELD-READY', w * 0.07, h * 0.19);
-    ctx.fillStyle = 'rgba(255,255,255,0.58)';
-    ctx.font = '500 14px Inter';
-    ctx.fillText('Animated combine harvester showcase', w * 0.07, h * 0.235);
-
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
+function setupFallback3D() {
+  els.viewerLoading.textContent = '3D library could not load. Parts search still works.';
+  els.threeContainer.style.minHeight = '320px';
 }
 
-function shadeColor(color, amount) {
-  const usePound = color[0] === '#';
-  const col = usePound ? color.slice(1) : color;
-  const num = parseInt(col, 16);
-  let r = (num >> 16) + amount;
-  let g = ((num >> 8) & 0x00ff) + amount;
-  let b = (num & 0x0000ff) + amount;
-  r = Math.min(255, Math.max(0, r));
-  g = Math.min(255, Math.max(0, g));
-  b = Math.min(255, Math.max(0, b));
-  return `${usePound ? '#' : ''}${(b | (g << 8) | (r << 16)).toString(16).padStart(6, '0')}`;
-}
-
-function drawPrism(ctx, x, y, w, h, depth, angleDeg, fill) {
-  const rad = angleDeg * Math.PI / 180;
-  const dx = Math.cos(rad) * depth;
-  const dy = Math.sin(rad) * depth * 0.42;
-  const front = [{x, y}, {x + w, y}, {x + w, y + h}, {x, y + h}];
-  const back = front.map((p) => ({ x: p.x + dx, y: p.y - dy }));
-
-  const sideIsRight = dx >= 0;
-  const side = sideIsRight ? [front[1], back[1], back[2], front[2]] : [front[0], back[0], back[3], front[3]];
-  const top = [front[0], front[1], back[1], back[0]];
-
-  ctx.fillStyle = fill;
-  drawPolygon(ctx, front);
-  ctx.fillStyle = shadeColor(fill, 28);
-  drawPolygon(ctx, top);
-  ctx.fillStyle = shadeColor(fill, -28);
-  drawPolygon(ctx, side);
-}
-
-function drawPolygon(ctx, points) {
-  ctx.beginPath();
-  ctx.moveTo(points[0].x, points[0].y);
-  for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
-  ctx.closePath();
-  ctx.fill();
-}
-
-function animateModel() {
-  const ctx = els.modelCanvas.getContext('2d');
-  function loop() {
-    if (appState.autoRotate) {
-      appState.modelAngle = (appState.modelAngle + 0.35) % 360;
-      els.rotationRange.value = String(Math.round(appState.modelAngle));
-    }
-
-    const w = els.modelCanvas.clientWidth;
-    const h = els.modelCanvas.clientHeight;
-    ctx.clearRect(0, 0, w, h);
-
-    const bg = ctx.createLinearGradient(0, 0, 0, h);
-    bg.addColorStop(0, '#0f1319');
-    bg.addColorStop(1, '#090c11');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, w, h);
-
-    const halo = ctx.createRadialGradient(w * 0.5, h * 0.2, 30, w * 0.5, h * 0.2, w * 0.3);
-    halo.addColorStop(0, 'rgba(255,165,58,0.26)');
-    halo.addColorStop(1, 'rgba(255,165,58,0)');
-    ctx.fillStyle = halo;
-    ctx.fillRect(0, 0, w, h);
-
-    ctx.fillStyle = 'rgba(255,255,255,0.06)';
-    ctx.fillRect(w * 0.12, h * 0.80, w * 0.74, 8);
-
-    const cx = w * 0.48;
-    const baseY = h * 0.40;
-    const s = Math.min(w / 900, 1);
-    const angle = appState.modelAngle;
-
-    drawPrism(ctx, cx - 150 * s, baseY, 260 * s, 92 * s, 60 * s, angle, '#f0a53a');
-    drawPrism(ctx, cx - 95 * s, baseY - 74 * s, 108 * s, 70 * s, 42 * s, angle, '#d7ddda');
-    drawPrism(ctx, cx + 20 * s, baseY - 46 * s, 88 * s, 56 * s, 32 * s, angle, '#8f989a');
-    drawPrism(ctx, cx + 110 * s, baseY - 24 * s, 100 * s, 40 * s, 30 * s, angle, '#6c7277');
-    drawPrism(ctx, cx - 250 * s, baseY + 30 * s, 120 * s, 18 * s, 36 * s, angle, '#e79433');
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.45)';
-    ctx.lineWidth = 6 * s;
-    const rad = angle * Math.PI / 180;
-    const dx = Math.cos(rad) * 90 * s;
-    const dy = Math.sin(rad) * 90 * s * 0.42;
-    ctx.beginPath();
-    ctx.moveTo(cx + 150 * s, baseY - 2 * s);
-    ctx.quadraticCurveTo(cx + 210 * s + dx * 0.1, baseY - 22 * s - dy * 0.1, cx + 260 * s + dx * 0.16, baseY + 24 * s - dy * 0.16);
-    ctx.stroke();
-
-    drawWheel(ctx, cx - 68 * s, baseY + 112 * s, 42 * s, 0.2);
-    drawWheel(ctx, cx + 124 * s, baseY + 108 * s, 28 * s, 0.2);
-
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
-}
-
-async function initFirebase() {
+async function setupFirebase() {
   if (!enableFirebase) return;
   try {
-    const [{ initializeApp }, { getFirestore, collection, addDoc, serverTimestamp }] = await Promise.all([
+    const [{ initializeApp }, authMod, dbMod] = await Promise.all([
       import('https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js'),
       import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js')
     ]);
-
     const app = initializeApp(firebaseConfig);
-    appState.firestore = getFirestore(app);
-    appState.collection = collection;
-    appState.addDoc = addDoc;
-    appState.serverTimestamp = serverTimestamp;
-  } catch (error) {
-    console.error('Firebase init error:', error);
-  }
-}
-
-async function submitEnquiry(event) {
-  event.preventDefault();
-  const t = content[appState.lang];
-  const form = event.currentTarget;
-  const formData = new FormData(form);
-  const payload = Object.fromEntries(formData.entries());
-  payload.offer = els.offerInput.value;
-  payload.createdAt = new Date().toISOString();
-  payload.language = appState.lang;
-
-  els.formStatus.className = 'form-status';
-  setText(els.formStatus, t.statusSubmitting);
-
-  try {
-    if (appState.firestore && appState.addDoc && appState.collection) {
-      await appState.addDoc(appState.collection(appState.firestore, leadsCollectionName), {
-        ...payload,
-        createdAt: appState.serverTimestamp ? appState.serverTimestamp() : new Date()
-      });
-      els.formStatus.classList.add('success');
-      setText(els.formStatus, t.statusSuccess);
-    } else {
-      const existing = JSON.parse(localStorage.getItem('newHiraLocalEnquiries') || '[]');
-      existing.push(payload);
-      localStorage.setItem('newHiraLocalEnquiries', JSON.stringify(existing));
-      els.formStatus.classList.add('success');
-      setText(els.formStatus, t.statusLocal);
-    }
-    form.reset();
-    renderFormOptions();
+    appState.auth = authMod.getAuth(app);
+    appState.db = dbMod.getFirestore(app);
+    appState.firebase = { ...authMod, ...dbMod };
+    appState.firebaseReady = true;
+    authMod.onAuthStateChanged(appState.auth, (user) => {
+      appState.user = user;
+      els.authStatus.textContent = user ? `Logged in: ${user.email}` : 'Not logged in';
+      els.authStatus.style.color = user ? 'var(--green)' : 'var(--muted)';
+    });
   } catch (error) {
     console.error(error);
-    els.formStatus.classList.add('error');
-    setText(els.formStatus, t.statusError);
+    els.authStatus.textContent = 'Firebase not available yet. Enable Auth and check connection.';
   }
 }
 
-function initForm() {
-  if (els.enquiryForm) {
-    els.enquiryForm.addEventListener('submit', submitEnquiry);
+function setupAuth() {
+  function openAuth() {
+    if (els.authDialog?.showModal) els.authDialog.showModal();
   }
-  updateOfferDisplay();
-}
+  els.authOpen?.addEventListener('click', openAuth);
+  els.authOpen2?.addEventListener('click', openAuth);
 
-function showAllReveals() {
-  document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
-}
-
-function safeRun(fn, label) {
-  try {
-    fn();
-  } catch (error) {
-    console.error('New Hira init step failed:', label, error);
+  async function doAuth(mode) {
+    els.authMessage.className = 'authMessage';
+    const email = els.authEmail.value.trim();
+    const password = els.authPassword.value;
+    if (!email || password.length < 6) {
+      els.authMessage.classList.add('error');
+      els.authMessage.textContent = 'Enter email and password with at least 6 characters.';
+      return;
+    }
+    try {
+      if (!appState.firebaseReady) throw new Error('Firebase not ready');
+      if (mode === 'login') await appState.firebase.signInWithEmailAndPassword(appState.auth, email, password);
+      else {
+        const result = await appState.firebase.createUserWithEmailAndPassword(appState.auth, email, password);
+        await appState.firebase.setDoc(appState.firebase.doc(appState.db, usersCollection, result.user.uid), {
+          email,
+          createdAt: appState.firebase.serverTimestamp()
+        }, { merge: true });
+      }
+      els.authMessage.classList.add('success');
+      els.authMessage.textContent = mode === 'login' ? 'Logged in successfully.' : 'Account created successfully.';
+      setTimeout(() => els.authDialog.close(), 700);
+    } catch (error) {
+      els.authMessage.classList.add('error');
+      els.authMessage.textContent = error.message.replace('Firebase: ', '');
+    }
   }
+  els.loginSubmit?.addEventListener('click', () => doAuth('login'));
+  els.signupSubmit?.addEventListener('click', () => doAuth('signup'));
+  els.logoutButton?.addEventListener('click', async () => {
+    if (appState.auth && appState.firebase?.signOut) await appState.firebase.signOut(appState.auth);
+  });
 }
 
-function init() {
-  safeRun(bindInteractions, 'bindInteractions');
-  safeRun(setupReveal, 'setupReveal');
-  safeRun(setupCanvases, 'setupCanvases');
-  safeRun(() => applyLanguage(appState.lang), 'applyLanguage');
-  safeRun(initForm, 'initForm');
-  safeRun(animateHero, 'animateHero');
-  safeRun(animateModel, 'animateModel');
-  safeRun(animateIntro, 'animateIntro');
-  initFirebase().catch((error) => console.error('Firebase init failed:', error));
-  setTimeout(showAllReveals, 700);
+function setupEnquiry() {
+  els.enquiryForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(els.enquiryForm).entries());
+    data.createdAtClient = new Date().toISOString();
+    data.userEmail = appState.user?.email || 'Guest';
+    data.userId = appState.user?.uid || null;
+    els.formStatus.className = 'formStatus';
+    els.formStatus.textContent = 'Submitting enquiry...';
+
+    try {
+      if (appState.firebaseReady && appState.db) {
+        await appState.firebase.addDoc(appState.firebase.collection(appState.db, enquiriesCollection), {
+          ...data,
+          createdAt: appState.firebase.serverTimestamp()
+        });
+        els.formStatus.classList.add('success');
+        els.formStatus.textContent = 'Enquiry submitted. Check Firestore collection harvester_enquiries.';
+      } else {
+        const saved = JSON.parse(localStorage.getItem('newHiraEnquiries') || '[]');
+        saved.push(data);
+        localStorage.setItem('newHiraEnquiries', JSON.stringify(saved));
+        els.formStatus.classList.add('success');
+        els.formStatus.textContent = 'Firebase unavailable, enquiry saved locally for testing.';
+      }
+      els.enquiryForm.reset();
+      els.enquiryOffer.value = inr(appState.offer);
+    } catch (error) {
+      els.formStatus.classList.add('error');
+      els.formStatus.textContent = error.message;
+    }
+  });
 }
 
-window.addEventListener('resize', () => safeRun(setupCanvases, 'resize setupCanvases'));
-window.addEventListener('DOMContentLoaded', init);
-setTimeout(showAllReveals, 1000);
+async function init() {
+  safe(setupReveal, 'reveal');
+  safe(setupMenu, 'menu');
+  safe(setupShare, 'share');
+  safe(setupOffer, 'offer');
+  safe(setupIntroCanvas, 'intro');
+  safe(setupHeroCanvas, 'hero');
+  safe(setupParts, 'parts');
+  safe(setupAuth, 'auth ui');
+  safe(setupEnquiry, 'enquiry');
+  setupFirebase();
+  setup3D().catch((error) => {
+    console.error(error);
+    setupFallback3D();
+  });
+  setTimeout(revealAll, 1200);
+}
+
+document.addEventListener('DOMContentLoaded', init);

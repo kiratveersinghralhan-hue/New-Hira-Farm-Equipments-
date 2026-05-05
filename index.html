@@ -2,404 +2,199 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b0d10" />
-  <meta name="description" content="New Hira Farm Equipments premium combine harvester website with multilingual content, animated intro, interactive visuals and Firebase enquiry form." />
-  <title>New Hira Farm Equipments</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090A0D" />
+  <meta name="description" content="New Hira premium single-page combine harvester 3D model, parts finder, repair guide, offers and enquiry." />
+  <title>New Hira | Combine Harvester 3D Parts Finder</title>
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
-  <script>document.documentElement.classList.add("js");</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="intro-overlay" id="introOverlay" aria-hidden="false">
-    <canvas id="introCanvas" width="1440" height="900"></canvas>
-    <div class="intro-content">
-      <p class="intro-kicker" data-i18n="introKicker">Punjab Crafted • Field Ready</p>
-      <h1><span data-i18n="introBrandA">New Hira</span><br><span data-i18n="introBrandB">Farm Equipments</span></h1>
-      <p class="intro-caption" data-i18n="introCaption">Premium combine harvester experience</p>
+  <div class="intro" id="intro">
+    <canvas id="introCanvas" aria-hidden="true"></canvas>
+    <div class="introGlass">
+      <p class="micro">Exclusive digital service experience</p>
+      <h1>New Hira</h1>
+      <p>360° combine harvester parts intelligence</p>
+      <div class="introBar"><span></span></div>
     </div>
-    <button class="skip-intro" id="skipIntro" type="button" data-i18n="skipIntro">Skip intro</button>
+    <button class="skipIntro" id="skipIntro" type="button">Enter website</button>
   </div>
 
-  <a class="skip-link" href="#main" data-i18n="skipLink">Skip to content</a>
-
-  <header class="site-header" id="top">
-    <div class="nav-wrap">
-      <a href="#top" class="brand">
-        <span class="brand-badge">NH</span>
-        <span class="brand-copy">
-          <strong>New Hira</strong>
-          <small data-i18n="brandSub">Farm Equipments</small>
-        </span>
-      </a>
-
-      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
-        <a href="#overview" data-i18n="navOverview">Overview</a>
-        <a href="#machine" data-i18n="navMachine">Machine</a>
-        <a href="#specs" data-i18n="navSpecs">Specifications</a>
-        <a href="#service" data-i18n="navService">Parts & Service</a>
-        <a href="#gallery" data-i18n="navGallery">Gallery</a>
-        <a href="#enquiry" data-i18n="navEnquire">Enquire</a>
-      </nav>
-
-      <div class="nav-tools">
-        <div class="select-wrap">
-          <label for="languageSelect" class="sr-only" data-i18n="languageLabel">Language</label>
-          <select id="languageSelect" aria-label="Choose language">
-            <option value="en">English</option>
-            <option value="hi">हिन्दी</option>
-            <option value="pa">ਪੰਜਾਬੀ</option>
-          </select>
-        </div>
-        <a href="#enquiry" class="btn btn-small btn-outline" data-i18n="navCta">Get offer</a>
-      </div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="New Hira home">
+      <span>NH</span>
+      <strong>New Hira</strong>
+    </a>
+    <button class="menuButton" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="mainNav" class="mainNav" aria-label="Main navigation">
+      <a href="#about">Company</a>
+      <a href="#model">3D Parts Finder</a>
+      <a href="#parts">Repair Guide</a>
+      <a href="#offer">Offer</a>
+      <a href="#enquiry">Enquiry</a>
+    </nav>
+    <div class="topActions">
+      <button class="textButton" id="shareButton" type="button">Share</button>
+      <button class="loginButton" id="authOpen" type="button">Login / Sign up</button>
     </div>
   </header>
 
-  <main id="main">
-    <section class="hero" id="overview">
-      <div class="hero-backdrop"></div>
-      <div class="hero-grid container">
-        <div class="hero-copy reveal">
-          <p class="eyebrow" data-i18n="heroEyebrow">Agricultural harvester experience</p>
-          <h1 data-i18n="heroTitle">A premium website concept for a powerful New Hira combine harvester.</h1>
-          <p class="hero-lead" data-i18n="heroLead">Inspired by high-end automotive storytelling and modern product pages, this design presents New Hira as a trusted manufacturer with dynamic visuals, multilingual content and direct farmer enquiries.</p>
-          <div class="hero-actions">
-            <a href="#enquiry" class="btn btn-primary" data-i18n="heroCtaPrimary">Enquire now</a>
-            <a href="#machine" class="btn btn-ghost" data-i18n="heroCtaSecondary">Explore machine</a>
-          </div>
-          <div class="hero-points" id="heroPoints"></div>
-        </div>
-
-        <div class="hero-stage reveal">
-          <div class="hero-stage-head">
-            <span data-i18n="heroStageLabel">Animated machine showcase</span>
-            <div class="status-pill">
-              <span class="pulse"></span>
-              <span data-i18n="heroStageStatus">Dynamic visual active</span>
-            </div>
-          </div>
-          <canvas id="heroCanvas" width="900" height="620" aria-label="Animated combine harvester"></canvas>
-          <div class="hero-stage-footer">
-            <div>
-              <small data-i18n="heroFooterLabelA">Story style</small>
-              <strong data-i18n="heroFooterValueA">Premium / cinematic</strong>
-            </div>
-            <div>
-              <small data-i18n="heroFooterLabelB">Language mode</small>
-              <strong id="currentLanguageLabel">English</strong>
-            </div>
-            <div>
-              <small data-i18n="heroFooterLabelC">Lead backend</small>
-              <strong>Firebase</strong>
-            </div>
-          </div>
+  <main id="top">
+    <section class="hero">
+      <div class="grain"></div>
+      <div class="heroCopy reveal">
+        <p class="eyebrow">Premium combine harvester support platform</p>
+        <h1>One page for the machine, its parts, its repairs and every farmer enquiry.</h1>
+        <p class="lead">A Bugatti/Rolls-Royce inspired single-page experience for New Hira: 360° rotatable combine harvester, searchable parts, repair guidance, offer capture, login and Firebase-ready enquiries.</p>
+        <div class="heroActions">
+          <a href="#model" class="primaryBtn">Open 3D model</a>
+          <a href="#enquiry" class="ghostBtn">Send enquiry</a>
         </div>
       </div>
-
-      <div class="metrics container reveal" id="metricsGrid"></div>
-    </section>
-
-    <section class="story container section" id="machine">
-      <div class="section-intro reveal">
-        <p class="eyebrow" data-i18n="storyEyebrow">Manufacturer story</p>
-        <h2 data-i18n="storyTitle">Built for demanding fields, presented with a modern premium identity.</h2>
-        <p data-i18n="storyLead">This layout mixes the elegance of luxury landing pages with practical agricultural communication — so farmers see strength, reliability, service support and value.</p>
-      </div>
-
-      <div class="story-layout">
-        <div class="story-card large reveal">
-          <div class="story-card-top">
-            <span class="chip" data-i18n="storyCardTag">New Hira 985 • Draft showcase</span>
-            <span class="mini-line" data-i18n="storyCardMini">Editable after final model confirmation</span>
-          </div>
-          <h3 data-i18n="storyCardTitle">One machine. One premium message. Multiple crops.</h3>
-          <p data-i18n="storyCardBody">Use this space to communicate manufacturing confidence, crop compatibility, operator comfort, and the availability of genuine service and spare parts.</p>
-          <div class="story-list" id="storyList"></div>
-        </div>
-
-        <div class="story-panel reveal">
-          <div class="floating-card">
-            <span class="panel-kicker" data-i18n="panelKicker">Machine highlights</span>
-            <h3 data-i18n="panelTitle">Designed to convert attention into enquiries.</h3>
-            <div class="highlight-stack" id="highlightStack"></div>
-          </div>
+      <div class="heroPanel reveal">
+        <canvas id="heroCanvas" aria-label="Animated New Hira combine harvester preview"></canvas>
+        <div class="heroStats">
+          <div><strong>360°</strong><span>Rotatable model</span></div>
+          <div><strong>Parts</strong><span>Search + location</span></div>
+          <div><strong>Firebase</strong><span>Auth + enquiry</span></div>
         </div>
       </div>
     </section>
 
-    <section class="experience section" id="specs">
-      <div class="container">
-        <div class="section-intro reveal">
-          <p class="eyebrow" data-i18n="experienceEyebrow">2D + 3D product experience</p>
-          <h2 data-i18n="experienceTitle">Interactive visuals that explain the machine better than a plain brochure.</h2>
-          <p data-i18n="experienceLead">A lightweight 3D model preview and an annotated 2D diagram help visitors understand the machine quickly on mobile or desktop.</p>
+    <section class="about section" id="about">
+      <div class="sectionHead reveal">
+        <p class="eyebrow">About the company</p>
+        <h2>New Hira is presented as a precision-first agricultural machinery brand.</h2>
+        <p>This single-page website is designed to promote the combine harvester, explain machine parts clearly, support farmers when they need replacement guidance, and turn visitors into enquiries.</p>
+      </div>
+      <div class="aboutGrid">
+        <article class="infoCard reveal"><span>01</span><h3>Manufacturer identity</h3><p>Shows New Hira as the machine maker, not just a seller. Replace this draft copy with your father’s real company history, manufacturing location and experience.</p></article>
+        <article class="infoCard reveal"><span>02</span><h3>Farmer support</h3><p>Farmers can search for parts such as shaft, fingers, blades, thresher drum, belt and pulley, then see a location and repair instructions.</p></article>
+        <article class="infoCard reveal"><span>03</span><h3>Sales conversion</h3><p>Inquiry form, offer amount, login/signup, WhatsApp button and share button help turn the website into a promotion and lead generation tool.</p></article>
+      </div>
+    </section>
+
+    <section class="modelSection section" id="model">
+      <div class="modelIntro reveal">
+        <p class="eyebrow">360° 3D parts finder</p>
+        <h2>Rotate the combine harvester, search parts, and see live part names on the model.</h2>
+        <p>The included model is a premium procedural model. For exact millimetre-level precision, replace it later with your real GLB/CAD model and mapped part coordinates.</p>
+      </div>
+      <div class="modelShell reveal">
+        <div class="viewerTop">
+          <div><p class="viewerLabel">Live model viewer</p><h3 id="selectedPartTitle">Select a part</h3></div>
+          <div class="viewerTools"><button type="button" id="resetView">Reset view</button><button type="button" id="toggleLabels">Labels on</button></div>
         </div>
-
-        <div class="experience-grid">
-          <div class="model-card reveal">
-            <div class="model-card-head">
-              <div>
-                <span class="panel-kicker" data-i18n="threeDLabel">Interactive 3D view</span>
-                <h3 data-i18n="threeDTitle">Rotate the combine harvester</h3>
-              </div>
-              <button class="btn btn-small btn-outline" type="button" id="rotateToggle" data-i18n="pauseRotate">Pause</button>
-            </div>
-            <canvas id="modelCanvas" width="950" height="560" aria-label="3D combine harvester model"></canvas>
-            <div class="slider-wrap">
-              <label for="rotationRange" data-i18n="rotationLabel">Rotation</label>
-              <input id="rotationRange" type="range" min="0" max="360" value="30" />
+        <div class="viewerGrid">
+          <div class="viewerWrap">
+            <div id="threeContainer" class="threeContainer">
+              <div id="partLabels" class="partLabels"></div>
+              <div id="viewerLoading" class="viewerLoading">Loading 3D model...</div>
             </div>
           </div>
-
-          <div class="spec-card reveal">
-            <div class="spec-head">
-              <span class="panel-kicker" data-i18n="specLabel">Machine data</span>
-              <h3 id="specTitle" data-i18n="specDefaultTitle">Power & engine</h3>
-            </div>
-            <div class="spec-tabs" role="tablist">
-              <button class="spec-tab active" data-tab="power" type="button" role="tab" aria-selected="true" data-i18n="tabPower">Power</button>
-              <button class="spec-tab" data-tab="harvesting" type="button" role="tab" aria-selected="false" data-i18n="tabHarvesting">Harvesting</button>
-              <button class="spec-tab" data-tab="drive" type="button" role="tab" aria-selected="false" data-i18n="tabDrive">Drive</button>
-              <button class="spec-tab" data-tab="service" type="button" role="tab" aria-selected="false" data-i18n="tabServiceSpecs">Service</button>
-            </div>
-            <div class="spec-table" id="specTable"></div>
-            <p class="spec-note" data-i18n="specNote">Draft technical information from public listings. Confirm final values before publishing.</p>
-          </div>
+          <aside class="partsPanel">
+            <label class="searchBox"><span>Search part name</span><input id="partSearch" type="search" placeholder="Search shaft, blades, thresher, pulley..." autocomplete="off" /></label>
+            <div id="partList" class="partList"></div>
+          </aside>
         </div>
-
-        <div class="diagram-grid">
-          <div class="diagram-card reveal">
-            <div class="diagram-head">
-              <div>
-                <span class="panel-kicker" data-i18n="diagramKicker">2D annotated diagram</span>
-                <h3 data-i18n="diagramTitle">Important parts at a glance</h3>
-              </div>
-              <button id="flashParts" class="btn btn-small btn-outline" type="button" data-i18n="diagramButton">Highlight parts</button>
-            </div>
-
-            <svg class="harvester-diagram" viewBox="0 0 980 480" role="img" aria-labelledby="diagramLabel">
-              <title id="diagramLabel">2D combine harvester parts diagram</title>
-              <defs>
-                <linearGradient id="diagramBody" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#f0a53a" />
-                  <stop offset="100%" stop-color="#ff6b1c" />
-                </linearGradient>
-                <linearGradient id="diagramCab" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#e9efea" />
-                  <stop offset="100%" stop-color="#aab8ad" />
-                </linearGradient>
-              </defs>
-              <rect x="40" y="340" width="820" height="14" rx="7" class="ground-line" />
-              <path d="M150 248 L280 160 H600 L742 236 L714 324 H186 Z" class="diag-body" />
-              <path d="M265 164 H438 V246 H170 Z" class="diag-cabin" />
-              <rect x="448" y="176" width="122" height="86" rx="14" class="diag-engine" />
-              <rect x="590" y="206" width="132" height="54" rx="12" class="diag-grain" />
-              <path d="M78 290 L190 232 L230 252 L130 324 Z" class="diag-header" />
-              <rect x="68" y="286" width="160" height="20" rx="10" class="diag-cutter" />
-              <path d="M742 238 C788 226 844 242 900 278" class="diag-auger" />
-              <line x1="762" y1="244" x2="902" y2="276" class="diag-auger-line" />
-              <circle cx="250" cy="346" r="68" class="diag-wheel" />
-              <circle cx="250" cy="346" r="28" class="diag-hub" />
-              <circle cx="656" cy="346" r="46" class="diag-wheel" />
-              <circle cx="656" cy="346" r="18" class="diag-hub" />
-              <g class="callouts">
-                <line x1="510" y1="178" x2="510" y2="95"></line>
-                <text x="510" y="80" text-anchor="middle" data-svg-i18n="callEngine">Engine</text>
-                <line x1="144" y1="284" x2="94" y2="168"></line>
-                <text x="82" y="152" data-svg-i18n="callCutter">Cutter bar</text>
-                <line x1="650" y1="210" x2="712" y2="120"></line>
-                <text x="718" y="108" data-svg-i18n="callGrain">Grain tank</text>
-                <line x1="250" y1="346" x2="166" y2="412"></line>
-                <text x="74" y="438" data-svg-i18n="callTyres">Steel tyres / wheels</text>
-                <line x1="818" y1="250" x2="896" y2="176"></line>
-                <text x="900" y="164" data-svg-i18n="callAuger">Unloading auger</text>
-              </g>
-            </svg>
-          </div>
-
-          <div class="parts-card reveal" id="service">
-            <span class="panel-kicker" data-i18n="partsKicker">Parts & support</span>
-            <h3 data-i18n="partsTitle">Promote genuine spare parts and after-sales service.</h3>
-            <p data-i18n="partsLead">This section is useful for convincing farmers that service backup is strong, spare parts are available, and seasonal maintenance will be easy.</p>
-            <div class="parts-grid" id="partsGrid"></div>
-          </div>
+        <div class="partDetails" id="partDetails">
+          <div><p class="detailLabel">Function</p><p id="partFunction">Select any part from the list or click a label on the 3D model.</p></div>
+          <div><p class="detailLabel">Common issue</p><p id="partIssue">The model will focus on the selected location.</p></div>
+          <div><p class="detailLabel">Remove / replace / repair method</p><p id="partRepair">Send the real service manual later and I can make this method exact for every part.</p></div>
         </div>
       </div>
     </section>
 
+    <section class="partsGuide section" id="parts">
+      <div class="sectionHead reveal"><p class="eyebrow">All parts and working explanation</p><h2>Searchable guide for common combine harvester parts.</h2><p>This is a starter technical guide. After you send real part numbers, photos and repair steps, it can become a proper service-support page.</p></div>
+      <div class="guideGrid" id="guideGrid"></div>
+    </section>
 
-    <section class="gallery-section section" id="gallery">
-      <div class="container">
-        <div class="section-intro reveal">
-          <p class="eyebrow" data-i18n="galleryEyebrow">Premium gallery presentation</p>
-          <h2 data-i18n="galleryTitle">A more luxurious product story for an agricultural machine.</h2>
-          <p data-i18n="galleryLead">This section is inspired by premium automotive storytelling: bold words, focused highlights and immersive product moments adapted for the combine harvester market.</p>
-        </div>
-        <div class="gallery-grid">
-          <article class="gallery-card reveal">
-            <span class="panel-kicker" data-i18n="galleryCard1Kicker">Commanding front profile</span>
-            <h3 data-i18n="galleryCard1Title">Presence that looks engineered for serious harvesting.</h3>
-            <p data-i18n="galleryCard1Body">Use real harvester photography later here. The layout is already ready for bold image-led storytelling.</p>
-          </article>
-          <article class="gallery-card warm reveal">
-            <span class="panel-kicker" data-i18n="galleryCard2Kicker">Operator perspective</span>
-            <h3 data-i18n="galleryCard2Title">Clear controls, confident visibility and field-focused comfort.</h3>
-            <p data-i18n="galleryCard2Body">Talk about operator ease, control access, maintenance visibility and harvesting confidence in this block.</p>
-          </article>
-          <article class="gallery-card dark reveal">
-            <span class="panel-kicker" data-i18n="galleryCard3Kicker">Built to support business</span>
-            <h3 data-i18n="galleryCard3Title">Spare parts, service backup and seasonal support make the difference.</h3>
-            <p data-i18n="galleryCard3Body">Use this to show why farmers should trust New Hira not only for the machine, but also for support after purchase.</p>
-          </article>
-        </div>
+    <section class="offer section" id="offer">
+      <div class="offerCard reveal">
+        <div class="offerCopy"><p class="eyebrow">Promotional offer</p><h2>Attach a booking offer to every enquiry.</h2><p>Set the discount amount after confirming with your father. The selected offer is automatically added to the enquiry form.</p><label class="rangeLine"><span>Offer amount</span><input id="offerRange" type="range" min="25000" max="200000" step="5000" value="100000" /></label></div>
+        <div class="offerNumber"><span>Current offer</span><strong id="offerDisplay">₹1,00,000</strong><p>Discount / booking benefit / exchange benefit</p></div>
       </div>
     </section>
 
-    <section class="offer-section section">
-      <div class="container offer-grid">
-        <div class="offer-copy reveal">
-          <p class="eyebrow" data-i18n="offerEyebrow">Seasonal campaign</p>
-          <h2 data-i18n="offerTitle">Offer-driven landing pages can increase calls and form enquiries.</h2>
-          <p data-i18n="offerLead">Use the offer amount your father confirms later. Right now the slider is interactive so the website feels alive and the offer value gets pushed into the enquiry form automatically.</p>
-          <div class="offer-value-card">
-            <span data-i18n="offerValueLabel">Current promotional offer</span>
-            <strong id="offerAmountDisplay">₹1,00,000</strong>
-            <small data-i18n="offerValueCaption">Discount / exchange / booking benefit — edit later</small>
-          </div>
-          <div class="slider-wrap accent">
-            <label for="offerRange" data-i18n="offerSliderLabel">Adjust offer amount</label>
-            <input id="offerRange" type="range" min="25000" max="200000" step="5000" value="100000" />
-          </div>
-          <button class="btn btn-primary" type="button" id="applyOfferBtn" data-i18n="applyOffer">Apply this offer to enquiry</button>
+    <section class="enquiry section" id="enquiry">
+      <div class="enquiryGrid">
+        <div class="authCard reveal">
+          <p class="eyebrow">Login / Sign up</p><h2>Customers can create an account before enquiry.</h2><p>Firebase Authentication is prepared. Enable Email/Password login in Firebase console for live account creation.</p>
+          <div id="authStatus" class="authStatus">Not logged in</div>
+          <div class="authMiniActions"><button type="button" id="authOpen2">Login / Sign up</button><button type="button" id="logoutButton">Logout</button></div>
         </div>
-
-        <div class="offer-panel reveal">
-          <div class="offer-box">
-            <span class="chip" data-i18n="offerBoxTag">Campaign message</span>
-            <h3 data-i18n="offerBoxTitle">Smart booking benefits for serious buyers.</h3>
-            <ul id="offerList"></ul>
-          </div>
-        </div>
+        <form class="enquiryForm reveal" id="enquiryForm">
+          <p class="eyebrow">Enquiry form</p><h2>Ask for price, service or part support.</h2>
+          <div class="formGrid"><label>Full name<input name="name" required placeholder="Farmer / customer name" /></label><label>Phone / WhatsApp<input name="phone" required placeholder="+91 98765 43210" /></label></div>
+          <div class="formGrid"><label>District<input name="district" placeholder="Patiala" /></label><label>Main crop<select name="crop"><option>Wheat</option><option>Paddy</option><option>Maize</option><option>Barley</option><option>Other</option></select></label></div>
+          <div class="formGrid"><label>Selected part / topic<input id="enquiryPart" name="selectedPart" readonly placeholder="Select a part from 3D model" /></label><label>Offer<input id="enquiryOffer" name="offer" readonly /></label></div>
+          <label>Message<textarea name="message" rows="5" placeholder="Tell us what you need: machine price, spare part, repair help, service visit..."></textarea></label>
+          <button class="primaryBtn full" type="submit">Submit enquiry</button>
+          <p id="formStatus" class="formStatus" role="status"></p>
+        </form>
       </div>
     </section>
 
-    <section class="enquiry-section section" id="enquiry">
-      <div class="container enquiry-grid">
-        <div class="form-card reveal">
-          <p class="eyebrow" data-i18n="formEyebrow">Direct farmer enquiries</p>
-          <h2 data-i18n="formTitle">Connect the website to Firebase and capture every lead.</h2>
-          <p data-i18n="formLead">This form is already prepared for Firebase. If Firebase is unavailable, enquiries are stored locally for testing so nothing feels broken.</p>
-
-          <form id="enquiryForm" novalidate>
-            <div class="field-grid">
-              <label>
-                <span data-i18n="fieldName">Full name</span>
-                <input type="text" name="name" required data-i18n-placeholder="fieldNamePlaceholder" placeholder="Farmer name" />
-              </label>
-              <label>
-                <span data-i18n="fieldPhone">Phone / WhatsApp</span>
-                <input type="tel" name="phone" required data-i18n-placeholder="fieldPhonePlaceholder" placeholder="+91 98765 43210" />
-              </label>
-            </div>
-            <div class="field-grid">
-              <label>
-                <span data-i18n="fieldDistrict">District</span>
-                <input type="text" name="district" data-i18n-placeholder="fieldDistrictPlaceholder" placeholder="e.g. Patiala" />
-              </label>
-              <label>
-                <span data-i18n="fieldState">State</span>
-                <select name="state" id="stateSelect"></select>
-              </label>
-            </div>
-            <div class="field-grid">
-              <label>
-                <span data-i18n="fieldCrop">Main crop</span>
-                <select name="crop" id="cropSelect"></select>
-              </label>
-              <label>
-                <span data-i18n="fieldOffer">Selected offer</span>
-                <input type="text" name="offer" id="offerInput" readonly />
-              </label>
-            </div>
-            <label>
-              <span data-i18n="fieldMessage">Requirement</span>
-              <textarea name="message" rows="5" data-i18n-placeholder="fieldMessagePlaceholder" placeholder="Tell us about crop, location and purchase timeline"></textarea>
-            </label>
-            <label class="consent-row">
-              <input type="checkbox" name="consent" required />
-              <span data-i18n="consentText">I agree that New Hira team can contact me regarding this enquiry.</span>
-            </label>
-            <button class="btn btn-primary full" type="submit" data-i18n="submitLabel">Submit enquiry</button>
-            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-          </form>
-        </div>
-
-        <aside class="contact-card reveal">
-          <span class="panel-kicker" data-i18n="contactKicker">Contact block</span>
-          <h3 data-i18n="contactTitle">Publish real sales details here.</h3>
-          <p data-i18n="contactLead">Replace this draft contact information with the exact phone number, WhatsApp number, address and working hours of New Hira Farm Equipments.</p>
-          <div class="contact-list">
-            <div>
-              <small data-i18n="contactPhoneLabel">Sales phone</small>
-              <strong>+91 98xxx xxxxx</strong>
-            </div>
-            <div>
-              <small data-i18n="contactWhatsappLabel">WhatsApp</small>
-              <strong>+91 98xxx xxxxx</strong>
-            </div>
-            <div>
-              <small data-i18n="contactLocationLabel">Location</small>
-              <strong data-i18n="contactLocationValue">Punjab, India</strong>
-            </div>
-            <div>
-              <small data-i18n="contactHoursLabel">Working hours</small>
-              <strong data-i18n="contactHoursValue">Mon - Sat • 9 AM to 6 PM</strong>
-            </div>
-          </div>
-          <div class="contact-note" data-i18n="contactNote">Tip: once you confirm pricing, warranty, finance and discount details, update them in the JavaScript content file and the whole site will change everywhere.</div>
-        </aside>
+    <section class="requirements section">
+      <div class="sectionHead reveal"><p class="eyebrow">For exact precision</p><h2>Send these files to make the 3D model exact.</h2></div>
+      <div class="requirementsGrid">
+        <div class="requirement reveal"><strong>3D model</strong><span>GLB/GLTF preferred. STEP, STP, IGES, OBJ, FBX or CAD also works.</span></div>
+        <div class="requirement reveal"><strong>Photos</strong><span>Front, back, left, right, top, cabin, engine bay, cutter, auger, tyres and internal panels.</span></div>
+        <div class="requirement reveal"><strong>Parts list</strong><span>Part names, part numbers, Hindi/Punjabi names, categories and exact positions.</span></div>
+        <div class="requirement reveal"><strong>Repair guide</strong><span>Tools needed, safety steps, bolts/removal order, replacement method and warnings.</span></div>
+        <div class="requirement reveal"><strong>Brand details</strong><span>Logo, colors, phone, WhatsApp, address, warranty, finance and offer details.</span></div>
+        <div class="requirement reveal"><strong>Brochure/specs</strong><span>Engine, emissions, tyres, gears, electrical system, steel body and service specs.</span></div>
       </div>
     </section>
   </main>
 
-  <div class="floating-cta" aria-label="Quick contact">
-    <a href="tel:+919800000000" class="cta-call">Call</a>
-    <a href="https://wa.me/919800000000" target="_blank" rel="noopener" class="cta-wa">WhatsApp</a>
-    <a href="#enquiry" class="cta-enquire">Enquire</a>
-  </div>
+  <footer class="footer"><strong>New Hira</strong><p>Single-page premium combine harvester website with 3D parts finder, Firebase enquiry, WhatsApp and share tools.</p></footer>
 
-  <footer class="site-footer">
-    <div class="container footer-wrap">
-      <div>
-        <strong>New Hira</strong>
-        <p data-i18n="footerText">Dynamic agricultural harvester landing page with English, Hindi and Punjabi translation support.</p>
-      </div>
-      <a href="#top" class="btn btn-small btn-outline" data-i18n="footerBackTop">Back to top</a>
+  <div class="floatActions"><a id="whatsappFloat" href="https://wa.me/919800000000" target="_blank" rel="noopener">WhatsApp</a><button id="shareFloat" type="button">Share</button><a href="#enquiry">Enquire</a></div>
+
+  <dialog id="authDialog" class="authDialog">
+    <form method="dialog" class="dialogCloseForm"><button aria-label="Close">×</button></form>
+    <div class="dialogInner">
+      <p class="eyebrow">Customer account</p><h2>Login or sign up</h2><p>Use Firebase Email/Password Authentication. If Firebase Auth is not enabled, this will show an error.</p>
+      <label>Email<input id="authEmail" type="email" placeholder="customer@example.com" /></label>
+      <label>Password<input id="authPassword" type="password" placeholder="Minimum 6 characters" /></label>
+      <div class="authActions"><button type="button" id="loginSubmit">Login</button><button type="button" id="signupSubmit">Sign up</button></div>
+      <p id="authMessage" class="authMessage"></p>
     </div>
-  </footer>
+  </dialog>
 
   <script>
-    (function(){
-      function closeIntro(){
-        var intro=document.getElementById("introOverlay");
-        if(!intro) return;
-        intro.classList.add("hidden");
-        intro.style.opacity="0";
-        intro.style.visibility="hidden";
-        intro.style.pointerEvents="none";
+    (function () {
+      function closeIntro() {
+        const intro = document.getElementById('intro');
+        if (!intro) return;
+        intro.classList.add('hidden');
+        intro.style.opacity = '0';
+        intro.style.visibility = 'hidden';
+        intro.style.pointerEvents = 'none';
       }
-      var btn=document.getElementById("skipIntro");
-      if(btn){btn.addEventListener("click", closeIntro); btn.addEventListener("touchend", function(e){ e.preventDefault(); closeIntro(); }, {passive:false});}
-      setTimeout(closeIntro, 4200);
-      setTimeout(function(){document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("visible")})}, 500);
-      window.NewHiraCloseIntro=closeIntro;
+      const btn = document.getElementById('skipIntro');
+      if (btn) {
+        btn.addEventListener('click', closeIntro);
+        btn.addEventListener('touchend', function (e) { e.preventDefault(); closeIntro(); }, { passive: false });
+      }
+      window.NewHiraCloseIntro = closeIntro;
+      setTimeout(closeIntro, 5200);
     })();
   </script>
   <script type="module" src="script.js"></script>

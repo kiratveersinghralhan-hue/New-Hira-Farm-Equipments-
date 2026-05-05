@@ -1,41 +1,42 @@
-# New Hira Farm Equipments Website v2
+# New Hira — Single Page 3D Parts Finder Website
 
-Premium static landing page for a combine harvester brand.
+This is a one-page premium website for New Hira.
 
-## Features
-- luxury-inspired dark design
-- animated intro screen
-- animated combine harvester hero canvas
-- lightweight 3D-style machine viewer
-- 2D annotated parts diagram
-- gallery-style premium storytelling section
-- English / Hindi / Punjabi full-page translation
-- Firebase Firestore enquiry form integration
-- no build step and no npm install
+## Included
+- Premium moving intro animation
+- About company section
+- 360° rotatable combine harvester 3D viewer
+- Live dynamic part labels
+- Search part by name
+- Part location focus in the 3D model
+- Working explanation + common issue + removal/replacement guidance
+- Login / Sign up prepared with Firebase Auth
+- Firebase Firestore enquiry form
+- Offer slider
+- WhatsApp floating button
+- Share website button
+- Root-level files only, ready for GitHub upload
 
-## Files
-- `index.html`
-- `styles.css`
-- `script.js`
-- `firebase-config.js`
-- `firestore.rules`
-- `README.md`
-- `.gitignore`
+## Firebase setup
+Your Firebase config is already inserted in `firebase-config.js`.
 
-## Firebase
-The included `firebase-config.js` already contains the Firebase values that were shared in chat.
-Collection name: `harvester_enquiries`
+In Firebase Console:
+1. Go to Authentication
+2. Enable Email/Password sign-in
+3. Go to Firestore Rules
+4. Paste the contents of `firestore.rules`
+5. Publish
 
-## GitHub Pages publish steps
-1. Create a new repository on GitHub.
-2. Upload all files from this ZIP directly into the repository root.
-3. Open **Settings** of the repo.
-4. Open **Pages**.
-5. Under **Build and deployment**, choose **Deploy from a branch**.
-6. Select branch **main** and folder **/root**.
-7. Save.
-8. Wait 1–3 minutes and open the published link.
+## For true precision 3D model
+The current website includes a procedural demonstration model. For exact real-part precision, send:
+- Real 3D model: GLB/GLTF preferred, or STEP/STP/IGES/OBJ/FBX/CAD
+- Real machine photos: front, back, left, right, top, engine, cabin, cutter, auger, tyres
+- Parts list: part names, part numbers, locations, Hindi/Punjabi names
+- Repair guide: tools, safety steps, removal order, bolt locations, replacement steps
+- Brand data: phone, WhatsApp, address, logo, tagline, warranty, offer terms
+- Specs/brochure: engine, tyres, gears, emissions, electrical system, body/steel info
 
-## Notes
-- Technical specs are draft values from public listings and should be confirmed before final publishing.
-- Replace draft contact details with real company phone, WhatsApp and address.
+## Replace WhatsApp/Call number
+In `index.html`, replace:
+`919800000000`
+with your real WhatsApp/call number including country code.
