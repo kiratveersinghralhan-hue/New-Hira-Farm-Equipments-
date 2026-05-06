@@ -4,212 +4,242 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0b0b0a" />
-  <meta name="description" content="New Hira premium advertisement website for combine harvesters, spare parts, warranty, referral marketing and 3D service guide." />
-  <title>New Hira | Premium Combine Harvester Advertisement</title>
-  <script type="importmap">
-    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
-  </script>
+  <meta name="description" content="New Hira premium agricultural machinery advertising website." />
+  <title>New Hira | Premium Combine Harvester Advertising</title>
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="intro" id="intro">
-    <div class="intro-inner">
-      <span class="intro-rule"></span>
-      <p>New Hira presents</p>
-      <h1>Harvesting<br>Confidence</h1>
-      <button id="enterSite" type="button">Enter</button>
+  <div class="preloader" id="preloader" aria-hidden="false">
+    <div class="preloader__line"></div>
+    <div class="preloader__content">
+      <span>New Hira</span>
+      <h1>Harvesting confidence.</h1>
+      <p>Premium agricultural machinery • Nabha</p>
     </div>
+    <button id="enterSite" class="preloader__button" type="button">Enter</button>
   </div>
 
-  <header class="site-header">
-    <a href="#top" class="brand"><span>NH</span><strong>New Hira</strong></a>
-    <button class="menu" id="menu" type="button" aria-label="Open menu"><span></span><span></span></button>
-    <nav id="nav">
-      <a href="#slogan">Campaign</a>
-      <a href="#combine">Combine</a>
+  <header class="header">
+    <a href="#top" class="brand" aria-label="New Hira">
+      <span>NH</span>
+      <strong>New Hira</strong>
+    </a>
+    <button class="menu" id="menu" type="button" aria-label="Menu" aria-expanded="false">
+      <i></i><i></i>
+    </button>
+    <nav class="nav" id="nav">
+      <a href="#brief">Brief</a>
       <a href="#parts">Parts</a>
       <a href="#warranty">Warranty</a>
       <a href="#network">Network</a>
       <a href="#service3d">3D Service</a>
       <a href="#enquiry">Enquiry</a>
     </nav>
-    <div class="header-actions">
-      <button id="shareTop" type="button">Share</button>
-      <button id="authOpen" type="button">Login</button>
-    </div>
+    <button class="login" id="loginOpen" type="button">Login</button>
   </header>
 
-  <aside class="side-rail" aria-label="Page progress">
-    <a href="#slogan" data-section="slogan"><span>01</span><b>Campaign</b></a>
-    <a href="#combine" data-section="combine"><span>02</span><b>Combine</b></a>
-    <a href="#parts" data-section="parts"><span>03</span><b>Parts</b></a>
-    <a href="#warranty" data-section="warranty"><span>04</span><b>Warranty</b></a>
-    <a href="#network" data-section="network"><span>05</span><b>Network</b></a>
-    <a href="#service3d" data-section="service3d"><span>06</span><b>3D</b></a>
+  <aside class="sideRail" aria-label="Section progress">
+    <a href="#top" data-section="top"><span></span><em>Intro</em></a>
+    <a href="#brief" data-section="brief"><span></span><em>Brief</em></a>
+    <a href="#parts" data-section="parts"><span></span><em>Parts</em></a>
+    <a href="#warranty" data-section="warranty"><span></span><em>Policy</em></a>
+    <a href="#network" data-section="network"><span></span><em>Network</em></a>
+    <a href="#service3d" data-section="service3d"><span></span><em>3D</em></a>
   </aside>
 
   <main id="top">
-    <section class="hero" id="slogan">
-      <div class="hero-media"><img src="hero.jpg" alt="New Hira combine working in field"></div>
-      <div class="hero-copy">
+    <section class="hero panel-section active" data-section-id="top">
+      <div class="heroMedia">
+        <img class="heroImage is-active" src="image1.jpg" alt="New Hira combine harvester in field" />
+        <img class="heroImage" src="image2.jpg" alt="New Hira combine harvester detail" />
+        <img class="heroImage" src="image3.jpg" alt="New Hira combine working" />
+        <div class="heroShade"></div>
+      </div>
+      <div class="heroCopy reveal">
         <p class="eyebrow">Premium agricultural machinery • Nabha</p>
         <h1>New Hira</h1>
-        <p class="slogan">Built for Indian fields. Designed for season-after-season confidence.</p>
-        <div class="hero-buttons">
-          <a href="#enquiry" class="btn primary">Book enquiry</a>
-          <a href="#service3d" class="btn ghost">Explore 3D service</a>
+        <p class="heroSlogan">Built for Indian fields. Designed for season-after-season confidence.</p>
+        <div class="heroActions">
+          <a class="btn btnLight" href="#enquiry">Book enquiry</a>
+          <a class="btn btnGhost" href="#service3d">Explore 3D service</a>
         </div>
+      </div>
+      <div class="heroMetrics reveal">
+        <div><strong>1 Season</strong><span>Warranty / guarantee</span></div>
+        <div><strong>500 Hrs</strong><span>Whichever is earlier</span></div>
+        <div><strong>₹1 Lakh</strong><span>2025–26 paddy offer</span></div>
       </div>
     </section>
 
-    <section class="section company-block" id="combine">
-      <div class="section-title">
+    <div class="ticker" aria-label="Advertisement strip">
+      <div class="tickerTrack">
+        <span>2025–26 Paddy personal combine offer up to ₹1,00,000</span>
+        <span>Share New Hira and earn up to ₹50,000 on completed booking</span>
+        <span>Warranty: 1 season or 500 hours, whichever is earlier</span>
+        <span>Service area: Nabha</span>
+        <span>New Hira • premium agricultural machinery</span>
+      </div>
+    </div>
+
+    <section class="section story panel-section" id="brief" data-section-id="brief">
+      <div class="sectionText reveal">
+        <span class="number">01</span>
         <p class="eyebrow">Advertisement brief</p>
-        <h2>A combine promoted with the calm confidence of a luxury machine.</h2>
+        <h2>Strength, service and trust — presented with a quieter luxury feel.</h2>
+        <p>New Hira is a Nabha-based agricultural machinery name led by Jatinder Singh. This advertising website presents the combine as a reliable business asset for farmers and contractors: built to harvest, supported by spare parts, and backed by practical service commitments.</p>
       </div>
-      <div class="split-card">
-        <div class="copy-panel">
-          <span class="number">01</span>
-          <h3>About New Hira</h3>
-          <p>New Hira, Nabha is presented as a farmer-focused combine harvester brand led by Jatinder Singh. The company message is simple: strong harvesting machines, accessible spare parts, practical field service and dependable support during the season.</p>
-          <p>This advertisement website is made to build trust before a phone call: it shows the machine, explains the parts, promotes warranty, introduces referral marketing and collects verified enquiries.</p>
-          <dl class="facts">
-            <div><dt>Owner</dt><dd>Jatinder Singh</dd></div>
-            <div><dt>Location</dt><dd>New Hira, Nabha</dd></div>
-            <div><dt>Service area</dt><dd>Nabha</dd></div>
-          </dl>
-        </div>
-        <figure class="image-panel"><img src="front.jpg" alt="New Hira combine front view"></figure>
-      </div>
-    </section>
-
-    <section class="section product-story">
-      <div class="product-grid">
-        <figure><img src="studio.jpg" alt="New Hira machine studio side profile"></figure>
-        <div>
-          <p class="eyebrow">Combine brief</p>
-          <h2>Made to communicate power without shouting.</h2>
-          <p>The campaign focuses on performance, harvesting output, crop readiness, operator confidence and service backup. It keeps the design minimal so the machine feels premium, not overloaded.</p>
-          <div class="mini-grid">
-            <div><strong>Precision</strong><span>Cleaner communication of machine strengths</span></div>
-            <div><strong>Support</strong><span>Spare parts and service messaging</span></div>
-            <div><strong>Trust</strong><span>Warranty, offer and referral transparency</span></div>
-          </div>
-        </div>
+      <div class="editorialGrid reveal">
+        <article>
+          <small>Purpose</small>
+          <h3>Season-ready harvesting</h3>
+          <p>Promote the combine as a dependable machine for Indian field conditions, paddy and wheat seasons, and long working days.</p>
+        </article>
+        <article>
+          <small>Support</small>
+          <h3>Parts + service</h3>
+          <p>Highlight fast access to blades, belts, bearings, shafts, pulleys, filters, sieves and other service parts.</p>
+        </article>
+        <article>
+          <small>Contact</small>
+          <h3>Direct enquiry</h3>
+          <p>Farmers can contact through phone, WhatsApp, login/signup or enquiry form while offers are attached automatically.</p>
+        </article>
       </div>
     </section>
 
-    <section class="section parts-section" id="parts">
-      <div class="section-title">
-        <p class="eyebrow">Spare parts</p>
-        <h2>Every important part presented like a premium product detail.</h2>
+    <section class="section carouselSection">
+      <div class="sectionText compact reveal">
+        <p class="eyebrow">Machine showcase</p>
+        <h2>Real field presence. Minimal presentation.</h2>
       </div>
-      <div class="parts-grid" id="partsGrid"></div>
-    </section>
-
-    <section class="section warranty" id="warranty">
-      <div class="split-card reverse">
-        <div class="copy-panel">
-          <span class="number">02</span>
-          <h3>Warranty & guarantee policy</h3>
-          <p>Warranty and guarantee are kept clear and direct: <strong>1 season or 500 working hours, whichever is earlier.</strong></p>
-          <p>Use the final legal wording before publishing publicly. This draft is written for advertisement clarity and customer trust.</p>
-          <ul class="clean-list">
-            <li>Machine inspection and guidance support</li>
-            <li>Spare parts availability communication</li>
-            <li>Service follow-up for verified customers</li>
-          </ul>
-        </div>
-        <figure class="image-panel"><img src="brand-detail.jpg" alt="New Hira rear brand detail"></figure>
+      <div class="luxCarousel reveal" id="luxCarousel">
+        <figure><img src="image1.jpg" alt="Combine harvester"><figcaption>Field performance</figcaption></figure>
+        <figure><img src="image2.jpg" alt="Combine harvester"><figcaption>Machine profile</figcaption></figure>
+        <figure><img src="image3.jpg" alt="Combine harvester"><figcaption>Working detail</figcaption></figure>
+        <figure><img src="image4.jpg" alt="Combine harvester"><figcaption>Manufacturing confidence</figcaption></figure>
+        <figure><img src="image5.jpg" alt="Combine harvester"><figcaption>New Hira identity</figcaption></figure>
       </div>
     </section>
 
-    <section class="section network" id="network">
-      <div class="section-title narrow">
+    <section class="section procedure panel-section" id="parts" data-section-id="parts">
+      <div class="sectionText reveal">
+        <span class="number">02</span>
+        <p class="eyebrow">Spare parts advertisement</p>
+        <h2>Every working season depends on the parts behind the machine.</h2>
+        <p>A premium spare-parts section makes the website useful for both buyers and existing machine owners. Search, enquire and request support for common parts.</p>
+      </div>
+      <div class="partCards reveal" id="partCards"></div>
+    </section>
+
+    <section class="split section panel-section" id="warranty" data-section-id="warranty">
+      <div class="policyCard reveal">
+        <span class="number">03</span>
+        <p class="eyebrow">Guarantee / warranty policy</p>
+        <h2>One season or 500 hours.</h2>
+        <p>Warranty and guarantee policy: <strong>1 season or 500 hours, whichever is earlier.</strong> Final terms, exclusions and service conditions should be confirmed before public launch.</p>
+      </div>
+      <div class="policyList reveal">
+        <div><span>01</span><strong>Season confidence</strong><p>Designed for serious seasonal work and supported by after-sales enquiry.</p></div>
+        <div><span>02</span><strong>Service focus</strong><p>Service area: Nabha. Extend this later with dealer/service locations.</p></div>
+        <div><span>03</span><strong>Offer support</strong><p>Promotional and referral benefits can be attached to every enquiry.</p></div>
+      </div>
+    </section>
+
+    <section class="network section panel-section" id="network" data-section-id="network">
+      <div class="sectionText reveal">
+        <span class="number">04</span>
         <p class="eyebrow">Network marketing</p>
-        <h2>Turn customers and supporters into New Hira promoters.</h2>
-        <p>Referral rewards should be confirmed and approved before launch, but the system is ready for the idea: share, refer, complete booking, earn reward and grow rank.</p>
+        <h2>A referral system that turns farmers into promoters.</h2>
+        <p>People who share New Hira and bring a successful inquiry/booking can earn up to ₹50,000 as cash or spare parts. A rank and badge system can make the campaign more engaging.</p>
       </div>
-      <div class="network-grid">
-        <article><span>Offer</span><h3>Up to ₹1,00,000</h3><p>2025–26 paddy season personal combine booking benefit.</p></article>
-        <article><span>Referral</span><h3>₹50,000 incentive</h3><p>Cash or spare parts after a verified enquiry completes and a combine is booked.</p></article>
-        <article><span>Rank system</span><h3>Badges & titles</h3><p>Promoters can grow through ranks as referrals increase.</p></article>
+      <div class="rankGrid reveal">
+        <div><small>Rank 1</small><strong>Field Scout</strong><span>First qualified referral</span></div>
+        <div><small>Rank 2</small><strong>Harvest Partner</strong><span>Multiple inquiries shared</span></div>
+        <div><small>Rank 3</small><strong>New Hira Champion</strong><span>Completed booking incentive</span></div>
       </div>
-      <div class="rank-line">
-        <div><b>Seed</b><span>First referral</span></div>
-        <div><b>Field Partner</b><span>3 verified leads</span></div>
-        <div><b>Harvest Champion</b><span>1 completed booking</span></div>
-        <div><b>New Hira Elite</b><span>Repeat performer</span></div>
+      <div class="offerStrip reveal">
+        <strong>Referral Incentive</strong>
+        <span>Up to ₹50,000 after completed booking • cash or spare parts</span>
       </div>
     </section>
 
-    <section class="section service3d" id="service3d">
-      <div class="section-title">
-        <p class="eyebrow">3D repair & replace system</p>
-        <h2>A calm 360° service studio for parts discovery.</h2>
+    <section class="section service3d panel-section" id="service3d" data-section-id="service3d">
+      <div class="sectionText reveal">
+        <span class="number">05</span>
+        <p class="eyebrow">3D repair and replacement prototype</p>
+        <h2>A clean 360° service experience for parts location.</h2>
+        <p>This is an advertising-ready 3D-style prototype. Send the real GLB/CAD model later and it can become precise for actual repair, replacement and part-location workflow.</p>
       </div>
-      <div class="studio-card">
-        <div class="viewer-wrap">
-          <div id="viewer"><div class="viewer-fallback">3D viewer loading</div></div>
+      <div class="serviceShell reveal">
+        <div class="modelStage">
+          <canvas id="modelCanvas" aria-label="3D style combine harvester service model"></canvas>
+          <div class="modelLabels" id="modelLabels"></div>
         </div>
-        <aside class="part-panel">
-          <label>Search part<input id="partSearch" type="search" placeholder="shaft, fingers, blades, drum, pulley..."></label>
-          <div id="partList" class="part-list"></div>
-          <div class="part-detail">
-            <p class="eyebrow">Selected part</p>
-            <h3 id="partTitle">Cutter Blades</h3>
-            <p id="partText">Cut crop at the header. Search or click a part to focus the model.</p>
-            <p id="repairText" class="repair-text">For exact repair procedures, add original part numbers, photos and service manual steps.</p>
+        <aside class="servicePanel">
+          <label>Search part<input id="partSearch" type="search" placeholder="shaft, blades, belt, pulley..." /></label>
+          <div id="servicePartList" class="servicePartList"></div>
+          <div class="serviceDetail">
+            <small>Selected part</small>
+            <h3 id="selectedPart">Cutter Blades</h3>
+            <p id="selectedPartInfo">Cut the crop at the header. Replace worn blades by locking the header safely, removing retaining bolts, installing correct blade sections and checking free movement.</p>
           </div>
         </aside>
       </div>
-      <p class="precision-note">Current 3D model is a clean advertising/service prototype. To make it exact, send the real GLB/CAD model and part coordinates.</p>
     </section>
 
     <section class="section enquiry" id="enquiry">
-      <div class="enquiry-card">
-        <div>
-          <p class="eyebrow">Enquiry</p>
-          <h2>Start the conversation with New Hira.</h2>
-          <p>Login is optional for now. Firebase is prepared for account-based enquiries when Email/Password authentication is enabled.</p>
-          <div class="contact-row">
-            <a href="tel:+919216107700">Call 9216107700</a>
-            <a href="mailto:newhira985@gmail.com">newhira985@gmail.com</a>
-          </div>
-        </div>
-        <form id="enquiryForm">
-          <div class="form-row"><label>Name<input name="name" required placeholder="Your name"></label><label>Phone<input name="phone" required placeholder="+91"></label></div>
-          <div class="form-row"><label>Interest<select name="interest"><option>Combine enquiry</option><option>Spare parts</option><option>Warranty support</option><option>Referral programme</option></select></label><label>Offer<input name="offer" value="Up to ₹1,00,000 paddy season offer" readonly></label></div>
-          <label>Message<textarea name="message" rows="5" placeholder="Tell us what you need"></textarea></label>
-          <button class="btn primary full" type="submit">Submit enquiry</button>
-          <p id="formStatus"></p>
-        </form>
+      <div class="enquiryText reveal">
+        <p class="eyebrow">Book enquiry</p>
+        <h2>Contact New Hira directly.</h2>
+        <p>Phone / WhatsApp: <strong>9216107700</strong><br>Email: <strong>newhira985@gmail.com</strong><br>Address: <strong>New Hira, Nabha</strong></p>
       </div>
+      <form class="enquiryForm reveal" id="enquiryForm">
+        <div class="formGrid">
+          <label>Name<input name="name" required placeholder="Your name"></label>
+          <label>Phone<input name="phone" required placeholder="+91 92161 07700"></label>
+        </div>
+        <div class="formGrid">
+          <label>Requirement<select name="requirement"><option>Combine enquiry</option><option>Spare parts</option><option>Service support</option><option>Referral incentive</option></select></label>
+          <label>Offer<input name="offer" id="offerInput" readonly value="Up to ₹1,00,000 paddy offer"></label>
+        </div>
+        <label>Message<textarea name="message" rows="5" placeholder="Tell us what you need..."></textarea></label>
+        <button class="btn btnLight full" type="submit">Submit enquiry</button>
+        <p id="formStatus" class="formStatus"></p>
+      </form>
     </section>
   </main>
 
   <footer class="footer">
     <strong>New Hira</strong>
-    <span>New Hira, Nabha • 9216107700 • newhira985@gmail.com</span>
+    <span>Premium agricultural machinery advertisement website.</span>
   </footer>
 
-  <div class="floating-actions">
+  <div class="floatingCta" aria-label="Quick actions">
     <a href="https://wa.me/919216107700" target="_blank" rel="noopener">WhatsApp</a>
-    <button id="shareFloat" type="button">Share</button>
+    <button type="button" id="shareBtn">Share</button>
     <a href="#enquiry">Enquire</a>
   </div>
 
-  <dialog id="authDialog">
-    <button class="close-dialog" id="closeAuth" type="button">×</button>
-    <p class="eyebrow">Account</p>
-    <h2>Login / Sign up</h2>
-    <label>Email<input id="authEmail" type="email" placeholder="name@example.com"></label>
-    <label>Password<input id="authPassword" type="password" placeholder="Minimum 6 characters"></label>
-    <div class="dialog-actions"><button id="loginBtn" type="button">Login</button><button id="signupBtn" type="button">Sign up</button></div>
-    <p id="authMsg"></p>
+  <button class="toTop" id="toTop" type="button" aria-label="Scroll to top">↑</button>
+
+  <dialog class="loginDialog" id="loginDialog">
+    <form method="dialog" class="dialogClose"><button>×</button></form>
+    <div>
+      <p class="eyebrow">Customer account</p>
+      <h2>Login / Sign up</h2>
+      <p>Firebase-ready. Enable Email/Password Auth in Firebase for live accounts.</p>
+      <label>Email<input id="authEmail" type="email" placeholder="customer@email.com"></label>
+      <label>Password<input id="authPassword" type="password" placeholder="minimum 6 characters"></label>
+      <div class="dialogActions">
+        <button id="loginSubmit" type="button">Login</button>
+        <button id="signupSubmit" type="button">Sign up</button>
+      </div>
+      <p id="authStatus">Not logged in.</p>
+    </div>
   </dialog>
 
   <script type="module" src="script.js"></script>

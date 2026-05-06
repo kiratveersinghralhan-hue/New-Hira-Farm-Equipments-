@@ -1,34 +1,41 @@
-# New Hira — Luxury Minimal Advertisement Website
+# New Hira Luxury Advertising Website
 
-Root-level static website ready for GitHub Pages.
+A simple, premium, smooth one-page advertising website for New Hira.
 
-## Includes
-- Luxury minimal advertising style
-- Calm intro animation
-- Side progress slider navigation
-- Company advertisement story
-- Combine brief
-- Spare parts showcase
-- Warranty / guarantee section
-- Referral network marketing section
-- 3D service prototype with part search
+## Included
+- Quiet luxury redesign
+- Smooth premium intro
+- Hero image carousel
+- Moving advertising strip
+- Side progress navigation
+- Spare parts advertising cards
+- Warranty / guarantee policy
+- Referral + rank system
+- 3D-style service prototype
+- WhatsApp, Share, Enquiry floating actions
+- Scroll-to-top button
 - Firebase-ready login/signup and enquiry form
-- WhatsApp floating button and share button
 
-## Company data used
+## Company Data Used
 - Company: New Hira
-- Owner: Jatinder Singh
+- Owner/founder: Jatinder Singh
 - Address: New Hira, Nabha
-- Phone / WhatsApp: 9216107700
+- Phone/WhatsApp: 9216107700
 - Email: newhira985@gmail.com
-- Warranty / Guarantee: 1 season or 500 hours, whichever is earlier
-- Offer: Up to ₹1,00,000 paddy season 2025–26 offer
-- Referral: ₹50,000 incentive after verified booking completion
+- Warranty/Guarantee: 1 season or 500 hours, whichever is earlier
+- Offer: Up to ₹1 lakh for paddy 2025–26 personal combine
+- Referral: Up to ₹50,000 cash/spare parts on completed booking
 
 ## Firebase
-Config is already inserted in `firebase-config.js`.
-Publish `firestore.rules` in Firebase Firestore rules.
-Enable Email/Password in Firebase Authentication if you want login/signup to work live.
+The Firebase config is already inserted in `firebase-config.js`.
 
-## To make the 3D repair model exact
-Send GLB/GLTF or CAD/STEP model, part list, part numbers, photos, and repair procedure details.
+To enable account login:
+1. Firebase Console → Authentication
+2. Enable Email/Password
+3. Firestore → Rules
+4. Paste `firestore.rules`
+5. Publish
+
+## GitHub Upload
+Upload all files directly to the root of the GitHub repository.
+No folder nesting is required.

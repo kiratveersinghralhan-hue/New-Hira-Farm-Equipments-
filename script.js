@@ -1,156 +1,366 @@
-import { enableFirebase, firebaseConfig, enquiriesCollection } from './firebase-config.js';
+import { enableFirebase, firebaseConfig, enquiriesCollection, usersCollection } from './firebase-config.js';
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
 
 const parts = [
-  {id:'blades', cat:'Cutting', name:'Cutter Blades', text:'Slices crop cleanly at the header for smooth feeding.', repair:'Stop machine, lock header, remove blade guards, replace damaged sections, tighten bolts and test movement manually.', pos:[-3.4,-.55,1.05]},
-  {id:'fingers', cat:'Feeding', name:'Reel Fingers', text:'Guides standing crop into the cutter and feeding system.', repair:'Secure reel, remove clip/bolt, replace bent finger, align with nearby fingers and rotate slowly to check clearance.', pos:[-3.7,.18,1.1]},
-  {id:'shaft', cat:'Drive', name:'Main Shaft', text:'Transfers drive power to important rotating assemblies.', repair:'Remove guards, mark coupler position, loosen bearings, inspect runout, replace worn coupler/bearing and align.', pos:[-.8,.2,.1]},
-  {id:'drum', cat:'Threshing', name:'Thresher Drum', text:'Separates grain from crop using drum and concave action.', repair:'Open inspection cover, lock drum, clean material, inspect bars/concave and replace worn elements in matched sets.', pos:[-.1,.35,.25]},
-  {id:'belt', cat:'Drive', name:'Belt & Pulley', text:'Transfers rotation to key machine functions.', repair:'Remove guard, release tensioner, inspect pulley grooves, fit correct belt, align pulleys and set tension.', pos:[1.05,.25,1.0]},
-  {id:'sieves', cat:'Cleaning', name:'Sieves', text:'Clean grain from chaff using airflow and shaking motion.', repair:'Clean sieve openings, inspect linkage, check fan setting and adjust openings according to crop.', pos:[.2,-.55,-.85]},
-  {id:'auger', cat:'Unloading', name:'Unloading Auger', text:'Moves grain from tank to trolley or transport vehicle.', repair:'Empty tank, open access, clear blockage, inspect bearing and flighting, test slowly after replacement.', pos:[2.5,.95,-.25]},
-  {id:'tyres', cat:'Movement', name:'Tyres & Wheels', text:'Carry load and provide field movement and traction.', repair:'Park level, chock machine, check pressure, inspect sidewall/rim bolts and replace with load-rated tyre.', pos:[-1.2,-1.05,1.1]},
-  {id:'filters', cat:'Service', name:'Filters', text:'Protect engine and hydraulic systems from dust and contamination.', repair:'Clean area, remove old filter, oil seal where required, fit correct part and check leaks after start.', pos:[1.25,.55,-.9]},
-  {id:'bearings', cat:'Service', name:'Bearings', text:'Support rotating parts with lower friction and stable movement.', repair:'Check heat/noise, remove bearing housing, replace worn bearing, grease properly and verify rotation.', pos:[.75,-.2,1.05]}
+  {name:'Cutter Blades', cat:'Cutting', text:'Sharp cutting sections for clean crop entry.', detail:'Cut crop at the header. Replace by securing header, removing blade bolts, fitting correct sections and checking free movement.', pos:[18,66]},
+  {name:'Reel Fingers', cat:'Feeding', text:'Guides standing crop toward the cutter bar.', detail:'Guide crop into header. Replace bent fingers by locking reel, removing retainer and aligning new finger with nearby tine.', pos:[20,42]},
+  {name:'Main Shaft', cat:'Drive', text:'Transfers power through the machine.', detail:'Main drive link. Inspect vibration, bearing heat and coupling alignment before replacement.', pos:[48,46]},
+  {name:'Thresher Drum', cat:'Threshing', text:'Separates grain from crop through rotation.', detail:'Separates grain from crop. Check rasp bars, concave clearance and balance before running again.', pos:[53,38]},
+  {name:'Belt Pulley', cat:'Drive', text:'Moves rotation across belt-driven systems.', detail:'Transfers rotation. Remove guard, loosen tensioner, inspect grooves, fit correct belt and align pulleys.', pos:[66,50]},
+  {name:'Cleaning Sieves', cat:'Cleaning', text:'Separates grain from chaff.', detail:'Clean grain flow. Remove dust/blockage, check openings and set according to crop.', pos:[56,68]},
+  {name:'Bearings', cat:'Service', text:'Supports rotating assemblies under load.', detail:'Check heat and play. Replace in pairs when needed and grease as recommended.', pos:[62,72]},
+  {name:'Auger Parts', cat:'Unloading', text:'Moves grain from tank to trolley.', detail:'Unload grain from tank. Clear blockage, inspect flighting and bearings, then test at low speed.', pos:[80,33]},
+  {name:'Filters', cat:'Engine', text:'Protects engine from dust and fuel contamination.', detail:'Replace air/fuel filters regularly, especially during dusty harvesting days.', pos:[64,33]},
+  {name:'Tyres', cat:'Mobility', text:'Supports field movement and traction.', detail:'Maintain pressure and inspect sidewalls, rim nuts, bearing play and steering linkage.', pos:[42,76]}
 ];
 
-let db=null, auth=null, firebase=null, selected='blades';
-let scene, camera, renderer, controls, partMeshes = new Map(), originalMats = new Map();
+const state = {
+  heroIndex: 0,
+  selectedPart: 0,
+  firebaseReady: false,
+  db: null,
+  auth: null,
+  user: null,
+  firebase: null
+};
 
-function closeIntro(){ const intro=$('#intro'); if(intro){ intro.classList.add('hidden'); intro.style.pointerEvents='none'; } }
-$('#enterSite')?.addEventListener('click', closeIntro);
-setTimeout(closeIntro, 2600);
+const els = {
+  preloader: $('#preloader'),
+  enterSite: $('#enterSite'),
+  menu: $('#menu'),
+  nav: $('#nav'),
+  images: $$('.heroImage'),
+  sideLinks: $$('.sideRail a'),
+  partCards: $('#partCards'),
+  modelCanvas: $('#modelCanvas'),
+  modelLabels: $('#modelLabels'),
+  partSearch: $('#partSearch'),
+  servicePartList: $('#servicePartList'),
+  selectedPart: $('#selectedPart'),
+  selectedPartInfo: $('#selectedPartInfo'),
+  form: $('#enquiryForm'),
+  formStatus: $('#formStatus'),
+  shareBtn: $('#shareBtn'),
+  toTop: $('#toTop'),
+  loginOpen: $('#loginOpen'),
+  loginDialog: $('#loginDialog'),
+  authEmail: $('#authEmail'),
+  authPassword: $('#authPassword'),
+  loginSubmit: $('#loginSubmit'),
+  signupSubmit: $('#signupSubmit'),
+  authStatus: $('#authStatus')
+};
 
-$('#menu')?.addEventListener('click',()=>$('#nav')?.classList.toggle('open'));
-$$('#nav a').forEach(a=>a.addEventListener('click',()=>$('#nav')?.classList.remove('open')));
+function safe(fn, label){try{return fn()}catch(e){console.error('New Hira:',label,e)}}
 
-function shareSite(){
-  const data={title:'New Hira', text:'Premium New Hira combine harvester advertisement website.', url:location.href};
-  if(navigator.share) navigator.share(data).catch(()=>{});
-  else navigator.clipboard?.writeText(location.href).then(()=>alert('Website link copied.'));
+function closePreloader(){
+  els.preloader?.classList.add('is-hidden');
+  els.preloader?.setAttribute('aria-hidden','true');
 }
-$('#shareTop')?.addEventListener('click', shareSite);
-$('#shareFloat')?.addEventListener('click', shareSite);
+els.enterSite?.addEventListener('click', closePreloader);
+setTimeout(closePreloader, 2600);
 
-function sideRail(){
-  const links=$$('.side-rail a');
-  const sections=links.map(a=>document.getElementById(a.dataset.section)).filter(Boolean);
-  const onScroll=()=>{
-    let active=sections[0]?.id;
-    sections.forEach(sec=>{ if(sec.getBoundingClientRect().top < innerHeight*.45) active=sec.id; });
-    links.forEach(a=>a.classList.toggle('active',a.dataset.section===active));
-  };
-  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+function setupMenu(){
+  els.menu?.addEventListener('click', () => {
+    const open = els.nav.classList.toggle('is-open');
+    els.menu.setAttribute('aria-expanded', String(open));
+  });
+  $$('.nav a').forEach(a=>a.addEventListener('click',()=>els.nav.classList.remove('is-open')));
 }
-sideRail();
 
-function renderParts(){
-  const grid=$('#partsGrid');
-  grid.innerHTML = parts.map(p=>`<article><span>${p.cat}</span><h3>${p.name}</h3><p>${p.text}</p></article>`).join('');
-  renderPartList();
+function setupReveal(){
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) entry.target.classList.add('is-visible');
+    });
+  }, {threshold:.12});
+  $$('.reveal').forEach(el=>io.observe(el));
+  setTimeout(()=>$$('.reveal').forEach(el=>el.classList.add('is-visible')), 700);
 }
-function renderPartList(filter=''){
-  const q=filter.toLowerCase().trim();
-  const list=$('#partList');
-  const found=parts.filter(p=>!q || p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
-  list.innerHTML=found.map(p=>`<button class="${p.id===selected?'active':''}" data-id="${p.id}" type="button"><strong>${p.name}</strong><br><small>${p.cat}</small></button>`).join('');
-  $$('#partList button').forEach(b=>b.addEventListener('click',()=>selectPart(b.dataset.id)));
+
+function setupHeroCarousel(){
+  setInterval(()=>{
+    state.heroIndex = (state.heroIndex + 1) % els.images.length;
+    els.images.forEach((img,i)=>img.classList.toggle('is-active', i===state.heroIndex));
+  }, 4500);
 }
-$('#partSearch')?.addEventListener('input', e=>renderPartList(e.target.value));
-function selectPart(id){
-  const part=parts.find(p=>p.id===id) || parts[0]; selected=part.id;
-  $('#partTitle').textContent=part.name; $('#partText').textContent=part.text; $('#repairText').textContent=part.repair;
-  renderPartList($('#partSearch')?.value || '');
-  if(partMeshes.size){
-    partMeshes.forEach((m,pid)=>m.material=originalMats.get(pid));
-    const mesh=partMeshes.get(id);
-    if(mesh){
-      mesh.material = new window.THREE.MeshStandardMaterial({color:0xd8b16a, emissive:0x3c2b10, metalness:.22, roughness:.36});
-      const v=new window.THREE.Vector3(...part.pos);
-      controls.target.lerp(v,.75);
-      camera.position.lerp(new window.THREE.Vector3(v.x+4.2,v.y+2.2,v.z+4.1),.6);
-    }
+
+function setupTicker(){
+  const track = $('.tickerTrack');
+  if(!track) return;
+  track.innerHTML += track.innerHTML;
+}
+
+function renderPartCards(){
+  els.partCards.innerHTML = parts.map((p,i)=>`
+    <button type="button" data-index="${i}">
+      <strong>${p.name}</strong>
+      <span>${p.cat} — ${p.text}</span>
+    </button>
+  `).join('');
+  $$('#partCards button').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelector('#service3d').scrollIntoView({behavior:'smooth'});
+    selectPart(Number(btn.dataset.index));
+  }));
+}
+
+function renderServiceList(filter=''){
+  const q = filter.toLowerCase().trim();
+  const shown = parts.filter(p => !q || p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q));
+  els.servicePartList.innerHTML = shown.map(p=>{
+    const i = parts.indexOf(p);
+    return `<button type="button" class="${i===state.selectedPart?'active':''}" data-index="${i}"><strong>${p.name}</strong><br><span>${p.cat}</span></button>`;
+  }).join('');
+  $$('#servicePartList button').forEach(btn=>btn.addEventListener('click',()=>selectPart(Number(btn.dataset.index))));
+}
+
+function selectPart(i){
+  state.selectedPart = i;
+  const p = parts[i];
+  els.selectedPart.textContent = p.name;
+  els.selectedPartInfo.textContent = p.detail;
+  renderServiceList(els.partSearch?.value || '');
+  drawModel();
+}
+
+function setupServiceSearch(){
+  els.partSearch?.addEventListener('input', e=>renderServiceList(e.target.value));
+  renderServiceList();
+  selectPart(0);
+}
+
+function setupModelCanvas(){
+  const canvas = els.modelCanvas;
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let dpr = 1, w = 0, h = 0, t = 0;
+
+  function resize(){
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    w = canvas.clientWidth || 800;
+    h = canvas.clientHeight || 520;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    drawModel();
   }
-}
-renderParts(); selectPart('blades');
+  window.addEventListener('resize', resize);
+  resize();
 
-async function setup3D(){
-  const THREE = await import('three'); window.THREE = THREE;
-  const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
-  const el=$('#viewer');
-  scene=new THREE.Scene(); scene.fog=new THREE.Fog(0x0b0b0a,8,24);
-  camera=new THREE.PerspectiveCamera(38, el.clientWidth/el.clientHeight, .1, 100); camera.position.set(5.8,3.4,6.6);
-  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); renderer.setPixelRatio(Math.min(devicePixelRatio||1,2)); renderer.setSize(el.clientWidth,el.clientHeight); renderer.outputColorSpace=THREE.SRGBColorSpace; el.prepend(renderer.domElement);
-  controls=new OrbitControls(camera, renderer.domElement); controls.enableDamping=true; controls.dampingFactor=.06; controls.target.set(0,0,0);
-  scene.add(new THREE.HemisphereLight(0xfff3dc,0x111111,1.4));
-  const key=new THREE.DirectionalLight(0xffd89a,2.2); key.position.set(4,7,4); scene.add(key);
-  const rim=new THREE.DirectionalLight(0x9fc6ff,.8); rim.position.set(-5,3,-5); scene.add(rim);
-  const ground=new THREE.Mesh(new THREE.CircleGeometry(7.5,96), new THREE.MeshStandardMaterial({color:0x15120d, roughness:.9})); ground.rotation.x=-Math.PI/2; ground.position.y=-1.42; scene.add(ground);
-  buildModel(THREE);
-  el.querySelector('.viewer-fallback')?.remove();
-  addEventListener('resize',()=>{renderer.setSize(el.clientWidth,el.clientHeight);camera.aspect=el.clientWidth/el.clientHeight;camera.updateProjectionMatrix();});
-  function animate(){controls.update();renderer.render(scene,camera);requestAnimationFrame(animate)} animate();
-  selectPart('blades');
-}
-function mat(THREE,c,m=.12,r=.58){return new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r})}
-function box(THREE,size,pos,color,id){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),mat(THREE,color));mesh.position.set(...pos);scene.add(mesh);if(id){mesh.userData.id=id;partMeshes.set(id,mesh);originalMats.set(id,mesh.material)}return mesh}
-function cyl(THREE,r,d,pos,rot,color,id){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d,48),mat(THREE,color));mesh.position.set(...pos);mesh.rotation.set(...rot);scene.add(mesh);if(id){partMeshes.set(id,mesh);originalMats.set(id,mesh.material)}return mesh}
-function buildModel(THREE){
-  box(THREE,[3.7,1.28,1.85],[.05,0,0],0x83b928);
-  box(THREE,[1.45,1.05,1.12],[-1.35,.62,.2],0xd9dfd7);
-  box(THREE,[.95,.64,1.16],[-1.38,.68,.22],0x182129);
-  box(THREE,[1.55,.78,1.35],[.85,.9,-.05],0x6ea41f,'filters');
-  box(THREE,[1.1,.65,.88],[1.18,.36,-.92],0x4b535a);
-  box(THREE,[1.6,.3,2.45],[-3.45,-.72,.48],0xa8c83e,'blades');
-  cyl(THREE,.2,2.5,[-3.65,-.18,.78],[Math.PI/2,0,0],0xcfd27a,'fingers');
-  cyl(THREE,.11,2.25,[-.8,.2,.1],[Math.PI/2,0,0],0xaeb2b4,'shaft');
-  cyl(THREE,.48,1.45,[-.1,.35,.25],[Math.PI/2,0,0],0x6e7274,'drum');
-  cyl(THREE,.36,.18,[1.05,.25,1.0],[Math.PI/2,0,0],0x20252a,'belt');
-  box(THREE,[1.45,.18,.82],[.2,-.55,-.85],0x7c858a,'sieves');
-  cyl(THREE,.12,2.5,[2.5,.95,-.25],[.65,0,1.1],0xb9b9ad,'auger');
-  cyl(THREE,.68,.54,[-1.2,-1.05,1.1],[Math.PI/2,0,0],0x08090a,'tyres');
-  cyl(THREE,.33,.57,[-1.2,-1.05,1.1],[Math.PI/2,0,0],0x5e6468);
-  cyl(THREE,.44,.38,[1.72,-1.05,1.02],[Math.PI/2,0,0],0x08090a);
-  cyl(THREE,.22,.4,[1.72,-1.05,1.02],[Math.PI/2,0,0],0x5e6468);
-  cyl(THREE,.18,.35,[.75,-.2,1.05],[Math.PI/2,0,0],0xa4a4a0,'bearings');
-}
-setup3D().catch(err=>{console.warn(err); $('#viewer .viewer-fallback').textContent='3D viewer unavailable. Parts list remains active.'});
+  function wheel(x,y,r,rot){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(rot);
+    ctx.fillStyle='#0a0a09';
+    ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(246,241,231,.25)';ctx.lineWidth=Math.max(3,r*.12);ctx.stroke();
+    for(let i=0;i<8;i++){
+      ctx.rotate(Math.PI/4);
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r*.75,0);ctx.stroke();
+    }
+    ctx.fillStyle='rgba(246,241,231,.18)';
+    ctx.beginPath();ctx.arc(0,0,r*.34,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
 
-async function initFirebase(){
+  window.drawModel = function draw(){
+    if(!ctx) return;
+    t += 0.016;
+    ctx.clearRect(0,0,w,h);
+    const bg = ctx.createRadialGradient(w*.7,h*.16,20,w*.7,h*.16,w*.45);
+    bg.addColorStop(0,'rgba(230,199,128,.18)');
+    bg.addColorStop(1,'rgba(230,199,128,0)');
+    ctx.fillStyle='#0d0d0b';ctx.fillRect(0,0,w,h);
+    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='rgba(246,241,231,.05)';
+    for(let i=0;i<14;i++){ctx.beginPath();ctx.moveTo(i*w/13,h*.74);ctx.lineTo(w*.5,h);ctx.stroke();}
+
+    const cx = w*.5, cy = h*.53;
+    const s = Math.min(w/780, h/520);
+    const pulse = parts[state.selectedPart].pos;
+
+    ctx.save();
+    ctx.translate(cx - 230*s, cy - 60*s);
+    ctx.scale(s,s);
+
+    const body = ctx.createLinearGradient(0,-70,420,90);
+    body.addColorStop(0,'#e9c36a'); body.addColorStop(1,'#9f7c31');
+    ctx.fillStyle=body;
+    ctx.beginPath();
+    ctx.moveTo(30,90);ctx.lineTo(110,-52);ctx.lineTo(330,-54);ctx.lineTo(450,54);ctx.lineTo(420,105);ctx.lineTo(55,105);ctx.closePath();ctx.fill();
+
+    ctx.fillStyle='#d8d2bf';
+    ctx.beginPath();ctx.moveTo(96,-54);ctx.lineTo(206,-54);ctx.lineTo(245,24);ctx.lineTo(48,24);ctx.closePath();ctx.fill();
+    ctx.fillStyle='rgba(14,16,18,.78)';ctx.fillRect(126,-38,84,46);
+
+    ctx.fillStyle='rgba(246,241,231,.16)';ctx.fillRect(258,-34,92,58);ctx.fillRect(360,10,60,36);
+    ctx.strokeStyle='rgba(246,241,231,.38)';ctx.lineWidth=9;
+    ctx.beginPath();ctx.moveTo(438,35);ctx.quadraticCurveTo(535,-14,608,62);ctx.stroke();
+
+    ctx.fillStyle='#b8892d';
+    ctx.beginPath();ctx.moveTo(-120,70);ctx.lineTo(40,10);ctx.lineTo(94,36);ctx.lineTo(-62,116);ctx.closePath();ctx.fill();
+    ctx.fillStyle='rgba(246,241,231,.2)';ctx.fillRect(-132,66,190,16);
+
+    wheel(142,132,64,t); wheel(372,128,44,t);
+
+    // active glowing location
+    const px = (pulse[0]/100)*620 - 130;
+    const py = (pulse[1]/100)*230 - 55;
+    const glow = ctx.createRadialGradient(px,py,4,px,py,52);
+    glow.addColorStop(0,'rgba(163,219,79,.92)');
+    glow.addColorStop(.35,'rgba(163,219,79,.28)');
+    glow.addColorStop(1,'rgba(163,219,79,0)');
+    ctx.fillStyle=glow;ctx.beginPath();ctx.arc(px,py,52,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#a3db4f';ctx.beginPath();ctx.arc(px,py,7,0,Math.PI*2);ctx.fill();
+
+    ctx.restore();
+
+    renderModelLabels();
+  }
+
+  function renderModelLabels(){
+    if(!els.modelLabels) return;
+    els.modelLabels.innerHTML = parts.slice(0,6).map((p,i)=>{
+      const active = i === state.selectedPart ? 'active' : '';
+      return `<span class="modelLabel ${active}" style="left:${p.pos[0]}%;top:${p.pos[1]}%">${p.name}</span>`;
+    }).join('');
+  }
+
+  setInterval(drawModel, 66);
+}
+
+function setupSectionProgress(){
+  const sections = $$('.panel-section');
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.dataset.sectionId;
+        els.sideLinks.forEach(a=>a.classList.toggle('is-active', a.dataset.section===id));
+      }
+    });
+  }, {threshold:.42});
+  sections.forEach(s=>io.observe(s));
+}
+
+function setupTopButton(){
+  window.addEventListener('scroll', ()=>{
+    els.toTop?.classList.toggle('is-visible', window.scrollY > 700);
+  });
+  els.toTop?.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+}
+
+async function shareSite(){
+  const data = {title:'New Hira', text:'New Hira premium agricultural machinery.', url:location.href};
+  try{
+    if(navigator.share) await navigator.share(data);
+    else{
+      await navigator.clipboard.writeText(location.href);
+      alert('Website link copied.');
+    }
+  }catch{}
+}
+function setupShare(){
+  els.shareBtn?.addEventListener('click', shareSite);
+}
+
+async function setupFirebase(){
   if(!enableFirebase) return;
   try{
-    const [{initializeApp}, authMod, dbMod] = await Promise.all([
+    const [{ initializeApp }, authMod, dbMod] = await Promise.all([
       import('https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js'),
       import('https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js'),
       import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js')
     ]);
-    const app=initializeApp(firebaseConfig); auth=authMod.getAuth(app); db=dbMod.getFirestore(app); firebase={...authMod,...dbMod};
-  }catch(e){console.warn(e)}
+    const app = initializeApp(firebaseConfig);
+    state.auth = authMod.getAuth(app);
+    state.db = dbMod.getFirestore(app);
+    state.firebase = {...authMod, ...dbMod};
+    state.firebaseReady = true;
+    authMod.onAuthStateChanged(state.auth, user=>{
+      state.user = user;
+      if(els.authStatus) els.authStatus.textContent = user ? `Logged in: ${user.email}` : 'Not logged in.';
+    });
+  }catch(err){
+    console.warn(err);
+    if(els.authStatus) els.authStatus.textContent = 'Firebase not connected yet.';
+  }
 }
-initFirebase();
-const dialog=$('#authDialog');
-$('#authOpen')?.addEventListener('click',()=>dialog?.showModal());
-$('#closeAuth')?.addEventListener('click',()=>dialog?.close());
-async function doAuth(mode){
-  const msg=$('#authMsg'); msg.textContent='Working...';
-  try{
-    if(!firebase) throw new Error('Firebase is not ready. Enable Auth in Firebase console.');
-    const email=$('#authEmail').value.trim(), pass=$('#authPassword').value;
-    if(mode==='login') await firebase.signInWithEmailAndPassword(auth,email,pass);
-    else await firebase.createUserWithEmailAndPassword(auth,email,pass);
-    msg.textContent=mode==='login'?'Logged in.':'Account created.'; setTimeout(()=>dialog.close(),650);
-  }catch(e){msg.textContent=e.message.replace('Firebase: ','')}
+
+function setupLogin(){
+  els.loginOpen?.addEventListener('click', ()=>els.loginDialog?.showModal?.());
+  async function auth(mode){
+    if(!state.firebaseReady){
+      els.authStatus.textContent = 'Firebase not ready. Enable Authentication in Firebase.';
+      return;
+    }
+    const email = $('#authEmail').value.trim();
+    const password = $('#authPassword').value;
+    try{
+      if(mode==='login') await state.firebase.signInWithEmailAndPassword(state.auth,email,password);
+      else{
+        const res = await state.firebase.createUserWithEmailAndPassword(state.auth,email,password);
+        await state.firebase.setDoc(state.firebase.doc(state.db, usersCollection, res.user.uid), {
+          email, createdAt: state.firebase.serverTimestamp()
+        }, {merge:true});
+      }
+      els.authStatus.textContent = mode === 'login' ? 'Logged in successfully.' : 'Account created successfully.';
+      setTimeout(()=>els.loginDialog.close(),700);
+    }catch(err){
+      els.authStatus.textContent = err.message.replace('Firebase: ','');
+    }
+  }
+  $('#loginSubmit')?.addEventListener('click',()=>auth('login'));
+  $('#signupSubmit')?.addEventListener('click',()=>auth('signup'));
 }
-$('#loginBtn')?.addEventListener('click',()=>doAuth('login'));
-$('#signupBtn')?.addEventListener('click',()=>doAuth('signup'));
-$('#enquiryForm')?.addEventListener('submit', async e=>{
-  e.preventDefault(); const status=$('#formStatus'); status.textContent='Submitting enquiry...';
-  const data=Object.fromEntries(new FormData(e.currentTarget).entries()); data.createdAtClient=new Date().toISOString();
-  try{
-    if(firebase && db) await firebase.addDoc(firebase.collection(db,enquiriesCollection), {...data, createdAt:firebase.serverTimestamp()});
-    else { const arr=JSON.parse(localStorage.getItem('newHiraEnquiries')||'[]'); arr.push(data); localStorage.setItem('newHiraEnquiries',JSON.stringify(arr)); }
-    status.textContent='Enquiry saved. New Hira team can follow up.'; e.currentTarget.reset();
-  }catch(err){status.textContent=err.message}
-});
+
+function setupEnquiry(){
+  $('#enquiryForm')?.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.currentTarget).entries());
+    data.createdAtClient = new Date().toISOString();
+    data.userEmail = state.user?.email || 'Guest';
+    data.source = 'luxury advertising website';
+    els.formStatus.className = 'formStatus';
+    els.formStatus.textContent = 'Submitting enquiry...';
+    try{
+      if(state.firebaseReady){
+        await state.firebase.addDoc(state.firebase.collection(state.db,enquiriesCollection), {
+          ...data,
+          createdAt: state.firebase.serverTimestamp()
+        });
+        els.formStatus.classList.add('success');
+        els.formStatus.textContent = 'Enquiry submitted. We will contact you soon.';
+      }else{
+        const arr = JSON.parse(localStorage.getItem('newHiraEnquiries') || '[]');
+        arr.push(data);
+        localStorage.setItem('newHiraEnquiries', JSON.stringify(arr));
+        els.formStatus.classList.add('success');
+        els.formStatus.textContent = 'Saved locally for testing. Firebase can store it when connected.';
+      }
+      e.currentTarget.reset();
+      $('#offerInput').value = 'Up to ₹1,00,000 paddy offer';
+    }catch(err){
+      els.formStatus.classList.add('error');
+      els.formStatus.textContent = err.message;
+    }
+  });
+}
+
+function init(){
+  safe(setupMenu,'menu');
+  safe(setupReveal,'reveal');
+  safe(setupHeroCarousel,'hero');
+  safe(setupTicker,'ticker');
+  safe(renderPartCards,'parts');
+  safe(setupServiceSearch,'service search');
+  safe(setupModelCanvas,'model canvas');
+  safe(setupSectionProgress,'progress');
+  safe(setupTopButton,'top');
+  safe(setupShare,'share');
+  safe(setupLogin,'login');
+  safe(setupEnquiry,'enquiry');
+  setupFirebase();
+}
+document.addEventListener('DOMContentLoaded', init);
