@@ -1,48 +1,156 @@
-import { enableFirebase, firebaseConfig, enquiriesCollection, usersCollection } from './firebase-config.js';
+import { enableFirebase, firebaseConfig, enquiriesCollection } from './firebase-config.js';
 
 const $ = (s) => document.querySelector(s);
-const $$ = (s) => [...document.querySelectorAll(s)];
+const $$ = (s) => Array.from(document.querySelectorAll(s));
 
 const parts = [
-  ['cutter_blades','Cutter Blades','Cutting','Slices standing crop at the header for clean harvesting.','Dull or broken blades cause uneven crop cutting.','Stop engine, lock header, wear gloves, remove blade bolts, replace damaged sections, tighten and test by hand.',[-4.6,-.7,1.15],['blade','knife','cutter']],
-  ['reel_fingers','Reel Fingers','Feeding','Guide crop into the cutter and auger.','Bent fingers cause bunching and uneven feeding.','Secure reel, remove retaining clip/bolt, replace finger, align and rotate slowly to verify clearance.',[-4.2,-.15,1.2],['finger','tine','reel']],
-  ['main_shaft','Main Shaft','Drive','Transfers drive power between rotating assemblies.','Vibration or heat can show bearing/coupler wear.','Remove guard, mark coupler, loosen bearings, inspect runout, replace bearing/coupler and realign.',[-1.1,.25,0],['shaft','drive shaft']],
-  ['thresher_drum','Thresher / Ga-Drum','Threshing','Separates grain from crop using drum and concave action.','Poor threshing or cracked grain may indicate clearance or rasp wear.','Open inspection cover, lock drum, clean packed crop, inspect rasp bars/concave, replace worn parts in matched sets.',[-.35,.25,.25],['thresher','drum','gadrum','ga drum']],
-  ['belt_pulley','Belt Pulley','Drive','Transfers rotation through belt-driven systems.','Squeal, slipping or cracks show belt tension/alignment issue.','Stop machine, remove guard, loosen tensioner, replace belt, align pulleys and set tension.',[1.15,.25,1.05],['belt','pulley','v belt']],
-  ['engine','Engine','Power','Provides power for travel, threshing, hydraulics and unloading.','Overheating, smoke or low power may indicate service issue.','Check coolant/oil, clean radiator, replace filters, inspect belts/wiring and call service if abnormal.',[1,.45,-.95],['motor','power']],
-  ['grain_tank','Grain Tank','Storage','Stores cleaned grain before unloading.','Leakage or slow unloading can indicate auger or seal issue.','Empty tank, clean, inspect floor and auger intake, tighten fasteners and replace worn flighting.',[.95,1.05,.05],['tank','hopper']],
-  ['unloading_auger','Unloading Auger','Unloading','Moves grain from tank to trolley/trailer.','Rattle or slow unload may mean blockage, bearing wear or flighting damage.','Disengage drive, clear blockage, open access, inspect bearing/flighting and test at low speed.',[3,.9,-.35],['auger','unloader']],
-  ['straw_walkers','Straw Walkers','Separation','Shake crop residue to recover remaining grain.','High grain loss from rear may show blockage or walker damage.','Open rear access, clean walkers, inspect bearings/keys, repair cracks and verify smooth motion.',[.65,-.1,-1.15],['walker','separation']],
-  ['sieves','Cleaning Sieves','Cleaning','Separate clean grain from chaff with airflow and shaking.','Dirty grain or losses may come from blocked/wrong sieve setting.','Stop fan, open access, clean sieve, inspect linkage and set opening according to crop.',[.1,-.55,-.85],['sieve','chaffer']],
-  ['front_tyre','Front Tyre','Movement','Carries major load and provides traction.','Low pressure, cracks or wobble affects field stability.','Park level, chock wheels, lift safely, check pressure/nuts, inspect sidewall and replace if needed.',[-1.55,-1.2,1.05],['tyre','tire','wheel']],
-  ['hydraulic_pump','Hydraulic Pump','Hydraulics','Supplies pressure for lifting and adjustment functions.','Slow lift, noise or leakage indicates hydraulic issue.','Clean area, check oil level, inspect hoses/seals, replace damaged hose/seal and bleed/test system.',[1.55,-.15,-.8],['hydraulic','pump','hose']]
-].map(([id,name,category,working,issue,repair,pos,aliases])=>({id,name,category,working,issue,repair,pos,aliases}));
+  {id:'blades', cat:'Cutting', name:'Cutter Blades', text:'Slices crop cleanly at the header for smooth feeding.', repair:'Stop machine, lock header, remove blade guards, replace damaged sections, tighten bolts and test movement manually.', pos:[-3.4,-.55,1.05]},
+  {id:'fingers', cat:'Feeding', name:'Reel Fingers', text:'Guides standing crop into the cutter and feeding system.', repair:'Secure reel, remove clip/bolt, replace bent finger, align with nearby fingers and rotate slowly to check clearance.', pos:[-3.7,.18,1.1]},
+  {id:'shaft', cat:'Drive', name:'Main Shaft', text:'Transfers drive power to important rotating assemblies.', repair:'Remove guards, mark coupler position, loosen bearings, inspect runout, replace worn coupler/bearing and align.', pos:[-.8,.2,.1]},
+  {id:'drum', cat:'Threshing', name:'Thresher Drum', text:'Separates grain from crop using drum and concave action.', repair:'Open inspection cover, lock drum, clean material, inspect bars/concave and replace worn elements in matched sets.', pos:[-.1,.35,.25]},
+  {id:'belt', cat:'Drive', name:'Belt & Pulley', text:'Transfers rotation to key machine functions.', repair:'Remove guard, release tensioner, inspect pulley grooves, fit correct belt, align pulleys and set tension.', pos:[1.05,.25,1.0]},
+  {id:'sieves', cat:'Cleaning', name:'Sieves', text:'Clean grain from chaff using airflow and shaking motion.', repair:'Clean sieve openings, inspect linkage, check fan setting and adjust openings according to crop.', pos:[.2,-.55,-.85]},
+  {id:'auger', cat:'Unloading', name:'Unloading Auger', text:'Moves grain from tank to trolley or transport vehicle.', repair:'Empty tank, open access, clear blockage, inspect bearing and flighting, test slowly after replacement.', pos:[2.5,.95,-.25]},
+  {id:'tyres', cat:'Movement', name:'Tyres & Wheels', text:'Carry load and provide field movement and traction.', repair:'Park level, chock machine, check pressure, inspect sidewall/rim bolts and replace with load-rated tyre.', pos:[-1.2,-1.05,1.1]},
+  {id:'filters', cat:'Service', name:'Filters', text:'Protect engine and hydraulic systems from dust and contamination.', repair:'Clean area, remove old filter, oil seal where required, fit correct part and check leaks after start.', pos:[1.25,.55,-.9]},
+  {id:'bearings', cat:'Service', name:'Bearings', text:'Support rotating parts with lower friction and stable movement.', repair:'Check heat/noise, remove bearing housing, replace worn bearing, grease properly and verify rotation.', pos:[.75,-.2,1.05]}
+];
 
-const state={labels:true,selected:null,offer:100000,db:null,auth:null,fb:null,user:null,three:null,scene:null,camera:null,renderer:null,controls:null,objects:new Map(),labelsMap:new Map(),materials:new Map(),ref:new URLSearchParams(location.search).get('ref')||''};
-const els={introCanvas:$('#introCanvas'),miniCanvas:$('#miniCombineCanvas'),menuBtn:$('#menuBtn'),nav:$('#nav'),partsGrid:$('#partsGrid'),partList:$('#partList'),partSearch:$('#partSearch'),partTitle:$('#partTitle'),partWorking:$('#partWorking'),partIssue:$('#partIssue'),partRepair:$('#partRepair'),viewer:$('#viewer'),labels:$('#labels'),loading:$('#viewerLoading'),toggleLabels:$('#toggleLabels'),resetView:$('#resetView'),selectedPartInput:$('#selectedPartInput'),offerInput:$('#offerInput'),enquiryForm:$('#enquiryForm'),formStatus:$('#formStatus'),shareTop:$('#shareTop'),shareFloat:$('#shareFloat'),authDialog:$('#authDialog'),loginOpen:$('#loginOpen'),loginOpen2:$('#loginOpen2'),authEmail:$('#authEmail'),authPassword:$('#authPassword'),loginBtn:$('#loginBtn'),signupBtn:$('#signupBtn'),logoutBtn:$('#logoutBtn'),authMessage:$('#authMessage'),authStatus:$('#authStatus'),refStatus:$('#refStatus'),copyReferral:$('#copyReferral')};
+let db=null, auth=null, firebase=null, selected='blades';
+let scene, camera, renderer, controls, partMeshes = new Map(), originalMats = new Map();
 
-function inr(v){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(v)}
-function safe(fn,label){try{return fn()}catch(e){console.error(label,e)}}
-function reveal(){const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.14});$$('.reveal').forEach(el=>obs.observe(el));setTimeout(()=>$$('.reveal').forEach(el=>el.classList.add('visible')),1000)}
-function menu(){els.menuBtn?.addEventListener('click',()=>{els.nav.classList.toggle('open');els.menuBtn.setAttribute('aria-expanded',els.nav.classList.contains('open'))});$$('#nav a').forEach(a=>a.addEventListener('click',()=>els.nav.classList.remove('open')))}
-function sideNav(){const buttons=$$('.sideSlider button');buttons.forEach(b=>b.addEventListener('click',()=>$('#'+b.dataset.target)?.scrollIntoView({behavior:'smooth'})));const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){buttons.forEach(b=>b.classList.toggle('active',b.dataset.target===e.target.id))}}),{threshold:.42});$$('.story').forEach(s=>obs.observe(s))}
-function share(){const data={title:'New Hira',text:'New Hira combine harvester advertisement and 3D repair finder',url:location.href};return navigator.share?navigator.share(data).catch(()=>{}):navigator.clipboard.writeText(location.href).then(()=>alert('Website link copied'))}
-function shareSetup(){els.shareTop?.addEventListener('click',share);els.shareFloat?.addEventListener('click',share)}
-function partsUI(){els.partsGrid.innerHTML=parts.map(p=>`<article class="partCard"><strong>${p.name}</strong><small>${p.category} • ${p.working}</small></article>`).join('');renderPartList();els.partSearch?.addEventListener('input',e=>renderPartList(e.target.value))}
-function renderPartList(q=''){q=q.toLowerCase().trim();const list=parts.filter(p=>!q||p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)||p.aliases.some(a=>a.includes(q)));els.partList.innerHTML=list.map(p=>`<button type="button" class="partBtn ${state.selected===p.id?'active':''}" data-id="${p.id}"><strong>${p.name}</strong><span>${p.category}</span></button>`).join('');$$('.partBtn').forEach(b=>b.addEventListener('click',()=>selectPart(b.dataset.id)))}
-function selectPart(id){const p=parts.find(x=>x.id===id);if(!p)return;state.selected=id;els.partTitle.textContent=p.name;els.partWorking.textContent=p.working;els.partIssue.textContent=p.issue;els.partRepair.textContent=p.repair;els.selectedPartInput.value=p.name;renderPartList(els.partSearch?.value||'');state.labelsMap.forEach((n,k)=>n.classList.toggle('active',k===id));if(state.three){state.objects.forEach((o,k)=>o.material=state.materials.get(k)||o.material);const o=state.objects.get(id);if(o){o.material=new state.three.MeshStandardMaterial({color:0x68e083,emissive:0x145525,roughness:.34,metalness:.25})}const t=new state.three.Vector3(...p.pos);state.controls.target.copy(t);state.camera.position.lerp(new state.three.Vector3(t.x+4,t.y+2.4,t.z+4),.7);state.controls.update()}}
-function offer(){els.offerInput.value='Up to ₹1,00,000 paddy 2025-26 offer + ₹50,000 referral incentive if completed booking qualifies'}
-function canvasIntro(){const c=els.introCanvas,ctx=c.getContext('2d');let w,h,d;function r(){d=devicePixelRatio||1;w=c.clientWidth||innerWidth;h=c.clientHeight||innerHeight;c.width=w*d;c.height=h*d;ctx.setTransform(d,0,0,d,0,0)}r();addEventListener('resize',r);function wheel(x,y,rr,t){ctx.save();ctx.translate(x,y);ctx.rotate(t);ctx.fillStyle='#090b0f';ctx.beginPath();ctx.arc(0,0,rr,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=6;ctx.stroke();for(let i=0;i<8;i++){ctx.rotate(Math.PI/4);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(rr*.72,0);ctx.stroke()}ctx.restore()}function machine(x,y,s,t){ctx.save();ctx.translate(x,y);ctx.scale(s,s);let g=ctx.createLinearGradient(-150,-60,190,70);g.addColorStop(0,'#f4b967');g.addColorStop(1,'#ff7a1c');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(-160,40);ctx.lineTo(-100,-60);ctx.lineTo(100,-60);ctx.lineTo(180,20);ctx.lineTo(150,60);ctx.lineTo(-130,60);ctx.closePath();ctx.fill();ctx.fillStyle='#e4e8e3';ctx.beginPath();ctx.moveTo(-95,-58);ctx.lineTo(0,-58);ctx.lineTo(32,0);ctx.lineTo(-130,0);ctx.closePath();ctx.fill();ctx.fillStyle='#16202b';ctx.fillRect(-78,-44,72,34);ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(42,-30,70,42);ctx.strokeStyle='rgba(255,255,255,.32)';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(170,5);ctx.quadraticCurveTo(240,-28,295,34);ctx.stroke();ctx.fillStyle='#dc8228';ctx.beginPath();ctx.moveTo(-225,38);ctx.lineTo(-155,0);ctx.lineTo(-116,20);ctx.lineTo(-185,62);ctx.closePath();ctx.fill();wheel(-65,78,42,t/250);wheel(112,76,30,t/250);ctx.restore()}function f(t){ctx.clearRect(0,0,w,h);let bg=ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#07080b');bg.addColorStop(.65,'#15100d');bg.addColorStop(1,'#2a160a');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);let glow=ctx.createRadialGradient(w*.72,h*.28,20,w*.72,h*.28,w*.35);glow.addColorStop(0,'rgba(244,185,103,.45)');glow.addColorStop(1,'transparent');ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(255,255,255,.06)';for(let i=0;i<18;i++){ctx.beginPath();ctx.moveTo(i*w/18,h*.75);ctx.lineTo(w*.5,h);ctx.stroke()}machine((t/8%(w+600))-300,h*.67,Math.min(1.1,Math.max(.72,w/900)),t);requestAnimationFrame(f)}requestAnimationFrame(f)}
-function miniCanvas(){const c=els.miniCanvas,ctx=c.getContext('2d');let w,h,d;function r(){d=devicePixelRatio||1;w=c.clientWidth||c.parentElement.clientWidth;h=c.clientHeight||c.parentElement.clientHeight;c.width=w*d;c.height=h*d;ctx.setTransform(d,0,0,d,0,0)}r();addEventListener('resize',r);function f(t){ctx.clearRect(0,0,w,h);ctx.fillStyle='rgba(7,8,11,.22)';ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(244,185,103,.22)';for(let i=0;i<8;i++){ctx.beginPath();ctx.moveTo(w*.1+i*w*.1,h*.2);ctx.lineTo(w*.2+i*w*.08,h*.86);ctx.stroke()}requestAnimationFrame(f)}requestAnimationFrame(f)}
-async function model3D(){try{const THREE=await import('three');const {OrbitControls}=await import('three/addons/controls/OrbitControls.js');state.three=THREE;const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x07080b,10,28);const cam=new THREE.PerspectiveCamera(42,els.viewer.clientWidth/els.viewer.clientHeight,.1,100);cam.position.set(6,4.2,7.5);const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(devicePixelRatio||1,2));ren.setSize(els.viewer.clientWidth,els.viewer.clientHeight);ren.outputColorSpace=THREE.SRGBColorSpace;els.viewer.prepend(ren.domElement);const controls=new OrbitControls(cam,ren.domElement);controls.enableDamping=true;controls.target.set(0,0,0);scene.add(new THREE.HemisphereLight(0xffedd3,0x12151d,1.3));const key=new THREE.DirectionalLight(0xffd2a0,2.5);key.position.set(4,8,5);scene.add(key);const rim=new THREE.DirectionalLight(0x9fd3ff,1.1);rim.position.set(-5,4,-6);scene.add(rim);state.scene=scene;state.camera=cam;state.renderer=ren;state.controls=controls;buildModel(THREE,scene);parts.forEach(p=>{let n=document.createElement('button');n.className='modelLabel';n.textContent=p.name;n.type='button';n.addEventListener('click',()=>selectPart(p.id));els.labels.appendChild(n);state.labelsMap.set(p.id,n)});els.loading.style.display='none';function resize(){ren.setSize(els.viewer.clientWidth,els.viewer.clientHeight);cam.aspect=els.viewer.clientWidth/els.viewer.clientHeight;cam.updateProjectionMatrix()}addEventListener('resize',resize);const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();ren.domElement.addEventListener('pointerdown',e=>{const r=ren.domElement.getBoundingClientRect();ptr.x=((e.clientX-r.left)/r.width)*2-1;ptr.y=-((e.clientY-r.top)/r.height)*2+1;ray.setFromCamera(ptr,cam);const hit=ray.intersectObjects([...state.objects.values()],true)[0];if(hit?.object?.userData?.partId)selectPart(hit.object.userData.partId)});function animate(){controls.update();ren.render(scene,cam);updateLabels(THREE);requestAnimationFrame(animate)}animate()}catch(e){console.error(e);els.loading.textContent='3D CDN not loaded. Parts search still works.'}}
-function mat(T,c){return new T.MeshStandardMaterial({color:c,roughness:.55,metalness:.16})}function box(T,scene,id,size,pos,color){let m=new T.Mesh(new T.BoxGeometry(...size),mat(T,color));m.position.set(...pos);if(id){m.userData.partId=id;state.objects.set(id,m);state.materials.set(id,m.material)}scene.add(m);return m}function cyl(T,scene,id,r,depth,pos,rot,color){let m=new T.Mesh(new T.CylinderGeometry(r,r,depth,48),mat(T,color));m.position.set(...pos);m.rotation.set(...rot);if(id){m.userData.partId=id;state.objects.set(id,m);state.materials.set(id,m.material)}scene.add(m);return m}
-function buildModel(T,scene){box(T,scene,null,[3.8,1.4,2],[.1,0,0],0xff8a24);box(T,scene,'grain_tank',[1.8,.9,1.5],[.95,1.05,.02],0xd88127);box(T,scene,'engine',[1.1,.75,.9],[1,.45,-.95],0x555e67);box(T,scene,null,[1.25,1.25,1.2],[-1.3,.65,.25],0xdfe5e0);box(T,scene,null,[.9,.78,1.24],[-1.34,.74,.28],0x17202a);box(T,scene,'cutter_blades',[1.65,.38,2.55],[-4.15,-.82,.38],0xf4b967);cyl(T,scene,'reel_fingers',.22,2.55,[-4.25,-.24,.75],[Math.PI/2,0,0],0xffc06d);for(let i=-5;i<=5;i++){let t=box(T,scene,null,[.05,.55,.04],[-4.25,-.22,.75+i*.22],0xffe0a8);t.userData.partId='reel_fingers'}cyl(T,scene,'main_shaft',.11,2.45,[-1.1,.25,0],[Math.PI/2,0,0],0xabb1b7);cyl(T,scene,'thresher_drum',.48,1.6,[-.35,.25,.25],[Math.PI/2,0,0],0x8f969c);cyl(T,scene,'belt_pulley',.38,.18,[1.15,.25,1.05],[Math.PI/2,0,0],0x303943);box(T,scene,null,[.08,.08,1.2],[1.46,.42,1.05],0x0a0d10);box(T,scene,'straw_walkers',[1.8,.25,.9],[.65,-.1,-1.15],0xc9924b);box(T,scene,'sieves',[1.65,.18,.85],[.1,-.55,-.85],0x7b858f);cyl(T,scene,'unloading_auger',.13,2.55,[3,.9,-.35],[.65,0,1.2],0xabb1b7);cyl(T,scene,'front_tyre',.72,.55,[-1.55,-1.2,1.05],[Math.PI/2,0,0],0x11151b);cyl(T,scene,'rear_tyre',.48,.38,[1.75,-1.12,1.0],[Math.PI/2,0,0],0x11151b);box(T,scene,'hydraulic_pump',[.58,.38,.44],[1.55,-.15,-.8],0x68727a);let ground=new T.Mesh(new T.CircleGeometry(8,96),mat(T,0x161312));ground.rotation.x=-Math.PI/2;ground.position.y=-1.55;scene.add(ground)}
-function updateLabels(T){if(!state.camera)return;els.labels.style.display=state.labels?'block':'none';const rect=els.viewer.getBoundingClientRect();parts.forEach(p=>{let n=state.labelsMap.get(p.id);let v=new T.Vector3(...p.pos).project(state.camera);n.style.left=((v.x*.5+.5)*rect.width)+'px';n.style.top=((-v.y*.5+.5)*rect.height)+'px';n.style.opacity=v.z<1?'1':'0';n.classList.toggle('active',state.selected===p.id)})}
-function viewerButtons(){els.toggleLabels?.addEventListener('click',()=>{state.labels=!state.labels;els.toggleLabels.textContent=state.labels?'Labels on':'Labels off'});els.resetView?.addEventListener('click',()=>{if(state.camera&&state.controls){state.camera.position.set(6,4.2,7.5);state.controls.target.set(0,0,0);state.controls.update()}})}
-async function firebase(){if(!enableFirebase)return;try{const [{initializeApp},authMod,dbMod]=await Promise.all([import('https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js'),import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js')]);const app=initializeApp(firebaseConfig);state.auth=authMod.getAuth(app);state.db=dbMod.getFirestore(app);state.fb={...authMod,...dbMod};authMod.onAuthStateChanged(state.auth,u=>{state.user=u;els.authStatus.textContent=u?'Logged in: '+u.email:'Not logged in';els.authStatus.style.color=u?'var(--green)':'var(--muted)';updateReferral()})}catch(e){console.error(e);els.authStatus.textContent='Firebase not available yet. Check Auth/Firestore setup.'}}
-function authUI(){function open(){els.authDialog.showModal?.()}els.loginOpen?.addEventListener('click',open);els.loginOpen2?.addEventListener('click',open);async function submit(mode){els.authMessage.className='';try{if(!state.fb)throw new Error('Firebase not ready');let email=els.authEmail.value.trim(),pass=els.authPassword.value;if(!email||pass.length<6)throw new Error('Enter email and minimum 6 character password');let res=mode==='login'?await state.fb.signInWithEmailAndPassword(state.auth,email,pass):await state.fb.createUserWithEmailAndPassword(state.auth,email,pass);if(mode==='signup')await state.fb.setDoc(state.fb.doc(state.db,usersCollection,res.user.uid),{email,referralCode:'NH'+res.user.uid.slice(0,6).toUpperCase(),createdAt:state.fb.serverTimestamp()},{merge:true});els.authMessage.className='success';els.authMessage.textContent=mode==='login'?'Logged in':'Account created';setTimeout(()=>els.authDialog.close(),650)}catch(e){els.authMessage.className='error';els.authMessage.textContent=e.message.replace('Firebase: ','')}}els.loginBtn?.addEventListener('click',()=>submit('login'));els.signupBtn?.addEventListener('click',()=>submit('signup'));els.logoutBtn?.addEventListener('click',()=>state.fb?.signOut(state.auth))}
-function updateReferral(){if(!state.user){els.refStatus.textContent='Login to generate your personal link.';return}const code='NH'+state.user.uid.slice(0,6).toUpperCase();els.refStatus.textContent=location.origin+location.pathname+'?ref='+code}
-function referralUI(){els.copyReferral?.addEventListener('click',()=>{navigator.clipboard.writeText(els.refStatus.textContent);alert('Referral link copied')})}
-function enquiry(){els.enquiryForm?.addEventListener('submit',async e=>{e.preventDefault();let data=Object.fromEntries(new FormData(els.enquiryForm).entries());data.createdAtClient=new Date().toISOString();data.referralFromUrl=state.ref;data.userId=state.user?.uid||null;data.userEmail=state.user?.email||null;els.formStatus.className='formStatus';els.formStatus.textContent='Submitting...';try{if(state.fb&&state.db){await state.fb.addDoc(state.fb.collection(state.db,enquiriesCollection),{...data,createdAt:state.fb.serverTimestamp()});els.formStatus.className='formStatus success';els.formStatus.textContent='Enquiry submitted to Firebase.'}else{let old=JSON.parse(localStorage.getItem('newHiraEnquiries')||'[]');old.push(data);localStorage.setItem('newHiraEnquiries',JSON.stringify(old));els.formStatus.className='formStatus success';els.formStatus.textContent='Firebase unavailable, saved locally for testing.'}els.enquiryForm.reset();offer()}catch(err){els.formStatus.className='formStatus error';els.formStatus.textContent=err.message}})}
-function init(){safe(reveal,'reveal');safe(menu,'menu');safe(sideNav,'sideNav');safe(shareSetup,'share');safe(partsUI,'parts');safe(offer,'offer');safe(canvasIntro,'introCanvas');safe(miniCanvas,'miniCanvas');safe(viewerButtons,'viewerButtons');safe(authUI,'authUI');safe(referralUI,'referral');safe(enquiry,'enquiry');firebase();model3D();setTimeout(()=>$$('.reveal').forEach(e=>e.classList.add('visible')),1200)}
-document.addEventListener('DOMContentLoaded',init);
+function closeIntro(){ const intro=$('#intro'); if(intro){ intro.classList.add('hidden'); intro.style.pointerEvents='none'; } }
+$('#enterSite')?.addEventListener('click', closeIntro);
+setTimeout(closeIntro, 2600);
+
+$('#menu')?.addEventListener('click',()=>$('#nav')?.classList.toggle('open'));
+$$('#nav a').forEach(a=>a.addEventListener('click',()=>$('#nav')?.classList.remove('open')));
+
+function shareSite(){
+  const data={title:'New Hira', text:'Premium New Hira combine harvester advertisement website.', url:location.href};
+  if(navigator.share) navigator.share(data).catch(()=>{});
+  else navigator.clipboard?.writeText(location.href).then(()=>alert('Website link copied.'));
+}
+$('#shareTop')?.addEventListener('click', shareSite);
+$('#shareFloat')?.addEventListener('click', shareSite);
+
+function sideRail(){
+  const links=$$('.side-rail a');
+  const sections=links.map(a=>document.getElementById(a.dataset.section)).filter(Boolean);
+  const onScroll=()=>{
+    let active=sections[0]?.id;
+    sections.forEach(sec=>{ if(sec.getBoundingClientRect().top < innerHeight*.45) active=sec.id; });
+    links.forEach(a=>a.classList.toggle('active',a.dataset.section===active));
+  };
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+}
+sideRail();
+
+function renderParts(){
+  const grid=$('#partsGrid');
+  grid.innerHTML = parts.map(p=>`<article><span>${p.cat}</span><h3>${p.name}</h3><p>${p.text}</p></article>`).join('');
+  renderPartList();
+}
+function renderPartList(filter=''){
+  const q=filter.toLowerCase().trim();
+  const list=$('#partList');
+  const found=parts.filter(p=>!q || p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
+  list.innerHTML=found.map(p=>`<button class="${p.id===selected?'active':''}" data-id="${p.id}" type="button"><strong>${p.name}</strong><br><small>${p.cat}</small></button>`).join('');
+  $$('#partList button').forEach(b=>b.addEventListener('click',()=>selectPart(b.dataset.id)));
+}
+$('#partSearch')?.addEventListener('input', e=>renderPartList(e.target.value));
+function selectPart(id){
+  const part=parts.find(p=>p.id===id) || parts[0]; selected=part.id;
+  $('#partTitle').textContent=part.name; $('#partText').textContent=part.text; $('#repairText').textContent=part.repair;
+  renderPartList($('#partSearch')?.value || '');
+  if(partMeshes.size){
+    partMeshes.forEach((m,pid)=>m.material=originalMats.get(pid));
+    const mesh=partMeshes.get(id);
+    if(mesh){
+      mesh.material = new window.THREE.MeshStandardMaterial({color:0xd8b16a, emissive:0x3c2b10, metalness:.22, roughness:.36});
+      const v=new window.THREE.Vector3(...part.pos);
+      controls.target.lerp(v,.75);
+      camera.position.lerp(new window.THREE.Vector3(v.x+4.2,v.y+2.2,v.z+4.1),.6);
+    }
+  }
+}
+renderParts(); selectPart('blades');
+
+async function setup3D(){
+  const THREE = await import('three'); window.THREE = THREE;
+  const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+  const el=$('#viewer');
+  scene=new THREE.Scene(); scene.fog=new THREE.Fog(0x0b0b0a,8,24);
+  camera=new THREE.PerspectiveCamera(38, el.clientWidth/el.clientHeight, .1, 100); camera.position.set(5.8,3.4,6.6);
+  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); renderer.setPixelRatio(Math.min(devicePixelRatio||1,2)); renderer.setSize(el.clientWidth,el.clientHeight); renderer.outputColorSpace=THREE.SRGBColorSpace; el.prepend(renderer.domElement);
+  controls=new OrbitControls(camera, renderer.domElement); controls.enableDamping=true; controls.dampingFactor=.06; controls.target.set(0,0,0);
+  scene.add(new THREE.HemisphereLight(0xfff3dc,0x111111,1.4));
+  const key=new THREE.DirectionalLight(0xffd89a,2.2); key.position.set(4,7,4); scene.add(key);
+  const rim=new THREE.DirectionalLight(0x9fc6ff,.8); rim.position.set(-5,3,-5); scene.add(rim);
+  const ground=new THREE.Mesh(new THREE.CircleGeometry(7.5,96), new THREE.MeshStandardMaterial({color:0x15120d, roughness:.9})); ground.rotation.x=-Math.PI/2; ground.position.y=-1.42; scene.add(ground);
+  buildModel(THREE);
+  el.querySelector('.viewer-fallback')?.remove();
+  addEventListener('resize',()=>{renderer.setSize(el.clientWidth,el.clientHeight);camera.aspect=el.clientWidth/el.clientHeight;camera.updateProjectionMatrix();});
+  function animate(){controls.update();renderer.render(scene,camera);requestAnimationFrame(animate)} animate();
+  selectPart('blades');
+}
+function mat(THREE,c,m=.12,r=.58){return new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r})}
+function box(THREE,size,pos,color,id){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),mat(THREE,color));mesh.position.set(...pos);scene.add(mesh);if(id){mesh.userData.id=id;partMeshes.set(id,mesh);originalMats.set(id,mesh.material)}return mesh}
+function cyl(THREE,r,d,pos,rot,color,id){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d,48),mat(THREE,color));mesh.position.set(...pos);mesh.rotation.set(...rot);scene.add(mesh);if(id){partMeshes.set(id,mesh);originalMats.set(id,mesh.material)}return mesh}
+function buildModel(THREE){
+  box(THREE,[3.7,1.28,1.85],[.05,0,0],0x83b928);
+  box(THREE,[1.45,1.05,1.12],[-1.35,.62,.2],0xd9dfd7);
+  box(THREE,[.95,.64,1.16],[-1.38,.68,.22],0x182129);
+  box(THREE,[1.55,.78,1.35],[.85,.9,-.05],0x6ea41f,'filters');
+  box(THREE,[1.1,.65,.88],[1.18,.36,-.92],0x4b535a);
+  box(THREE,[1.6,.3,2.45],[-3.45,-.72,.48],0xa8c83e,'blades');
+  cyl(THREE,.2,2.5,[-3.65,-.18,.78],[Math.PI/2,0,0],0xcfd27a,'fingers');
+  cyl(THREE,.11,2.25,[-.8,.2,.1],[Math.PI/2,0,0],0xaeb2b4,'shaft');
+  cyl(THREE,.48,1.45,[-.1,.35,.25],[Math.PI/2,0,0],0x6e7274,'drum');
+  cyl(THREE,.36,.18,[1.05,.25,1.0],[Math.PI/2,0,0],0x20252a,'belt');
+  box(THREE,[1.45,.18,.82],[.2,-.55,-.85],0x7c858a,'sieves');
+  cyl(THREE,.12,2.5,[2.5,.95,-.25],[.65,0,1.1],0xb9b9ad,'auger');
+  cyl(THREE,.68,.54,[-1.2,-1.05,1.1],[Math.PI/2,0,0],0x08090a,'tyres');
+  cyl(THREE,.33,.57,[-1.2,-1.05,1.1],[Math.PI/2,0,0],0x5e6468);
+  cyl(THREE,.44,.38,[1.72,-1.05,1.02],[Math.PI/2,0,0],0x08090a);
+  cyl(THREE,.22,.4,[1.72,-1.05,1.02],[Math.PI/2,0,0],0x5e6468);
+  cyl(THREE,.18,.35,[.75,-.2,1.05],[Math.PI/2,0,0],0xa4a4a0,'bearings');
+}
+setup3D().catch(err=>{console.warn(err); $('#viewer .viewer-fallback').textContent='3D viewer unavailable. Parts list remains active.'});
+
+async function initFirebase(){
+  if(!enableFirebase) return;
+  try{
+    const [{initializeApp}, authMod, dbMod] = await Promise.all([
+      import('https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js'),
+      import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js')
+    ]);
+    const app=initializeApp(firebaseConfig); auth=authMod.getAuth(app); db=dbMod.getFirestore(app); firebase={...authMod,...dbMod};
+  }catch(e){console.warn(e)}
+}
+initFirebase();
+const dialog=$('#authDialog');
+$('#authOpen')?.addEventListener('click',()=>dialog?.showModal());
+$('#closeAuth')?.addEventListener('click',()=>dialog?.close());
+async function doAuth(mode){
+  const msg=$('#authMsg'); msg.textContent='Working...';
+  try{
+    if(!firebase) throw new Error('Firebase is not ready. Enable Auth in Firebase console.');
+    const email=$('#authEmail').value.trim(), pass=$('#authPassword').value;
+    if(mode==='login') await firebase.signInWithEmailAndPassword(auth,email,pass);
+    else await firebase.createUserWithEmailAndPassword(auth,email,pass);
+    msg.textContent=mode==='login'?'Logged in.':'Account created.'; setTimeout(()=>dialog.close(),650);
+  }catch(e){msg.textContent=e.message.replace('Firebase: ','')}
+}
+$('#loginBtn')?.addEventListener('click',()=>doAuth('login'));
+$('#signupBtn')?.addEventListener('click',()=>doAuth('signup'));
+$('#enquiryForm')?.addEventListener('submit', async e=>{
+  e.preventDefault(); const status=$('#formStatus'); status.textContent='Submitting enquiry...';
+  const data=Object.fromEntries(new FormData(e.currentTarget).entries()); data.createdAtClient=new Date().toISOString();
+  try{
+    if(firebase && db) await firebase.addDoc(firebase.collection(db,enquiriesCollection), {...data, createdAt:firebase.serverTimestamp()});
+    else { const arr=JSON.parse(localStorage.getItem('newHiraEnquiries')||'[]'); arr.push(data); localStorage.setItem('newHiraEnquiries',JSON.stringify(arr)); }
+    status.textContent='Enquiry saved. New Hira team can follow up.'; e.currentTarget.reset();
+  }catch(err){status.textContent=err.message}
+});
