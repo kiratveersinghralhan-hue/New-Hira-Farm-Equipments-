@@ -3,79 +3,84 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#10100e" />
+  <meta name="theme-color" content="#f5efe3" />
   <title>New Hira | Combine Harvester Manufacturer</title>
-  <meta name="description" content="New Hira Nabha combine harvester manufacturer advertisement website with warranty, offer, spare parts, service and enquiry." />
+  <meta name="description" content="New Hira professional combine harvester advertisement website." />
   <script>document.documentElement.classList.add('js');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body class="intro-lock">
-  <div class="introOverlay" id="introOverlay" aria-hidden="false">
-    <div class="introOverlay__grain"></div>
-    <div class="introCenter">
-      <p class="eyebrow">Nabha • Premium Agricultural Machinery</p>
-      <div class="introMachine" aria-hidden="true">
-        <div class="introMachine__header"></div>
-        <div class="introMachine__body"></div>
-        <div class="introMachine__cab"></div>
-        <div class="introMachine__auger"></div>
-        <div class="introMachine__wheel introMachine__wheel--big"></div>
-        <div class="introMachine__wheel introMachine__wheel--small"></div>
-      </div>
-      <h1>New Hira</h1>
-      <p class="introText">Combine harvester strength, introduced with a clean business presentation.</p>
+  <div class="introOverlay" id="introOverlay">
+    <div class="introCard">
+      <span class="brandMark">NH</span>
+      <p class="eyebrow" data-i18n="introEyebrow">Professional agricultural machinery</p>
+      <h1 data-i18n="introTitle">New Hira</h1>
+      <p data-i18n="introText">A focused business presentation for combine harvesters, service and enquiries.</p>
+      <div class="introProgress"><span></span></div>
     </div>
-    <button class="introSkip" id="introSkip" type="button">Skip intro</button>
+    <button class="introSkip" id="introSkip" type="button" data-i18n="skipIntro">Enter site</button>
   </div>
 
-
   <header class="topbar">
-    <a class="brand" href="#top">
+    <a class="brand" href="#top" aria-label="New Hira">
       <span>NH</span>
-      <strong>New Hira</strong>
+      <strong data-i18n="brandName">New Hira</strong>
     </a>
+
     <button class="menu" id="menuBtn" type="button" aria-label="Open menu"><span></span><span></span></button>
+
     <nav class="nav" id="nav">
-      <a href="#product">Product</a>
-      <a href="#parts">Parts</a>
-      <a href="#policy">Warranty</a>
-      <a href="#service">Service</a>
-      <a href="#enquiry">Enquiry</a>
+      <a href="#product" data-i18n="navProduct">Product</a>
+      <a href="#parts" data-i18n="navParts">Parts</a>
+      <a href="#policy" data-i18n="navWarranty">Warranty</a>
+      <a href="#service" data-i18n="navService">Service</a>
+      <a href="#enquiry" data-i18n="navEnquiry">Enquiry</a>
     </nav>
-    <a class="callTop" href="tel:+919216107700">Call</a>
+
+    <div class="headerRight">
+      <label class="languageWrap" aria-label="Language">
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="pa">ਪੰਜਾਬੀ</option>
+        </select>
+      </label>
+      <a class="callTop" href="tel:+919216107700" data-i18n="call">Call</a>
+    </div>
   </header>
 
   <main id="top">
     <section class="hero">
+      <div class="heroCopy">
+        <p class="eyebrow" data-i18n="heroEyebrow">New Hira • Nabha</p>
+        <h1 data-i18n="heroTitle">Built for harvesting confidence.</h1>
+        <p class="lead" data-i18n="heroLead">A professional advertisement page for New Hira combine harvesters, seasonal support, spare parts and direct farmer enquiries.</p>
+        <div class="heroActions">
+          <a class="btn primary" href="#enquiry" data-i18n="bookEnquiry">Book enquiry</a>
+          <button class="btn secondary" id="openPartsHero" type="button" data-i18n="searchParts">Search parts</button>
+        </div>
+      </div>
+
       <div class="heroImage">
         <img src="photo1.jpg" alt="New Hira combine harvester">
       </div>
-      <div class="heroCopy">
-        <p class="eyebrow">Nabha • Agricultural Machinery</p>
-        <h1>New Hira</h1>
-        <p class="lead">Combine harvesters built for Indian fields, backed by seasonal support, spare availability and direct enquiry service.</p>
-        <div class="heroActions">
-          <a class="btn primary" href="#enquiry">Book enquiry</a>
-          <button class="btn secondary" id="openPartsHero" type="button">Search parts</button>
-        </div>
-      </div>
+
       <div class="quickStats">
-        <div><strong>1 Season</strong><span>Warranty / guarantee</span></div>
-        <div><strong>500 Hrs</strong><span>Whichever is earlier</span></div>
-        <div><strong>₹1 Lakh</strong><span>2025–26 paddy offer</span></div>
+        <div><strong data-i18n="statWarrantyValue">1 Season</strong><span data-i18n="statWarrantyLabel">Warranty / guarantee</span></div>
+        <div><strong data-i18n="statHoursValue">500 Hrs</strong><span data-i18n="statHoursLabel">Whichever is earlier</span></div>
+        <div><strong data-i18n="statOfferValue">₹1 Lakh</strong><span data-i18n="statOfferLabel">2025–26 paddy offer</span></div>
       </div>
     </section>
 
     <section class="company">
       <div>
-        <p class="eyebrow">Company</p>
-        <h2>Real machinery. Real service. Real farmer connection.</h2>
+        <p class="eyebrow" data-i18n="companyEyebrow">Company</p>
+        <h2 data-i18n="companyTitle">A practical machinery business with direct customer connection.</h2>
       </div>
-      <p>New Hira, Nabha is presented as a focused agricultural machinery business led by Jatinder Singh. This page is made for advertisement: clear product message, direct contact, warranty policy, offer campaign and service support.</p>
+      <p data-i18n="companyText">New Hira, Nabha is presented as a focused agricultural machinery business led by Jatinder Singh. This page is made for advertisement: clear product message, direct contact, warranty policy, offer campaign and service support.</p>
     </section>
 
     <section class="product" id="product">
@@ -83,49 +88,48 @@
         <img src="photo2.jpg" alt="New Hira combine harvester side view">
       </div>
       <div class="productInfo">
-        <p class="eyebrow">Combine harvester</p>
-        <h2>Made to work through demanding harvest seasons.</h2>
+        <p class="eyebrow" data-i18n="productEyebrow">Combine harvester</p>
+        <h2 data-i18n="productTitle">Made for demanding harvest seasons.</h2>
         <div class="featureGrid">
-          <article><strong>Field Presence</strong><span>Strong machine identity for paddy and wheat harvesting campaigns.</span></article>
-          <article><strong>Service Support</strong><span>Direct Nabha contact for machine, parts and maintenance enquiries.</span></article>
-          <article><strong>Business Offer</strong><span>Personal combine paddy offer up to ₹1,00,000 for 2025–26.</span></article>
-          <article><strong>Referral Growth</strong><span>Up to ₹50,000 reward on completed referral booking.</span></article>
+          <article><strong data-i18n="feature1Title">Field Presence</strong><span data-i18n="feature1Text">Strong machine identity for paddy and wheat harvesting campaigns.</span></article>
+          <article><strong data-i18n="feature2Title">Service Support</strong><span data-i18n="feature2Text">Direct Nabha contact for machine and maintenance enquiries.</span></article>
+          <article><strong data-i18n="feature3Title">Business Offer</strong><span data-i18n="feature3Text">Personal combine paddy offer up to ₹1,00,000 for 2025–26.</span></article>
+          <article><strong data-i18n="feature4Title">Referral Growth</strong><span data-i18n="feature4Text">Up to ₹50,000 reward on completed referral booking.</span></article>
         </div>
       </div>
     </section>
 
     <section class="partsStrip" id="parts">
       <div>
-        <p class="eyebrow">Spare parts</p>
-        <h2>Search the New Hira parts list without scrolling a long page.</h2>
-        <p>Catalogue opens in a clean panel, so the website stays short and business-like.</p>
+        <p class="eyebrow" data-i18n="partsEyebrow">Spare parts</p>
+        <h2 data-i18n="partsTitle">Search the New Hira parts list in one clean panel.</h2>
+        <p data-i18n="partsText">The catalogue opens in a simple search panel, so the main page stays short and professional.</p>
       </div>
-      <button class="btn primary" id="openParts" type="button">Open parts catalogue</button>
+      <button class="btn primary" id="openParts" type="button" data-i18n="openCatalogue">Open parts catalogue</button>
     </section>
 
     <section class="policyOffer" id="policy">
       <article>
-        <p class="eyebrow">Warranty / guarantee</p>
-        <h2>1 season or 500 hours</h2>
-        <p>Warranty and guarantee policy: one season or 500 working hours, whichever is earlier. Final exclusions and conditions can be added after confirmation.</p>
+        <p class="eyebrow" data-i18n="warrantyEyebrow">Warranty / guarantee</p>
+        <h2 data-i18n="warrantyTitle">1 season or 500 hours</h2>
+        <p data-i18n="warrantyText">Warranty and guarantee policy: one season or 500 working hours, whichever is earlier. Final exclusions and conditions can be added after confirmation.</p>
       </article>
       <article>
-        <p class="eyebrow">Marketing offer</p>
-        <h2>Earn through referrals</h2>
-        <p>Share New Hira information. If the enquiry is completed and the combine is booked, earn up to ₹50,000 as cash or approved reward.</p>
+        <p class="eyebrow" data-i18n="offerEyebrow">Marketing offer</p>
+        <h2 data-i18n="offerTitle">Earn through referrals</h2>
+        <p data-i18n="offerText">Share New Hira information. If the enquiry is completed and the combine is booked, earn up to ₹50,000 as cash or approved reward.</p>
       </article>
     </section>
 
-    
-<section class="service support" id="service">
+    <section class="service support" id="service">
       <div class="serviceText">
-        <p class="eyebrow">Service support</p>
-        <h2>Maintenance support, presented simply.</h2>
-        <p>Instead of a heavy technical module, this section keeps service practical: direct contact, parts search, enquiry support and machine assistance from New Hira. A precise interactive 3D repair system can be added later when the real model is available.</p>
+        <p class="eyebrow" data-i18n="serviceEyebrow">Service support</p>
+        <h2 data-i18n="serviceTitle">Maintenance support, presented simply.</h2>
+        <p data-i18n="serviceText">This section keeps service practical: direct contact, parts search, enquiry support and machine assistance from New Hira.</p>
         <div class="supportGrid">
-          <article><strong>Direct Guidance</strong><span>Call or WhatsApp New Hira for inspection, maintenance and replacement guidance.</span></article>
-          <article><strong>Parts Search</strong><span>Use the parts catalogue panel to quickly search listed items without scrolling a long page.</span></article>
-          <article><strong>Future Upgrade</strong><span>Once you share GLB/CAD files, this section can become a true precision service module.</span></article>
+          <article><strong data-i18n="support1Title">Direct Guidance</strong><span data-i18n="support1Text">Call or WhatsApp New Hira for inspection, maintenance and replacement guidance.</span></article>
+          <article><strong data-i18n="support2Title">Parts Search</strong><span data-i18n="support2Text">Use the catalogue panel to quickly search listed items without scrolling a long page.</span></article>
+          <article><strong data-i18n="support3Title">Future Upgrade</strong><span data-i18n="support3Text">A precision 3D repair system can be added later when the real model is available.</span></article>
         </div>
       </div>
       <div class="supportPhoto">
@@ -133,60 +137,55 @@
       </div>
     </section>
 
-
     <section class="enquiry" id="enquiry">
       <div class="contactCard">
-        <p class="eyebrow">Contact</p>
-        <h2>New Hira, Nabha</h2>
-        <p><strong>Phone / WhatsApp:</strong> 9216107700<br><strong>Email:</strong> newhira985@gmail.com<br><strong>Owner:</strong> Jatinder Singh</p>
+        <p class="eyebrow" data-i18n="contactEyebrow">Contact</p>
+        <h2 data-i18n="contactTitle">New Hira, Nabha</h2>
+        <p><strong data-i18n="phoneLabel">Phone / WhatsApp:</strong> 9216107700<br><strong data-i18n="emailLabel">Email:</strong> newhira985@gmail.com<br><strong data-i18n="ownerLabel">Owner:</strong> Jatinder Singh</p>
         <div class="contactActions">
-          <a class="btn primary" href="https://wa.me/919216107700" target="_blank" rel="noopener">WhatsApp</a>
-          <a class="btn secondary" href="tel:+919216107700">Call now</a>
+          <a class="btn primary" href="https://wa.me/919216107700" target="_blank" rel="noopener" data-i18n="whatsapp">WhatsApp</a>
+          <a class="btn secondary" href="tel:+919216107700" data-i18n="callNow">Call now</a>
         </div>
       </div>
 
       <form class="formCard" id="enquiryForm">
-        <p class="eyebrow">Enquiry</p>
-        <h2>Send a message</h2>
+        <p class="eyebrow" data-i18n="enquiryEyebrow">Enquiry</p>
+        <h2 data-i18n="enquiryTitle">Send a message</h2>
         <div class="formGrid">
-          <label>Name<input name="name" required placeholder="Your name"></label>
-          <label>Phone<input name="phone" required placeholder="+91"></label>
+          <label><span data-i18n="nameLabel">Name</span><input name="name" required data-i18n-placeholder="namePlaceholder" placeholder="Your name"></label>
+          <label><span data-i18n="phoneInputLabel">Phone</span><input name="phone" required placeholder="+91"></label>
         </div>
-        <label>Requirement
-          <select name="requirement">
-            <option>Combine enquiry</option>
-            <option>Service support</option>
-            <option>Referral offer</option>
-          </select>
+        <label><span data-i18n="requirementLabel">Requirement</span>
+          <select name="requirement" id="requirementSelect"></select>
         </label>
-        <label>Message<textarea name="message" rows="4" placeholder="Tell us what you need"></textarea></label>
-        <button class="btn primary full" type="submit">Submit enquiry</button>
+        <label><span data-i18n="messageLabel">Message</span><textarea name="message" rows="4" data-i18n-placeholder="messagePlaceholder" placeholder="Tell us what you need"></textarea></label>
+        <button class="btn primary full" type="submit" data-i18n="submitEnquiry">Submit enquiry</button>
         <p class="status" id="status"></p>
       </form>
     </section>
   </main>
 
   <footer class="footer">
-    <span>New Hira</span>
-    <button id="shareBtn" type="button">Share website</button>
+    <span data-i18n="brandName">New Hira</span>
+    <button id="shareBtn" type="button" data-i18n="shareWebsite">Share website</button>
   </footer>
 
   <button class="toTop" id="toTop" type="button" aria-label="Scroll to top">↑</button>
 
   <div class="mobileCta" id="mobileCta">
-    <a href="https://wa.me/919216107700" target="_blank" rel="noopener">WhatsApp</a>
-    <a href="#enquiry">Enquire</a>
+    <a href="https://wa.me/919216107700" target="_blank" rel="noopener" data-i18n="whatsapp">WhatsApp</a>
+    <a href="#enquiry" data-i18n="enquiryShort">Enquire</a>
   </div>
 
   <dialog class="partsDialog" id="partsDialog">
     <div class="dialogHead">
       <div>
-        <p class="eyebrow">New Hira parts</p>
-        <h2>Spare parts catalogue</h2>
+        <p class="eyebrow" data-i18n="dialogEyebrow">New Hira parts</p>
+        <h2 data-i18n="dialogTitle">Spare parts catalogue</h2>
       </div>
       <button id="closeParts" type="button">×</button>
     </div>
-    <input id="partsSearch" type="search" placeholder="Search bearing, cutter, shaft, grease gun..." />
+    <input id="partsSearch" type="search" data-i18n-placeholder="partsSearchPlaceholder" placeholder="Search bearing, cutter, shaft, grease gun..." />
     <div class="partsList" id="partsList"></div>
   </dialog>
 
