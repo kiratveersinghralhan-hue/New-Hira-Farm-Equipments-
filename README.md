@@ -1,47 +1,25 @@
-# New Hira Luxury Advertising Website
+# New Hira Business Advertisement Website
 
-A simple, premium, smooth one-page advertising website for New Hira.
+A shorter, cleaner real-business advertisement website.
 
-## Included
-- Quiet luxury redesign
-- Smooth premium intro
-- Hero image carousel
-- Moving advertising strip
-- Side progress navigation
-- Spare parts advertising cards
-- Warranty / guarantee policy
-- Referral + rank system
-- 3D-style service prototype
-- WhatsApp, Share, Enquiry floating actions
-- Scroll-to-top button
-- Firebase-ready login/signup and enquiry form
+## Structure
+- Hero with direct business message
+- Short company section
+- Combine advertisement section
+- Compact spare parts catalogue in popup
+- Warranty and referral offer
+- Simple 3D service preview
+- Enquiry/contact section
 
-## Company Data Used
+## Data
 - Company: New Hira
-- Owner/founder: Jatinder Singh
+- Owner: Jatinder Singh
 - Address: New Hira, Nabha
 - Phone/WhatsApp: 9216107700
 - Email: newhira985@gmail.com
 - Warranty/Guarantee: 1 season or 500 hours, whichever is earlier
-- Offer: Up to ₹1 lakh for paddy 2025–26 personal combine
-- Referral: Up to ₹50,000 cash/spare parts on completed booking
+- Offer: Up to ₹1 lakh for 2025–26 paddy personal combine
+- Referral: Up to ₹50,000 reward on completed booking
 
-## Firebase
-The Firebase config is already inserted in `firebase-config.js`.
-
-To enable account login:
-1. Firebase Console → Authentication
-2. Enable Email/Password
-3. Firestore → Rules
-4. Paste `firestore.rules`
-5. Publish
-
-## GitHub Upload
-Upload all files directly to the root of the GitHub repository.
-No folder nesting is required.
-
-## Spare parts catalogue update
-Added the uploaded spare parts list as a searchable 95-item catalogue. A few handwritten/blackened rows are marked for confirmation instead of guessing.
-
-## Responsive cleanup
-Fixed mobile overflow, converted the catalogue into mobile cards, delayed floating CTA visibility, and removed repeated spare-parts wording outside the catalogue and 3D service section.
+## Upload
+Upload all files directly to the root of your GitHub repository.

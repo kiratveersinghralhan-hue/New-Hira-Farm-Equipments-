@@ -1,5 +1,4 @@
 // Firebase config for New Hira.
-// Your Firebase project values are already inserted.
 
 export const enableFirebase = true;
 
@@ -14,4 +13,3 @@ export const firebaseConfig = {
 };
 
 export const enquiriesCollection = "harvester_enquiries";
-export const usersCollection = "users";
