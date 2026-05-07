@@ -4,16 +4,1146 @@ const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
 
 const parts = [
-  {name:'Cutter Blades', cat:'Cutting', text:'Sharp cutting sections for clean crop entry.', detail:'Cut crop at the header. Replace by securing header, removing blade bolts, fitting correct sections and checking free movement.', pos:[18,66]},
-  {name:'Reel Fingers', cat:'Feeding', text:'Guides standing crop toward the cutter bar.', detail:'Guide crop into header. Replace bent fingers by locking reel, removing retainer and aligning new finger with nearby tine.', pos:[20,42]},
-  {name:'Main Shaft', cat:'Drive', text:'Transfers power through the machine.', detail:'Main drive link. Inspect vibration, bearing heat and coupling alignment before replacement.', pos:[48,46]},
-  {name:'Thresher Drum', cat:'Threshing', text:'Separates grain from crop through rotation.', detail:'Separates grain from crop. Check rasp bars, concave clearance and balance before running again.', pos:[53,38]},
-  {name:'Belt Pulley', cat:'Drive', text:'Moves rotation across belt-driven systems.', detail:'Transfers rotation. Remove guard, loosen tensioner, inspect grooves, fit correct belt and align pulleys.', pos:[66,50]},
-  {name:'Cleaning Sieves', cat:'Cleaning', text:'Separates grain from chaff.', detail:'Clean grain flow. Remove dust/blockage, check openings and set according to crop.', pos:[56,68]},
-  {name:'Bearings', cat:'Service', text:'Supports rotating assemblies under load.', detail:'Check heat and play. Replace in pairs when needed and grease as recommended.', pos:[62,72]},
-  {name:'Auger Parts', cat:'Unloading', text:'Moves grain from tank to trolley.', detail:'Unload grain from tank. Clear blockage, inspect flighting and bearings, then test at low speed.', pos:[80,33]},
-  {name:'Filters', cat:'Engine', text:'Protects engine from dust and fuel contamination.', detail:'Replace air/fuel filters regularly, especially during dusty harvesting days.', pos:[64,33]},
-  {name:'Tyres', cat:'Mobility', text:'Supports field movement and traction.', detail:'Maintain pressure and inspect sidewalls, rim nuts, bearing play and steering linkage.', pos:[42,76]}
+  {
+    "no": 1,
+    "name": "Guide Drum Shaft",
+    "cat": "Shafts",
+    "qty": "1",
+    "text": "Guide drum shaft for feeding/guide drum rotation.",
+    "detail": "Supports guide drum rotation. Inspect straightness, bearing seats and keyway before fitting.",
+    "pos": [
+      42,
+      42
+    ]
+  },
+  {
+    "no": 2,
+    "name": "Handwritten item — confirm",
+    "cat": "Shafts",
+    "qty": "1",
+    "text": "This row is handwritten in the photo and needs confirmation.",
+    "detail": "Please confirm exact English part name from the original parts book.",
+    "pos": [
+      34,
+      50
+    ]
+  },
+  {
+    "no": 3,
+    "name": "Handwritten RED SHAFT item — confirm",
+    "cat": "Shafts",
+    "qty": "1",
+    "text": "A handwritten shaft item is visible but not fully readable.",
+    "detail": "Please confirm the exact part name/part number for precise catalogue entry.",
+    "pos": [
+      41,
+      61
+    ]
+  },
+  {
+    "no": 4,
+    "name": "Bearing 6311",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "Bearing 6311 for rotating assembly support.",
+    "detail": "Replace when heat, noise, play or rough rotation appears. Fit only correct bearing number.",
+    "pos": [
+      62,
+      72
+    ]
+  },
+  {
+    "no": 5,
+    "name": "Bearing 6208",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "Bearing 6208 for rotating components.",
+    "detail": "Clean housing, press evenly on correct race and grease/fit as per machine requirement.",
+    "pos": [
+      55,
+      31
+    ]
+  },
+  {
+    "no": 6,
+    "name": "Bearing 6205",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "Bearing 6205 for light/medium rotating support.",
+    "detail": "Inspect shaft and housing before replacement to avoid repeated failure.",
+    "pos": [
+      62,
+      42
+    ]
+  },
+  {
+    "no": 7,
+    "name": "Bearing T-144",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "T-144 bearing listed in New Hira spare parts book.",
+    "detail": "Use matching bearing specification and confirm fitment location before installation.",
+    "pos": [
+      69,
+      53
+    ]
+  },
+  {
+    "no": 8,
+    "name": "Bearing 1888180",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "1888180 bearing listed in parts book.",
+    "detail": "Match number exactly and check bearing seat wear before fitment.",
+    "pos": [
+      76,
+      64
+    ]
+  },
+  {
+    "no": 9,
+    "name": "Bearing UCF 207",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "UCF 207 bearing unit.",
+    "detail": "Align housing, tighten set screws properly and check free rotation.",
+    "pos": [
+      83,
+      75
+    ]
+  },
+  {
+    "no": 10,
+    "name": "Bearing 206 UC",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "UC 206 bearing insert.",
+    "detail": "Use with compatible housing. Check shaft diameter and locking arrangement.",
+    "pos": [
+      25,
+      34
+    ]
+  },
+  {
+    "no": 11,
+    "name": "Bearing UCF - 206",
+    "cat": "Bearings",
+    "qty": "1",
+    "text": "UCF 206 bearing unit.",
+    "detail": "Replace as complete unit if housing or insert is worn.",
+    "pos": [
+      32,
+      45
+    ]
+  },
+  {
+    "no": 12,
+    "name": "Thresher Pulley Lock",
+    "cat": "Drive",
+    "qty": "1",
+    "text": "Locking part for thresher pulley assembly.",
+    "detail": "Inspect wear and locking security before operating thresher drive.",
+    "pos": [
+      39,
+      56
+    ]
+  },
+  {
+    "no": 13,
+    "name": "Rubber Seal Size 45-62-10",
+    "cat": "Rubber Seals",
+    "qty": "1",
+    "text": "Rubber oil/dust seal size 45-62-10.",
+    "detail": "Fit cleanly without damaging lip; check shaft surface before installing.",
+    "pos": [
+      46,
+      67
+    ]
+  },
+  {
+    "no": 14,
+    "name": "Rubber Seal Size 40-80-10",
+    "cat": "Rubber Seals",
+    "qty": "1",
+    "text": "Rubber seal size 40-80-10.",
+    "detail": "Use correct orientation and avoid dry running during installation.",
+    "pos": [
+      53,
+      78
+    ]
+  },
+  {
+    "no": 15,
+    "name": "Rubber Seal Size 50-70-10",
+    "cat": "Rubber Seals",
+    "qty": "1",
+    "text": "Rubber seal size 50-70-10.",
+    "detail": "Replace when leakage or dust ingress is visible.",
+    "pos": [
+      60,
+      37
+    ]
+  },
+  {
+    "no": 16,
+    "name": "Rubber Seal Size 55-90-10/13",
+    "cat": "Rubber Seals",
+    "qty": "1",
+    "text": "Rubber seal size 55-90-10/13.",
+    "detail": "Confirm exact thickness before replacement.",
+    "pos": [
+      67,
+      48
+    ]
+  },
+  {
+    "no": 17,
+    "name": "Rubber Seal Size 35-62-10",
+    "cat": "Rubber Seals",
+    "qty": "1",
+    "text": "Rubber seal size 35-62-10.",
+    "detail": "Clean seal seat and press evenly.",
+    "pos": [
+      74,
+      59
+    ]
+  },
+  {
+    "no": 18,
+    "name": "Rubber Seal Size 65-90-13",
+    "cat": "Rubber Seals",
+    "qty": "1",
+    "text": "Rubber seal size 65-90-13.",
+    "detail": "Use proper installer to prevent bent seal body.",
+    "pos": [
+      81,
+      70
+    ]
+  },
+  {
+    "no": 19,
+    "name": "Rubber Bush Large",
+    "cat": "Rubber Bushes & Kits",
+    "qty": "2",
+    "text": "Large rubber bush for vibration/support locations.",
+    "detail": "Replace cracked or loose bushes; lubricate lightly if recommended.",
+    "pos": [
+      23,
+      29
+    ]
+  },
+  {
+    "no": 20,
+    "name": "Steering Jack Kit",
+    "cat": "Rubber Bushes & Kits",
+    "qty": "1",
+    "text": "Kit for steering jack service.",
+    "detail": "Depressurize hydraulics before opening steering jack assembly.",
+    "pos": [
+      30,
+      40
+    ]
+  },
+  {
+    "no": 21,
+    "name": "High Low Jack Kit",
+    "cat": "Rubber Bushes & Kits",
+    "qty": "1",
+    "text": "High-low jack service kit.",
+    "detail": "Inspect seals and rod surface before reassembly.",
+    "pos": [
+      37,
+      51
+    ]
+  },
+  {
+    "no": 22,
+    "name": "Distributor / Control Valve Kit",
+    "cat": "Rubber Bushes & Kits",
+    "qty": "1",
+    "text": "Hydraulic distributor/control valve kit.",
+    "detail": "Keep all ports clean; replace seals in correct order.",
+    "pos": [
+      44,
+      62
+    ]
+  },
+  {
+    "no": 23,
+    "name": "Hydraulic Pipe for Steering Jack 24\"",
+    "cat": "Hydraulic",
+    "qty": "1",
+    "text": "24 inch hydraulic pipe for steering jack.",
+    "detail": "Check pressure rating and route away from sharp edges.",
+    "pos": [
+      51,
+      73
+    ]
+  },
+  {
+    "no": 24,
+    "name": "Plastic Bush 35 mm Collar",
+    "cat": "Bushes",
+    "qty": "1",
+    "text": "Plastic bush / collar, approximately 35 mm.",
+    "detail": "Confirm exact size and fit without forcing.",
+    "pos": [
+      58,
+      32
+    ]
+  },
+  {
+    "no": 25,
+    "name": "Axle Couplings",
+    "cat": "Other Items",
+    "qty": "1",
+    "text": "Coupling for axle connection.",
+    "detail": "Inspect keyway/splines and tighten locking hardware securely.",
+    "pos": [
+      65,
+      43
+    ]
+  },
+  {
+    "no": 26,
+    "name": "Small Axle",
+    "cat": "Other Items",
+    "qty": "1",
+    "text": "Small axle part.",
+    "detail": "Check straightness, bearing surface and locking arrangement.",
+    "pos": [
+      72,
+      54
+    ]
+  },
+  {
+    "no": 27,
+    "name": "Large Axle",
+    "cat": "Other Items",
+    "qty": "1",
+    "text": "Large axle part.",
+    "detail": "Use lifting support and proper alignment during replacement.",
+    "pos": [
+      79,
+      65
+    ]
+  },
+  {
+    "no": 28,
+    "name": "External Lock M-42",
+    "cat": "Other Items",
+    "qty": "5",
+    "text": "M-42 external lock.",
+    "detail": "Use correct lock size and replace if distorted.",
+    "pos": [
+      21,
+      76
+    ]
+  },
+  {
+    "no": 29,
+    "name": "Crank Gutke (Wooden)",
+    "cat": "Other Items",
+    "qty": "2",
+    "text": "Wooden crank gutka / block.",
+    "detail": "Confirm fitment position before installation.",
+    "pos": [
+      28,
+      35
+    ]
+  },
+  {
+    "no": 30,
+    "name": "Main Housing Puller",
+    "cat": "Tools / Service",
+    "qty": "1",
+    "text": "Puller for main housing service.",
+    "detail": "Use evenly to avoid housing damage.",
+    "pos": [
+      35,
+      46
+    ]
+  },
+  {
+    "no": 31,
+    "name": "Main Housing Puller Rod with Nut",
+    "cat": "Tools / Service",
+    "qty": "3",
+    "text": "Puller rod with nut for main housing puller.",
+    "detail": "Inspect threads and use equal tension.",
+    "pos": [
+      42,
+      57
+    ]
+  },
+  {
+    "no": 32,
+    "name": "Small Adapter of Hydraulic Pipe 18x18",
+    "cat": "Hydraulic",
+    "qty": "1",
+    "text": "Small hydraulic pipe adapter 18x18.",
+    "detail": "Use correct thread and sealing method.",
+    "pos": [
+      49,
+      68
+    ]
+  },
+  {
+    "no": 33,
+    "name": "Round Plastic Chain Tensioner",
+    "cat": "Chain / Elevator",
+    "qty": "1",
+    "text": "Plastic chain tensioner.",
+    "detail": "Adjust chain slack after fitting.",
+    "pos": [
+      56,
+      79
+    ]
+  },
+  {
+    "no": 34,
+    "name": "Elevator Chain Lock",
+    "cat": "Chain / Elevator",
+    "qty": "2",
+    "text": "Lock for elevator chain.",
+    "detail": "Install clip/lock in correct direction of chain travel.",
+    "pos": [
+      63,
+      38
+    ]
+  },
+  {
+    "no": 35,
+    "name": "Heavy Chain Lock Half/Full",
+    "cat": "Chain / Elevator",
+    "qty": "2",
+    "text": "Heavy chain lock half/full.",
+    "detail": "Use correct chain pitch and check after first run.",
+    "pos": [
+      70,
+      49
+    ]
+  },
+  {
+    "no": 36,
+    "name": "Elevator Sacropt 7 x 35",
+    "cat": "Chain / Elevator",
+    "qty": "1",
+    "text": "Elevator component size 7 x 35 from parts list.",
+    "detail": "Confirm spelling/specification from original book before final catalog.",
+    "pos": [
+      77,
+      60
+    ]
+  },
+  {
+    "no": 37,
+    "name": "Large / Bracketies",
+    "cat": "Brackets",
+    "qty": "2",
+    "text": "Large brackets listed in parts book.",
+    "detail": "Check hole alignment and weld/plate condition.",
+    "pos": [
+      84,
+      71
+    ]
+  },
+  {
+    "no": 38,
+    "name": "Thrasher Key",
+    "cat": "Keys / Locks",
+    "qty": "1",
+    "text": "Key for thresher assembly.",
+    "detail": "Replace worn key and inspect keyway damage.",
+    "pos": [
+      26,
+      30
+    ]
+  },
+  {
+    "no": 39,
+    "name": "Guide Drum Key",
+    "cat": "Keys / Locks",
+    "qty": "1",
+    "text": "Key for guide drum shaft/assembly.",
+    "detail": "Ensure tight fit with no play before operation.",
+    "pos": [
+      33,
+      41
+    ]
+  },
+  {
+    "no": 40,
+    "name": "Elevator Pad 6\"",
+    "cat": "Chain / Elevator",
+    "qty": "5",
+    "text": "6 inch elevator pad.",
+    "detail": "Install evenly and inspect chain tension.",
+    "pos": [
+      40,
+      52
+    ]
+  },
+  {
+    "no": 41,
+    "name": "Feeding Chain Lock Half/Full",
+    "cat": "Chain / Elevator",
+    "qty": "2",
+    "text": "Feeding chain lock half/full.",
+    "detail": "Confirm chain size and direction before fitting.",
+    "pos": [
+      47,
+      63
+    ]
+  },
+  {
+    "no": 42,
+    "name": "Cutter Bar Fingers",
+    "cat": "Cutter Bar",
+    "qty": "2",
+    "text": "Fingers for cutter bar crop guidance.",
+    "detail": "Replace bent/broken fingers and check blade clearance.",
+    "pos": [
+      20,
+      62
+    ]
+  },
+  {
+    "no": 43,
+    "name": "Blade Strip",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "Blade strip for cutter bar.",
+    "detail": "Keep strip straight and tighten fasteners evenly.",
+    "pos": [
+      22,
+      66
+    ]
+  },
+  {
+    "no": 44,
+    "name": "Blades Class",
+    "cat": "Cutter Bar",
+    "qty": "10",
+    "text": "Blade class / blade sections.",
+    "detail": "Replace dull or broken blades for clean cutting.",
+    "pos": [
+      68,
+      44
+    ]
+  },
+  {
+    "no": 45,
+    "name": "Reel Tines",
+    "cat": "Cutter Bar",
+    "qty": "5",
+    "text": "Tines for reel assembly.",
+    "detail": "Align with reel and check rotation clearance.",
+    "pos": [
+      75,
+      55
+    ]
+  },
+  {
+    "no": 46,
+    "name": "Frog Killi",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "Frog killi listed in cutter bar section.",
+    "detail": "Confirm exact local name/fitment before final catalog.",
+    "pos": [
+      82,
+      66
+    ]
+  },
+  {
+    "no": 47,
+    "name": "Blade Head",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "Blade head for cutter bar assembly.",
+    "detail": "Check fitment with blade strip and bush.",
+    "pos": [
+      18,
+      64
+    ]
+  },
+  {
+    "no": 48,
+    "name": "Blade Head Bush",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "Bush for blade head.",
+    "detail": "Replace when play/noise appears at blade head.",
+    "pos": [
+      31,
+      36
+    ]
+  },
+  {
+    "no": 49,
+    "name": "41 No. Goti Rod",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "41 No. goti rod.",
+    "detail": "Confirm exact rod application before fitting.",
+    "pos": [
+      38,
+      47
+    ]
+  },
+  {
+    "no": 50,
+    "name": "Reel Bush",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "Bush for reel assembly.",
+    "detail": "Replace worn bush and grease if applicable.",
+    "pos": [
+      45,
+      58
+    ]
+  },
+  {
+    "no": 51,
+    "name": "Fish Bush",
+    "cat": "Cutter Bar",
+    "qty": "2",
+    "text": "Fish bush listed in parts list.",
+    "detail": "Confirm exact location and replace as matched pair when worn.",
+    "pos": [
+      52,
+      69
+    ]
+  },
+  {
+    "no": 52,
+    "name": "Grain 12th or 19th",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "Grain part 12th or 19th as printed in list.",
+    "detail": "Please confirm exact name/specification for final catalog.",
+    "pos": [
+      59,
+      28
+    ]
+  },
+  {
+    "no": 53,
+    "name": "Blade Strip Daab",
+    "cat": "Cutter Bar",
+    "qty": "2",
+    "text": "Daab / clamp for blade strip.",
+    "detail": "Tighten evenly to hold strip securely.",
+    "pos": [
+      66,
+      39
+    ]
+  },
+  {
+    "no": 54,
+    "name": "Blade Rivets",
+    "cat": "Cutter Bar",
+    "qty": "1",
+    "text": "Rivets for blade assembly.",
+    "detail": "Use correct rivets and secure properly.",
+    "pos": [
+      73,
+      50
+    ]
+  },
+  {
+    "no": 55,
+    "name": "Tralla Gutka",
+    "cat": "Cutter Bar",
+    "qty": "2",
+    "text": "Tralla gutka listed in parts list.",
+    "detail": "Confirm exact location and replace worn block/gutka.",
+    "pos": [
+      80,
+      61
+    ]
+  },
+  {
+    "no": 56,
+    "name": "D.E. Spanner (Set)",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Double-end spanner set.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 57,
+    "name": "Ring Spanner (Set)",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Ring spanner set.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 58,
+    "name": "Socket Goti Set with All Size Sockets",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Socket/goti set with all size sockets.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 59,
+    "name": "W.P. Piller",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Water pump plier / W.P. piller.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 60,
+    "name": "Allen Key (Set)",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Allen key set.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 61,
+    "name": "Centre Punch",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Centre punch.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 62,
+    "name": "Punch Round 3 mm",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Round punch 3 mm.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 63,
+    "name": "Chisel",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Chisel.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 64,
+    "name": "Wheel Spanner Layland",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Wheel spanner Leyland/Layland.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 65,
+    "name": "Pipe Wrench 18\" Long",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "18 inch long pipe wrench.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 66,
+    "name": "Bench Vice No.1",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Bench vice No.1.",
+    "detail": "Workshop/toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 67,
+    "name": "Oil Cane",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Oil can.",
+    "detail": "Lubrication toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 68,
+    "name": "Circlip Plier Outer 7\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "7 inch outer circlip plier.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 69,
+    "name": "Circlip Plier Inner 7\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "7 inch inner circlip plier.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 70,
+    "name": "Pump L-Key",
+    "cat": "Toolkit",
+    "qty": "2",
+    "text": "Pump L-key.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 71,
+    "name": "Hammer 2 lb.",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "2 lb hammer.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 72,
+    "name": "Hammer 4 lb.",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "4 lb hammer.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 73,
+    "name": "Three Legs Bearing Puller",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Three-leg bearing puller.",
+    "detail": "Use evenly to remove bearings without damaging shaft.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 74,
+    "name": "Round File 10\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "10 inch round file.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 75,
+    "name": "Flat File 12\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "12 inch flat file.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 76,
+    "name": "Plier 10\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "10 inch plier.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 77,
+    "name": "Hexa Frame",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Hacksaw/hexa frame.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 78,
+    "name": "Hexa Blade",
+    "cat": "Toolkit",
+    "qty": "2",
+    "text": "Hacksaw/hexa blade.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 79,
+    "name": "Grease Gun 12\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "12 inch grease gun.",
+    "detail": "Lubrication toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 80,
+    "name": "Grease Gun Nipple (Kit)",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Grease gun nipple kit.",
+    "detail": "Lubrication toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 81,
+    "name": "Grease Pipe 8MM 12\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "8MM 12 inch grease pipe.",
+    "detail": "Lubrication toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 82,
+    "name": "Grease Pipe 6MM 12\"",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "6MM 12 inch grease pipe.",
+    "detail": "Lubrication toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 83,
+    "name": "Screw Driver",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Screwdriver.",
+    "detail": "General service toolkit item.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 84,
+    "name": "Mechanical Jack",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Mechanical jack.",
+    "detail": "Use only on firm ground with support stands.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 85,
+    "name": "Mechanical Jack Rod",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Mechanical jack rod.",
+    "detail": "Use with matching jack.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 86,
+    "name": "Nuts Bolts All Sizes",
+    "cat": "Hardware",
+    "qty": "1",
+    "text": "Assorted nuts and bolts.",
+    "detail": "Use correct grade/size for machine assemblies.",
+    "pos": [
+      37,
+      38
+    ]
+  },
+  {
+    "no": 87,
+    "name": "Split Pins All Sizes",
+    "cat": "Hardware",
+    "qty": "1",
+    "text": "Assorted split pins.",
+    "detail": "Replace split pins after removal; do not reuse damaged pins.",
+    "pos": [
+      44,
+      49
+    ]
+  },
+  {
+    "no": 88,
+    "name": "Unclear / blacked-out item — confirm",
+    "cat": "Spare Parts",
+    "qty": "-",
+    "text": "This row is blacked out in the uploaded image.",
+    "detail": "Please confirm exact name and quantity from the original book.",
+    "pos": [
+      51,
+      60
+    ]
+  },
+  {
+    "no": 89,
+    "name": "Thrasher Spikes",
+    "cat": "Threshing",
+    "qty": "5",
+    "text": "Spikes for thresher assembly.",
+    "detail": "Replace worn spikes in balanced pattern.",
+    "pos": [
+      54,
+      37
+    ]
+  },
+  {
+    "no": 90,
+    "name": "Thrasher Drum Paddy/Wheat",
+    "cat": "Threshing",
+    "qty": "1",
+    "text": "Thresher drum for paddy/wheat.",
+    "detail": "Check balance, rasp/spike condition and clearances.",
+    "pos": [
+      53,
+      38
+    ]
+  },
+  {
+    "no": 91,
+    "name": "Concave Assembly Paddy/Wheat",
+    "cat": "Threshing",
+    "qty": "1",
+    "text": "Concave assembly for paddy/wheat.",
+    "detail": "Set clearance according to crop and inspect for wear.",
+    "pos": [
+      52,
+      42
+    ]
+  },
+  {
+    "no": 92,
+    "name": "Cutter Puller",
+    "cat": "Tools / Service",
+    "qty": "1",
+    "text": "Puller for cutter/service assembly.",
+    "detail": "Use to remove assembly without hammer damage.",
+    "pos": [
+      79,
+      52
+    ]
+  },
+  {
+    "no": 93,
+    "name": "Water Cool Cage",
+    "cat": "Cooling",
+    "qty": "1",
+    "text": "Water cool cage.",
+    "detail": "Inspect cooling airflow and blockage.",
+    "pos": [
+      21,
+      63
+    ]
+  },
+  {
+    "no": 94,
+    "name": "Tool Box",
+    "cat": "Toolkit",
+    "qty": "1",
+    "text": "Tool box.",
+    "detail": "Storage for service tools.",
+    "pos": [
+      78,
+      80
+    ]
+  },
+  {
+    "no": 95,
+    "name": "Array Straw Walker Blade",
+    "cat": "Straw Walker",
+    "qty": "10",
+    "text": "Straw walker blade array.",
+    "detail": "Inspect for cracks and replace damaged blades.",
+    "pos": [
+      35,
+      33
+    ]
+  }
 ];
 
 const state = {
@@ -94,15 +1224,47 @@ function setupTicker(){
 }
 
 function renderPartCards(){
-  els.partCards.innerHTML = parts.map((p,i)=>`
-    <button type="button" data-index="${i}">
+  const featuredNames = [
+    'Guide Drum Shaft','Bearing 6311','Cutter Bar Fingers','Blade Strip',
+    'Thrasher Drum Paddy/Wheat','Concave Assembly Paddy/Wheat',
+    'Belt Pulley','Array Straw Walker Blade','D.E. Spanner (Set)','Grease Gun 12"'
+  ];
+  const featured = featuredNames
+    .map(name => parts.find(p => p.name === name))
+    .filter(Boolean);
+
+  els.partCards.innerHTML = featured.map((p)=>`
+    <button type="button" data-index="${parts.indexOf(p)}">
       <strong>${p.name}</strong>
-      <span>${p.cat} — ${p.text}</span>
+      <span>${p.cat} • Qty ${p.qty} — ${p.text}</span>
     </button>
   `).join('');
+
   $$('#partCards button').forEach(btn=>btn.addEventListener('click',()=>{
     document.querySelector('#service3d').scrollIntoView({behavior:'smooth'});
     selectPart(Number(btn.dataset.index));
+  }));
+
+  renderCatalog();
+  $('#catalogSearch')?.addEventListener('input', e => renderCatalog(e.target.value));
+}
+
+function renderCatalog(filter=''){
+  const q = filter.toLowerCase().trim();
+  const shown = parts.filter(p => !q || String(p.no).includes(q) || p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q));
+  const body = $('#catalogBody');
+  if(!body) return;
+  body.innerHTML = shown.map(p => `
+    <tr data-index="${parts.indexOf(p)}">
+      <td>${p.no}</td>
+      <td><strong>${p.name}</strong><small>${p.text}</small></td>
+      <td>${p.cat}</td>
+      <td>${p.qty}</td>
+    </tr>
+  `).join('');
+  $$('#catalogBody tr').forEach(row => row.addEventListener('click', () => {
+    document.querySelector('#service3d').scrollIntoView({behavior:'smooth'});
+    selectPart(Number(row.dataset.index));
   }));
 }
 

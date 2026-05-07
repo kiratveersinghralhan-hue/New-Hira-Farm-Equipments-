@@ -355,6 +355,89 @@ p{color:var(--muted);line-height:1.72}
 .partCards strong{display:block;font-size:1.2rem;margin-bottom:8px}
 .partCards span{color:var(--muted);line-height:1.6}
 
+
+.partsCatalog{
+  grid-column:1 / -1;
+  margin-top:22px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.052),rgba(255,255,255,.02));
+  border-radius:var(--radius);
+  padding:24px;
+}
+.catalogHead{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:18px;
+}
+.catalogHead h3{
+  margin:8px 0 0;
+  font-size:clamp(1.5rem,3vw,2.4rem);
+}
+.catalogSearch{
+  min-width:min(360px,100%);
+  color:var(--muted);
+  font-weight:800;
+  display:grid;
+  gap:8px;
+}
+.catalogTableWrap{
+  max-height:560px;
+  overflow:auto;
+  border:1px solid rgba(246,241,231,.1);
+  border-radius:22px;
+}
+.catalogTable{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+}
+.catalogTable th,
+.catalogTable td{
+  padding:14px 16px;
+  text-align:left;
+  border-bottom:1px solid rgba(246,241,231,.09);
+  vertical-align:top;
+}
+.catalogTable th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:#14120f;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:.72rem;
+}
+.catalogTable td:first-child{
+  color:var(--gold);
+  font-weight:900;
+  width:72px;
+}
+.catalogTable td:nth-child(3),
+.catalogTable td:nth-child(4){
+  color:var(--muted);
+  white-space:nowrap;
+}
+.catalogTable tr{
+  cursor:pointer;
+  transition:background .18s ease;
+}
+.catalogTable tr:hover{
+  background:rgba(230,199,128,.08);
+}
+.catalogTable strong{
+  display:block;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.catalogTable small{
+  display:block;
+  color:var(--muted);
+  line-height:1.55;
+}
+
 .split{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -578,6 +661,10 @@ input:focus,select:focus,textarea:focus{border-color:rgba(230,199,128,.6)}
   .heroMetrics{position:relative;left:auto;right:auto;bottom:auto;margin-top:34px}
 }
 @media(max-width:760px){
+  .catalogHead{display:grid;align-items:start}
+  .partsCatalog{padding:18px}
+  .catalogTable{min-width:660px}
+
   .header{height:84px}
   .menu{display:block}
   .nav{

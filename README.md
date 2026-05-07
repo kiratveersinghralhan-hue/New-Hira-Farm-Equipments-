@@ -39,3 +39,6 @@ To enable account login:
 ## GitHub Upload
 Upload all files directly to the root of the GitHub repository.
 No folder nesting is required.
+
+## Spare parts catalogue update
+Added the uploaded spare parts list as a searchable 95-item catalogue. A few handwritten/blackened rows are marked for confirmation instead of guessing.
