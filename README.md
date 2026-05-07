@@ -23,3 +23,6 @@ A shorter, cleaner real-business advertisement website.
 
 ## Upload
 Upload all files directly to the root of your GitHub repository.
+
+## Update
+Added a combine-harvester intro animation and removed the temporary 3D section. Service is now presented as a simple business support section.

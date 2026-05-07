@@ -12,7 +12,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+
+<body class="intro-lock">
+  <div class="introOverlay" id="introOverlay" aria-hidden="false">
+    <div class="introOverlay__grain"></div>
+    <div class="introCenter">
+      <p class="eyebrow">Nabha • Premium Agricultural Machinery</p>
+      <div class="introMachine" aria-hidden="true">
+        <div class="introMachine__header"></div>
+        <div class="introMachine__body"></div>
+        <div class="introMachine__cab"></div>
+        <div class="introMachine__auger"></div>
+        <div class="introMachine__wheel introMachine__wheel--big"></div>
+        <div class="introMachine__wheel introMachine__wheel--small"></div>
+      </div>
+      <h1>New Hira</h1>
+      <p class="introText">Combine harvester strength, introduced with a clean business presentation.</p>
+    </div>
+    <button class="introSkip" id="introSkip" type="button">Skip intro</button>
+  </div>
+
+
   <header class="topbar">
     <a class="brand" href="#top">
       <span>NH</span>
@@ -96,18 +116,23 @@
       </article>
     </section>
 
-    <section class="service" id="service">
+    
+<section class="service support" id="service">
       <div class="serviceText">
-        <p class="eyebrow">3D service preview</p>
-        <h2>Simple repair-location prototype.</h2>
-        <p>This demo shows how a future real 3D model can highlight blade, shaft, belt, pulley, thresher and auger locations. Send GLB/CAD later for precision.</p>
-        <div class="partButtons" id="partButtons"></div>
+        <p class="eyebrow">Service support</p>
+        <h2>Maintenance support, presented simply.</h2>
+        <p>Instead of a heavy technical module, this section keeps service practical: direct contact, parts search, enquiry support and machine assistance from New Hira. A precise interactive 3D repair system can be added later when the real model is available.</p>
+        <div class="supportGrid">
+          <article><strong>Direct Guidance</strong><span>Call or WhatsApp New Hira for inspection, maintenance and replacement guidance.</span></article>
+          <article><strong>Parts Search</strong><span>Use the parts catalogue panel to quickly search listed items without scrolling a long page.</span></article>
+          <article><strong>Future Upgrade</strong><span>Once you share GLB/CAD files, this section can become a true precision service module.</span></article>
+        </div>
       </div>
-      <div class="modelBox">
-        <canvas id="modelCanvas" width="900" height="560"></canvas>
-        <span class="pin" id="pin">Blade</span>
+      <div class="supportPhoto">
+        <img src="photo3.jpg" alt="New Hira combine harvester service support image">
       </div>
     </section>
+
 
     <section class="enquiry" id="enquiry">
       <div class="contactCard">
