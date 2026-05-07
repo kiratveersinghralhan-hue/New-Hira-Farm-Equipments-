@@ -1407,9 +1407,14 @@ function setupSectionProgress(){
 }
 
 function setupTopButton(){
-  window.addEventListener('scroll', ()=>{
+  const floating = $('#floatingCta');
+  const onScroll = () => {
+    const show = window.scrollY > Math.min(520, window.innerHeight * 0.45);
     els.toTop?.classList.toggle('is-visible', window.scrollY > 700);
-  });
+    floating?.classList.toggle('is-visible', show);
+  };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
   els.toTop?.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
 }
 

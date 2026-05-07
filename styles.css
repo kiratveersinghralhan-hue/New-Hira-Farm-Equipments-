@@ -713,3 +713,346 @@ input:focus,select:focus,textarea:focus{border-color:rgba(230,199,128,.6)}
   .heroActions .btn{width:100%}
   .ticker span{padding:16px 24px}
 }
+
+
+/* === Responsive production patch === */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  padding-bottom: 0;
+}
+
+main,
+section,
+header,
+footer,
+.hero,
+.section,
+.ticker,
+.procedure,
+.split,
+.network,
+.service3d,
+.enquiry {
+  max-width: 100%;
+}
+
+h1, h2, h3, p, a, button, span, strong, small {
+  overflow-wrap: break-word;
+}
+
+.header {
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+.hero {
+  width: 100%;
+}
+
+.heroCopy,
+.sectionText,
+.policyCard,
+.enquiryText {
+  min-width: 0;
+}
+
+.ticker {
+  width: 100%;
+  max-width: 100vw;
+}
+
+.tickerTrack {
+  will-change: transform;
+}
+
+.luxCarousel {
+  max-width: 100%;
+}
+
+.catalogTable {
+  min-width: 0;
+}
+
+.catalogTableWrap {
+  width: 100%;
+  max-width: 100%;
+}
+
+.floatingCta {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 120%);
+  transition: opacity .28s ease, transform .28s ease;
+}
+
+.floatingCta.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.panel-section,
+.section {
+  scroll-margin-top: 96px;
+}
+
+@media(max-width: 760px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .header {
+    height: 82px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand strong {
+    white-space: nowrap;
+  }
+
+  .menu {
+    flex: 0 0 54px;
+  }
+
+  .login {
+    flex: 0 0 auto;
+  }
+
+  .hero {
+    width: 100%;
+    min-height: auto;
+    padding: 72px 16px 54px;
+    display: block;
+  }
+
+  .heroCopy {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .heroCopy h1 {
+    font-size: clamp(4.25rem, 20vw, 6.2rem);
+    line-height: .78;
+    max-width: 100%;
+  }
+
+  .heroSlogan {
+    font-size: clamp(1.35rem, 7vw, 2.2rem);
+    max-width: 100%;
+  }
+
+  .heroActions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .heroActions .btn {
+    width: 100%;
+  }
+
+  .heroMetrics {
+    width: 100%;
+    max-width: 100%;
+    margin: 28px 0 0;
+  }
+
+  .section {
+    width: 100%;
+    padding: 72px 16px;
+  }
+
+  .story,
+  .procedure,
+  .split,
+  .serviceShell,
+  .enquiry {
+    width: 100%;
+    gap: 22px;
+  }
+
+  .editorialGrid,
+  .partCards,
+  .rankGrid,
+  .policyList {
+    width: 100%;
+  }
+
+  .partCards button,
+  .editorialGrid article,
+  .policyCard,
+  .policyList div,
+  .rankGrid div,
+  .serviceShell,
+  .enquiryForm,
+  .partsCatalog {
+    width: 100%;
+  }
+
+  .sectionText h2,
+  .policyCard h2,
+  .enquiryText h2 {
+    font-size: clamp(2.15rem, 11vw, 3.45rem);
+    line-height: .96;
+  }
+
+  .luxCarousel {
+    grid-auto-columns: 86%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .luxCarousel figure {
+    height: 360px;
+  }
+
+  .partsCatalog {
+    margin-top: 20px;
+    padding: 18px;
+  }
+
+  .catalogHead {
+    display: grid;
+    gap: 14px;
+  }
+
+  .catalogSearch {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .catalogTableWrap {
+    max-height: none;
+    overflow: visible;
+    border: 0;
+  }
+
+  .catalogTable,
+  .catalogTable thead,
+  .catalogTable tbody,
+  .catalogTable tr,
+  .catalogTable td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .catalogTable thead {
+    display: none;
+  }
+
+  .catalogTable tr {
+    margin-bottom: 12px;
+    padding: 14px;
+    border: 1px solid rgba(246,241,231,.10);
+    border-radius: 18px;
+    background: rgba(255,255,255,.025);
+  }
+
+  .catalogTable td {
+    padding: 3px 0;
+    border: 0;
+    white-space: normal !important;
+  }
+
+  .catalogTable td:first-child {
+    width: auto;
+    font-size: .82rem;
+  }
+
+  .catalogTable td:first-child::before {
+    content: "S.No ";
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .catalogTable td:nth-child(3)::before {
+    content: "Category: ";
+    color: var(--gold);
+    font-weight: 900;
+  }
+
+  .catalogTable td:nth-child(4)::before {
+    content: "Qty: ";
+    color: var(--gold);
+    font-weight: 900;
+  }
+
+  .modelStage,
+  #modelCanvas {
+    width: 100%;
+    height: 360px;
+    min-height: 360px;
+  }
+
+  .floatingCta {
+    left: 50%;
+    right: auto;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    width: min(420px, calc(100vw - 20px));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .floatingCta a,
+  .floatingCta button {
+    min-width: 0;
+    width: 100%;
+    min-height: 50px;
+    font-size: .88rem;
+    padding-left: 4px;
+    padding-right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .toTop {
+    bottom: calc(82px + env(safe-area-inset-bottom));
+  }
+
+  .footer {
+    width: calc(100% - 32px);
+    padding-bottom: 128px;
+  }
+}
+
+@media(max-width: 390px) {
+  .brand strong {
+    font-size: .92rem;
+  }
+
+  .brand span {
+    width: 44px;
+    height: 44px;
+  }
+
+  .login {
+    padding: 0 14px;
+    font-size: .86rem;
+  }
+
+  .menu {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+
+  .floatingCta a,
+  .floatingCta button {
+    font-size: .82rem;
+  }
+}

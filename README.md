@@ -42,3 +42,6 @@ No folder nesting is required.
 
 ## Spare parts catalogue update
 Added the uploaded spare parts list as a searchable 95-item catalogue. A few handwritten/blackened rows are marked for confirmation instead of guessing.
+
+## Responsive cleanup
+Fixed mobile overflow, converted the catalogue into mobile cards, delayed floating CTA visibility, and removed repeated spare-parts wording outside the catalogue and 3D service section.
