@@ -1,4 +1,5 @@
-// Firebase config for New Hira.
+// Firebase configuration for New Hira lead capture.
+// Firebase web API keys are not passwords, but you should restrict this project in Firebase Console.
 
 export const enableFirebase = true;
 

@@ -1,0 +1,17 @@
+{
+  "name": "New Hira 985 Combine Harvester",
+  "short_name": "New Hira",
+  "description": "Combine harvester showroom website for New Hira Crop Challengers.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fffdf7",
+  "theme_color": "#13240d",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
